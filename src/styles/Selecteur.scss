@@ -1,5 +1,8 @@
 @import "./Utils.scss";
 
+.tiquet .btn-produit {
+  align-items: baseline!important;
+}
 .btn-produit{
   padding: 10px;
   min-height: 80px;
@@ -70,7 +73,7 @@
 }
 
 .input-number-group .input-number {
-  width: 30px;
+  width: 37px;
   padding: 0 12px;
   vertical-align: top;
   text-align: center;

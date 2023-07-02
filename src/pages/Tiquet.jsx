@@ -2,17 +2,22 @@ import Page from '../components/Page.jsx'
 import Header from "../components/Header.jsx"
 import Footer from '../components/Footer.jsx'
 import '../styles/Utils.scss'
+import '../styles/Tiquet.scss'
 
 const Tiquet =()=> <>
   <Page>
     <Header title='COMMANDE' />
     <div className='scroll'>
-      <section>
+      <section className='tiquet'>
         <h4>Récapitulatif de commande</h4>
         <div className="btn-produit grida1a">
+
           <div className="image"></div>
           <div>
+            <div className="flexi">
             <div className="bold">Menu Repas</div>
+            <div className="prix">11.50€</div>
+            </div>
             <p>
               <span>Viande:</span><br/>
               Poisson (2.00€)<br/>
@@ -25,8 +30,7 @@ const Tiquet =()=> <>
               Coca 33cl (1.50€)<br/>
             </p>
           </div>
-          <div className="prix">11.50€</div>
-        </div>
+                  </div>
         <div className='btn-produit grida1a'>
           <div className='image'></div>
           <div>

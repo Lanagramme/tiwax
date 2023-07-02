@@ -53,7 +53,7 @@ const Graduate =()=> {
     <div className="input-group-button only-positif">
       <span className="input-number-decrement">-</span>
     </div>
-    <input className="input-number only-positif" type="number" value="1" min="0" max="1000" disabled />
+    <input className="input-number only-positif" type="number" value="0" min="0" max="1000" disabled />
     <div className="input-group-button">
       <span className="input-number-increment">+</span>
     </div>
