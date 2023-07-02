@@ -23,6 +23,10 @@
     background: $bg-main;
     margin-right: 15px;
   }
+  span {
+    word-wrap: break-word;
+    word-break: break-word;
+  }
 }
 
 .prix {
