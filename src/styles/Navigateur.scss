@@ -1,0 +1,20 @@
+@use "./Utils.scss"; 
+
+.option {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  align-items: center;
+}
+
+section {
+  margin: 10px;
+  padding: 10px ;
+  border-top: 4px solid #edebeb;
+  font-size: 1.3rem!important;
+  p {
+    font-weight: bold;
+  }
+
+
+} 

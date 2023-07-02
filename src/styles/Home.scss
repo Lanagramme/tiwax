@@ -1,0 +1,13 @@
+@import 'Utils';
+.btn-categorie {
+  height: 113px;
+  margin: 10px 5px;;
+  display: grid;
+  place-items: center;
+  background: $bg-secondary;
+  color: white !important;
+  text-transform: uppercase;
+  * {
+    font-weight: 900;
+  }
+}

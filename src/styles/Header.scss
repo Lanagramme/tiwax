@@ -1,0 +1,11 @@
+@use './Utils.scss';
+.header {
+  // place-items:center;
+  
+  * {text-align: center;}
+  button { 
+    width: fit-content;
+    border: none;
+    background: none;
+  }
+}
