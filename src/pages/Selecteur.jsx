@@ -2,6 +2,7 @@ import Page from '../components/Page.jsx'
 import Header from "../components/Header.jsx"
 import Footer from '../components/Footer.jsx'
 import { useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import '../styles/Button.scss'
 import '../styles/Selecteur.scss'
 
@@ -197,7 +198,7 @@ const Selecteur =()=> {
       </div>
     </Page>
     <Footer>
-      <button className='btn m-auto'>Ajouter au panier</button>
+      <NavLink to='/' className='btn m-auto'>Ajouter au panier</NavLink>
     </Footer>
   </>
 }

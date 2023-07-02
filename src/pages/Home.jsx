@@ -69,9 +69,9 @@ const Home=()=> <div className="App-screen">
       <button className="svg">
         <img src={"./static/home.png"} />
       </button>
-      <button className="svg">
+      <NavLink to='Tiquet' className="svg">
         <img src={"./static/cart.png"} />
-      </button>
+      </NavLink>
       <button className="svg">
         <img src={"./static/calendar.png"} />
       </button>
