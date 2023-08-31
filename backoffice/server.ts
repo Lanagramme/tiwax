@@ -9,10 +9,14 @@ async function handleConn(conn: Deno.Conn) {
 async function handle(req) {
   if (req.headers.get("upgrade") != "websocket") {
     const pathname = new URL(req.url).pathname;
+    const isAsset = pathname.startsWith("/asset")
+    const res = await pathname.startsWith("/asset")
+    ? serveDir(req, { fsRoot: new URL('.', import.meta.url).pathname + "/asset" })
+    : Deno.readFile(new URL('.', import.meta.url).pathname + '/index.html');
+    console.log(isAsset)
+    console.log(res)
 
-    return new Response(await pathname.startsWith("/asset")
-      ? serveDir(req, { fsRoot: new URL('.', import.meta.url).pathname + "/asset" })
-      : Deno.readFile(new URL('.', import.meta.url).pathname + '/index.html'));
+    return new Response(res);
   }
 
   // Upgrade the incoming HTTP request to a WebSocket connection
