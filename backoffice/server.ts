@@ -1,4 +1,6 @@
 console.log('start')
+import { serveDir } from "https://deno.land/std@0.200.0/http/file_server.ts";
+
 async function handleConn(conn: Deno.Conn) {
   const httpConn = Deno.serveHttp(conn);
   console.log('handleConn')
@@ -11,7 +13,9 @@ async function handle(req) {
   if (req.headers.get("upgrade") != "websocket") {
     const pathname = new URL(req.url).pathname;
     const isAsset = pathname.startsWith("/asset")
-    const res = Deno.readFile(new URL('.', import.meta.url).pathname + isAsset ? +pathname : '/index.html');
+    const res = await pathname.startsWith("/asset")
+    ? serveDir(req, { fsRoot: new URL('.', import.meta.url).pathname + "/asset" })
+    : Deno.readFile(new URL('.', import.meta.url).pathname + '/index.html');
     console.log(isAsset)
     console.log(res)
 
@@ -32,4 +36,5 @@ async function handle(req) {
 }
 
 const listener = Deno.listen({ hostname: "localhost", port: 8080 });
+for await (const conn of listener) { handleConn(conn); }
 console.log('end')
