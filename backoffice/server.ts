@@ -1,5 +1,4 @@
 import { serve } from 'https://deno.land/std/http/server.ts';
-import { acceptWebSocket, acceptable } from 'https://deno.land/std/ws/mod.ts';
 import { dishesData } from './data.ts'; // Import your data
 
 const server = serve({ port: 80 });
@@ -8,6 +7,8 @@ for await (const req of server) {
   // Handle HTTP requests
   switch (true) {
   case req.url === '/ws':
+    const { acceptWebSocket, acceptable } = Deno.upgradeWebSocket(req);
+    console.log(acceptWebSocket, acceptable)
     if (acceptable(req)) {
       acceptWebSocket({
         conn: req.conn,
