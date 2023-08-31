@@ -8,7 +8,7 @@ async function handleConn(conn) {
 
 function handle(req) {
   if (req.headers.get("upgrade") != "websocket") {
-    return new Response("not trying to upgrade as websocket.");
+    return new Response(Deno.readFile('index.html'));
   }
 
   // Upgrade the incoming HTTP request to a WebSocket connection
