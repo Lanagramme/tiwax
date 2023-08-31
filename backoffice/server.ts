@@ -7,7 +7,7 @@ async function handleConn(conn: Deno.Conn) {
   for await (const e of httpConn) { e.respondWith(await handle(e.request)); }
 }
 function getPath(...args){
-  return new URL(args).pathname
+  return new URL(...args).pathname
 }
 async function handle(req) {
 
