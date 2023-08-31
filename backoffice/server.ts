@@ -15,9 +15,9 @@ Routes.set('/ws', function(req){
     .then(handleWebSocket);
   }
 })
-Routes.set('/', function(req){
-  // const body = await Deno.readFile('static/index.html');
-  req.respond({ body: await Deno.readFile('static/index.html') });
+Routes.set('/', async function(req){
+  const body = await Deno.readFile('static/index.html');
+  req.respond({ body });
 })
 Routes.set('/styles.css', getRessource)
 Routes.set('/client.js', getRessource)
