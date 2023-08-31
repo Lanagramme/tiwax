@@ -3,7 +3,7 @@ import { dishesData } from './data.ts'; // Import your data
 
 const server = serve({ port: 80 }), Routes = new Map();
 Routes.set('/ws', function(req){
-  const { acceptWebSocket, acceptable } = ws(Deno.upgradeWebSocket(req));
+  const { acceptWebSocket, acceptable } = Deno.upgradeWebSocket(req);
   console.log(acceptWebSocket, acceptable)
   if (acceptable(req)) {
     acceptWebSocket({
@@ -33,11 +33,11 @@ async function getRessource(req){
 }
 async function handleWebSocket(ws: WebSocket) {
   for await (const event of ws) {
-  if (typeof event === 'string') {
-    if (event === 'getDishes') {
-    ws.send(JSON.stringify(dishesData)); // Send data to the client
+    if (typeof event === 'string') {
+      if (event === 'getDishes') {
+      ws.send(JSON.stringify(dishesData)); // Send data to the client
+      }
+      // Handle other WebSocket events here
     }
-    // Handle other WebSocket events here
-  }
   }
 }
