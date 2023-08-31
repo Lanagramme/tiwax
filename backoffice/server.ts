@@ -16,8 +16,8 @@ Routes.set('/ws', function(req){
   }
 })
 Routes.set('/', function(req){
-  const body = await Deno.readFile('static/index.html');
-  req.respond({ body });
+  // const body = await Deno.readFile('static/index.html');
+  req.respond({ body: await Deno.readFile('static/index.html') });
 })
 Routes.set('/styles.css', getRessource)
 Routes.set('/client.js', getRessource)
