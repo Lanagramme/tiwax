@@ -24,7 +24,7 @@ Routes.set('/client.js', getRessource)
 
 // Handle HTTP requests
 for await (const req of server) { Routes.has(req.url) && Routes.get(req.url)(req) }
-function getRessource(req){
+async function getRessource(req){
   const filePath = `static${req.url}`;
   const headers = new Headers();
   headers.set('Content-Type', 'text/css'); // Adjust Content-Type if needed
