@@ -2,13 +2,13 @@ async function handleConn(conn) {
   const httpConn = Deno.serveHttp(conn);
 
   for await (const e of httpConn) {
-    e.respondWith(handle(e.request));
+    e.respondWith(await handle(e.request));
   }
 }
 
-function handle(req) {
+async function handle(req) {
   if (req.headers.get("upgrade") != "websocket") {
-    return new Response(Deno.readFile('index.html'));
+    return new Response(await Deno.readFile('index.html'));
   }
 
   // Upgrade the incoming HTTP request to a WebSocket connection
