@@ -22,15 +22,8 @@ Routes.set('/', function(req){
 Routes.set('/styles.css', getRessource)
 Routes.set('/client.js', getRessource)
 
-for await (const req of server) {
-  // Handle HTTP requests
-  switch (true) {
-  
-  case req.url === :
-  case req.url === :
-    
-  }
-}
+// Handle HTTP requests
+for await (const req of server) { Routes.has(req.url) && Routes.get(req.url)(req) }
 function getRessource(req){
   const filePath = `static${req.url}`;
   const headers = new Headers();
