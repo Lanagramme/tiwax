@@ -1,29 +1,23 @@
+"use strict";
 // client.tsx
-
-import { h, render } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
-
-const App = () => {
-  const [dishes, setDishes] = useState([]);
-
-  useEffect(() => {
-    const socket = new WebSocket('wss://your-deployed-app-url');
-
-    socket.onmessage = (event) => {
-      const newData = JSON.parse(event.data);
-      setDishes(newData);
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, []);
-
-  // Implement UI components and CRUD logic for dishes
-  // Example: display dishes in a table, allow adding/editing/deleting
-
-  return (
-    <div>
+Object.defineProperty(exports, "__esModule", { value: true });
+var preact_1 = require("preact");
+var hooks_1 = require("preact/hooks");
+var App = function () {
+    var _a = (0, hooks_1.useState)([]), dishes = _a[0], setDishes = _a[1];
+    (0, hooks_1.useEffect)(function () {
+        var socket = new WebSocket('wss://your-deployed-app-url');
+        socket.onmessage = function (event) {
+            var newData = JSON.parse(event.data);
+            setDishes(newData);
+        };
+        return function () {
+            socket.close();
+        };
+    }, []);
+    // Implement UI components and CRUD logic for dishes
+    // Example: display dishes in a table, allow adding/editing/deleting
+    return (<div>
       <h1>Backoffice</h1>
       <table>
         <thead>
@@ -34,20 +28,16 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          {dishes.map((dish) => (
-            <tr key={dish.id}>
+          {dishes.map(function (dish) { return (<tr key={dish.id}>
               <td>{dish.name}</td>
               <td>${dish.price.toFixed(2)}</td>
               <td>
                 {/* Add buttons for editing and deleting */}
               </td>
-            </tr>
-          ))}
+            </tr>); })}
         </tbody>
       </table>
       {/* Add form or buttons for adding/editing dishes */}
-    </div>
-  );
+    </div>);
 };
-
-render(<App />, document.getElementById('app'));
+(0, preact_1.render)(<App />, document.getElementById('app'));
