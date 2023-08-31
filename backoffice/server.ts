@@ -14,7 +14,7 @@ async function handle(req) {
   console.log('handle')
   if (req.headers.get("upgrade") != "websocket") {
     const pathname = getPath(req.url), dirName = getPath('.', import.meta.url);
-    if(pathname.startsWith("/asset")) return serveDir(req, { fsRoot: dirName + "/asset" });
+    if(pathname.startsWith("/assets")) return serveDir(req, { fsRoot: dirName });
 
     return new Response(await Deno.readFile(dirName + '/index.html'));
   }
