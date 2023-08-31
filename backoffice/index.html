@@ -6,6 +6,14 @@
     <title>Document</title>
 </head>
 <body>
-    <script src="assets/client.js"></script>
+    <!-- <script src="assets/client.js"></script> -->
+    <script>
+        const ws = new WebSocket("ws://localhost:8080/");
+
+        // Connection opened
+        ws.addEventListener('open', function (_event) {
+            ws.send('Hello Server!');
+        });
+    </script>
 </body>
 </html>
