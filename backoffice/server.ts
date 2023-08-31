@@ -11,9 +11,6 @@ async function handle(req) {
     const pathname = new URL(req.url).pathname;
     
     if (pathname.startsWith("/asset")) return serveDir(req, { fsRoot: new URL('.', import.meta.url).pathname + "/asset" });
-    // Build a readable stream so the file doesn't have to be fully loaded into
-    // memory while we send it
-    const readableStream = file.readable;
 
     return new Response(await Deno.readFile(new URL('.', import.meta.url).pathname + '/index.html'));
   }
