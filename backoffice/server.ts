@@ -1,4 +1,3 @@
-console.log('start')
 import { serveDir } from "https://deno.land/std@0.200.0/http/file_server.ts";
 
 async function handleConn(conn: Deno.Conn) { for await (const e of Deno.serveHttp(conn)) e.respondWith(await handle(e.request)); }
