@@ -1,19 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <!-- <script src="assets/client.js"></script> -->
+    <title>Admin Panel</title>
+    <style>
+      /* Basic CSS styling */
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .tabs {
+        display: flex;
+        justify-content: space-between;
+      }
+      .tab {
+        padding: 10px;
+        background-color: #333;
+        color: #fff;
+        cursor: pointer;
+      }
+      .tab-content:not(:last-child):not(:target), .tab-content:not(:target ~ :last-child) {
+        display: none;
+      }
+      .table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .checkbox-label input[type="checkbox"] {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tabs">
+      <div class="tab" id="dashboard-tab">Dashboard</div>
+      <div class="tab" id="dishes-tab">Dishes</div>
+      <div class="tab" id="drinks-tab">Drinks</div>
+    </div>
+  
+    <div class="tab-content" id="dashboard">
+      <h2>Dashboard</h2>
+      <div class="checkbox-label">
+        <input type="checkbox" id="shop-status">
+        <label for="shop-status">Shop is open</label>
+      </div>
+    </div>
+  
+    <div class="tab-content" id="dishes">
+      <h2>Dishes</h2>
+      <table class="table">
+        <!-- Table content for dishes CRUD -->
+      </table>
+    </div>
+  
+    <div class="tab-content" id="drinks">
+      <h2>Drinks</h2>
+      <table class="table">
+        <!-- Table content for drinks CRUD -->
+      </table>
+    </div>
+  
     <script>
-        const ws = new WebSocket(`wss://${location.host}/`);
+      const ws = new WebSocket(`wss://${location.host}/`);
 
-        // Connection opened
-        ws.addEventListener('open', function (_event) {
-            ws.send('Hello Server!');
-        });
+      if(!location.hash){ location.hash = "dashboard" }
+
+      // Connection opened
+      ws.addEventListener('open', function (_event) {
+        ws.send('Hello Server!');
+      });
     </script>
-</body>
+  </body>
 </html>
