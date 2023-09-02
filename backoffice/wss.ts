@@ -52,8 +52,7 @@ export function ws({ socket, response }) {
           break;
         default: res = { type:"message", body: { data: new Date().toString(), dataType }};
           break;
-        }
-      res =  data.type === "broadcast" ? data : { type:"message", body: data }
+      }
     }
 
     if(res.type === "broadcast") broadcast(res.body);
