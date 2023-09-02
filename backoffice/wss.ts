@@ -1,12 +1,21 @@
-const Items = new Map, sockets = new Set;
+const
+	Items = new Map,
+	channel = new BroadcastChannel('available'),
+	sockets = new Set<WebSocket>()
 
-function broadcast(data){
-  let i = 0, size = sockets.size;
-	if(size > 1) console.log('less than 2 connection');
-  else console.log(size, ' connection')
-	sockets.forEach(socket => (send(socket, data), i++))
-  console.log(size == i)
+
+channel.onmessage = e => {
+  console.log(e)
+  // (e.target != channel) && channel.postMessage(e.data)
+  // sockets.forEach(s => s.send(e.data))
 }
+  function broadcast(data){
+    let i = 0, size = sockets.size;
+    if(size < 2) console.log('less than 2 connection');
+    else console.log(size, ' connection')
+    sockets.forEach(socket => (send(socket, data), i++))
+    console.log(size == i)
+  }
 
 function send(socket, data) { socket.send(JSON.stringify(data)) }
 
@@ -33,11 +42,14 @@ export function ws({ socket, response }) {
 		  res =  data.type === "broadcast" ? data : { type:"message", body: data }
 	  }
 
-	  if(res.type === "broadcast") broadcast(res.body);
+	  if(res.type === "broadcast") channel.postMessage(res.body);// broadcast(res.body);
 	  else send(socket, res.body);
 	};
   
 	socket.onerror = (e) => console.log("socket errored:", e.message);
-	socket.onclose = () => console.log("socket closed");
+	socket.onclose = () => {
+		console.log("socket closed")
+		sockets.delete(socket)
+	};
 	return response;
 }
