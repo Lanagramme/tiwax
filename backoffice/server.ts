@@ -24,7 +24,7 @@ async function handle(req) {
   };
   socket.onerror = (e) => console.log("socket errored:", e.message);
   socket.onclose = () => console.log("socket closed");
-
+  socket.send('test')
   return response;
 }
 
