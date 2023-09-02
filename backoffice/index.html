@@ -156,13 +156,14 @@
             action(action, item){ actions[action] ? actions[action](item) : console.log(action, item) }
           },
           beforeCreate(){ 
+            const self = this
             ws.addEventListener('open', function (_event) {
             ws.send('getItems');
             ws.onmessage = (e) => {
 	            const res = JSON.parse(e.data);
               console.log(res)
               switch (true) {
-                case res.method == 'get': Object.assign(this.$data, res.data)
+                case res.method == 'get': Object.assign(self.$data, res.data)
                   break;
               
                 default:
