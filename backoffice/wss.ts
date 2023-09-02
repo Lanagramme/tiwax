@@ -45,8 +45,10 @@ export function ws({ socket, response }) {
 
       switch (true) {
         case data.method == "post":
+          console.log(data)
           data.item?.type ? items.push(data.item) : console.log(data);
-          res = { type:"message", body: { msg: "item added" }}
+          console.log(items)
+          res = { type:"broadcast", body: { method: 'get', data: { items } }}
           break;
         default: res = { type:"message", body: { data: new Date().toString(), dataType }};
           break;
