@@ -33,7 +33,7 @@ async function handle(req) {
       console.log("socket message:", e.data);
       res = { type:"message", body: { data: new Date().toString(), dataType }};
     } else {
-      res =  data.type === "broadcast" ? data : { type:"message", body: { data }}
+      res =  data.type === "broadcast" ? data : { type:"message", body: data }
     }
     if(res.type === "broadcast") {
       sockets.forEach(socket => socket.send(JSON.stringify(res.body)))
