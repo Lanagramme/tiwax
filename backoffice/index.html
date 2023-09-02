@@ -180,7 +180,7 @@
       //Connection opened
       ws.addEventListener('open', function (_event) {
         ws.send('Hello Server!');
-        ws.onmessage(data=>console.log(data));
+        ws.onmessage = data=>console.log(data);
       });
     </script>
   </body>
