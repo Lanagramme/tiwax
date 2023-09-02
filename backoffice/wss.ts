@@ -8,6 +8,7 @@ function broadcast(data){
   let i = 0, size = sockets.size;
   if(size < 2) console.log('less than 2 connection');
   else console.log(size, ' connection')
+  e.target != channel && channel.postMessage(res.body)
   sockets.forEach(socket => (send(socket, data), i++))
   console.log(size == i)
 }
@@ -26,8 +27,7 @@ export function ws({ socket, response }) {
 	socket.onmessage = channel.onmessage = (e) => {
 	  let data, res;
     console.log(e)
-    // (e.target != channel) && channel.postMessage(e.data)
-    // sockets.forEach(s => s.send(e.data))
+
 	  try { data = JSON.parse(e.data); } catch (error) { data = e.data }
   
 	  const dataType = typeof data;
@@ -39,7 +39,7 @@ export function ws({ socket, response }) {
 		  res =  data.type === "broadcast" ? data : { type:"message", body: data }
 	  }
 
-	  if(res.type === "broadcast") channel.postMessage(res.body);// broadcast(res.body);
+	  if(res.type === "broadcast") broadcast(res.body);
 	  else send(socket, res.body);
 	};
   
