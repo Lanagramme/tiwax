@@ -4,18 +4,13 @@ const
 	sockets = new Set<WebSocket>()
 
 
-channel.onmessage = e => {
-  console.log(e)
-  // (e.target != channel) && channel.postMessage(e.data)
-  // sockets.forEach(s => s.send(e.data))
+function broadcast(data){
+  let i = 0, size = sockets.size;
+  if(size < 2) console.log('less than 2 connection');
+  else console.log(size, ' connection')
+  sockets.forEach(socket => (send(socket, data), i++))
+  console.log(size == i)
 }
-  function broadcast(data){
-    let i = 0, size = sockets.size;
-    if(size < 2) console.log('less than 2 connection');
-    else console.log(size, ' connection')
-    sockets.forEach(socket => (send(socket, data), i++))
-    console.log(size == i)
-  }
 
 function send(socket, data) { socket.send(JSON.stringify(data)) }
 
@@ -28,9 +23,11 @@ export function ws({ socket, response }) {
 	  console.log("socket opened", before,after)
 	};
 
-	socket.onmessage = (e) => {
+	socket.onmessage = channel.onmessage = (e) => {
 	  let data, res;
-  
+    console.log(e)
+    // (e.target != channel) && channel.postMessage(e.data)
+    // sockets.forEach(s => s.send(e.data))
 	  try { data = JSON.parse(e.data); } catch (error) { data = e.data }
   
 	  const dataType = typeof data;
