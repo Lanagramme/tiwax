@@ -17,7 +17,7 @@ async function handle(req) {
 
   // Upgrade the incoming HTTP request to a WebSocket connection
   const { socket, response } = Deno.upgradeWebSocket(req);
-  socket.onopen = () => { sockets.set(socket.id, socket), console.log("socket id:"+ socket.id +" opened")};
+  socket.onopen = () => { sockets.set(socket.id, socket), console.log("socket opened", socket)};
   socket.onmessage = (e) => {
     let data, res;
 
