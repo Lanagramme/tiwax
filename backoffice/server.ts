@@ -1,4 +1,5 @@
 import { serveDir } from "https://deno.land/std@0.200.0/http/file_server.ts";
+const Items = new Map, sockets = new Map;
 
 async function handleConn(conn: Deno.Conn) { for await (const e of Deno.serveHttp(conn)) e.respondWith(await handle(e.request)); }
 
@@ -16,7 +17,7 @@ async function handle(req) {
 
   // Upgrade the incoming HTTP request to a WebSocket connection
   const { socket, response } = Deno.upgradeWebSocket(req);
-  socket.onopen = () => console.log("socket opened");
+  socket.onopen = () => { sockets.set(socket.id, socket), console.log("socket id:"+ socket.id +" opened")};
   socket.onmessage = (e) => {
     let data, res;
 
@@ -37,6 +38,7 @@ async function handle(req) {
 
     socket.send(JSON.stringify(res));
   };
+
   socket.onerror = (e) => console.log("socket errored:", e.message);
   socket.onclose = () => console.log("socket closed");
   return response;
