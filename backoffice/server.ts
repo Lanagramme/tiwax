@@ -1,5 +1,5 @@
 import { serveDir } from "https://deno.land/std@0.200.0/http/file_server.ts";
-const Items = new Map, sockets = new Map;
+const Items = new Map, sockets = new Set;
 
 async function handleConn(conn: Deno.Conn) { for await (const e of Deno.serveHttp(conn)) e.respondWith(await handle(e.request)); }
 
@@ -17,7 +17,7 @@ async function handle(req) {
 
   // Upgrade the incoming HTTP request to a WebSocket connection
   const { socket, response } = Deno.upgradeWebSocket(req);
-  socket.onopen = () => { sockets.set(socket.id, socket), console.log("socket opened", socket)};
+  socket.onopen = () => { sockets.add(socket), console.log("socket opened")};
   socket.onmessage = (e) => {
     let data, res;
 
@@ -31,12 +31,13 @@ async function handle(req) {
 
     if( ["string", "number"].includes(dataType)) {
       console.log("socket message:", e.data);
-      res = { type:"message", message: new Date().toString(), dataType};
+      res = { type:"message", body: { data: new Date().toString(), dataType }};
     } else {
-      res = data
+      res =  data.type === "broadcast" ? data : { type:"message", body: { data: new Date().toString(), dataType }}
     }
-
-    socket.send(JSON.stringify(res));
+    if(res.type === "broadcast") {
+      sockets.forEach(socket => socket.send(JSON.stringify(res.body)))
+    } else socket.send(JSON.stringify(res.body));
   };
 
   socket.onerror = (e) => console.log("socket errored:", e.message);
