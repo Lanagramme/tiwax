@@ -140,9 +140,9 @@
             }
             ws.send(JSON.stringify({method: "post", item}))
           },
-          edit({id}){
+          edit({id, type}){
             item = {
-              id,
+              id, type,
               detail: "An amazingly awesome edited product",
               titre: "edited product",
             }
