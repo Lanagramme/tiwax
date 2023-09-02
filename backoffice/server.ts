@@ -19,7 +19,7 @@ async function handle(req) {
   socket.onopen = () => console.log("socket opened");
   socket.onmessage = (e) => {
     console.log("socket message:", e.data);
-    socket.send(new Date().toString());
+    socket.send(e.data);
   };
   socket.onerror = (e) => console.log("socket errored:", e.message);
   socket.onclose = () => console.log("socket closed");
