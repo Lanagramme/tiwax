@@ -1,4 +1,5 @@
-const Items = new Map, sockets = new Set<WebSocket>();
+import { items } from "./data.ts"
+const sockets = new Set<WebSocket>();
 
 function broadcast(data){
   let i = 0, size = sockets.size;
@@ -31,7 +32,15 @@ export function ws({ socket, response }) {
 	  const dataType = typeof data;
   
 	  if( ["string", "number"].includes(dataType)) {
-		  console.log("socket message:", e.data);
+		  console.log("socket message:", data);
+		  switch (data) {
+			case 'getItems':
+				res = { type:"message", body: { req: 'get', data: { items } }}
+				break;
+		  
+			default:
+				break;
+		  }
 		  res = { type:"message", body: { data: new Date().toString(), dataType }};
 	  } else {
 		  res =  data.type === "broadcast" ? data : { type:"message", body: data }

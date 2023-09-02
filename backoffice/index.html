@@ -116,6 +116,7 @@
     <script>
       if(!location.hash) location.hash = "dashboard";
 
+      const ws = new WebSocket(`wss://${location.host}/`);
       const dataModel = {
         items: {
           "titre": "text",
@@ -126,24 +127,6 @@
         orders: ["id","content"]
       }
       const
-        items = [
-          {
-            id: "A1",
-            titre: "dish A",
-            detail: "The marvelously delicious dish A",
-            prix: 1,
-            image: false,
-            type: "dishes"
-          },
-          {
-            id: "D1",
-            titre: "drink A",
-            detail: "The marvelously delicious drink A",
-            prix: 1,
-            image: false,
-            type: "drinks"
-          },
-        ],
         orders = [
           { id: "O1", content: [] }
         ],
@@ -161,29 +144,32 @@
         };
 
         
-        new Vue({
-            el: '#app',
-            data: {
-              dataModel,
-              items,
-              shopOpen: false,
-              orders,
-            },
-            methods:{
-              getValues(o){ return Object.entries(o).reduce((acc, [key, val])=> (!['type', 'id'].includes(key) && acc.push(val),acc),[]) },
-              action(action, item){ actions[action] ? actions[action](item) : console.log(action, item) }
-            }
-        });
-      const ws = new WebSocket(`wss://${location.host}/`);
-
-      
-      //Connection opened
-      ws.addEventListener('open', function (_event) {
-        ws.send('Hello Server!');
-        ws.onmessage = ({data}) => {
-          alert('msg')
-          console.log(JSON.parse(data))
-        };
+      new Vue({
+          el: '#app',
+          data: {
+            dataModel,
+            items: [],
+            shopOpen: false,
+            orders,
+          },
+          methods:{
+            action(action, item){ actions[action] ? actions[action](item) : console.log(action, item) }
+          },
+          beforeCreate(){ 
+            ws.addEventListener('open', function (_event) {
+            ws.send('getItems');
+            ws.onmessage = (e) => {
+	            const res = JSON.parse(e.data);   
+              switch (true) {
+                case res.req == 'get': Object.assign(this.$data, res.data)
+                  break;
+              
+                default:
+                  break;
+              }
+            };
+          });
+        }
       });
     </script>
   </body>
