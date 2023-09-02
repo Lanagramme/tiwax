@@ -18,13 +18,11 @@ async function handle(req) {
   const { socket, response } = Deno.upgradeWebSocket(req);
   socket.onopen = () => console.log("socket opened");
   socket.onmessage = (e) => {
-    console.log('arg =>',e)
     console.log("socket message:", e.data);
     socket.send(new Date().toString());
   };
   socket.onerror = (e) => console.log("socket errored:", e.message);
   socket.onclose = () => console.log("socket closed");
-  socket.send('test')
   return response;
 }
 
