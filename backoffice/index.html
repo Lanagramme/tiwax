@@ -10,26 +10,38 @@
         font-family: Arial, sans-serif;
       }
       .tabs {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-auto-flow: column;
+        text-align: center;
       }
       .tab {
         padding: 10px;
         background-color: #333;
         color: #fff;
         cursor: pointer;
+        transition: all .3s ease;
       }
-      .tab-content:not(:last-child):not(:target), .tab-content:not(:target ~ :last-child) {
+      .tab-content:not(:last-child):not(:target), :target ~ .tab-content:last-child {
         display: none;
       }
+      .tabs:has(+ main > :nth-child(1):target) > :nth-child(1),
+      .tabs:has(+ main > :nth-child(2):target) > :nth-child(2),
+      .tabs:has(+ main > :nth-child(3):target) > :nth-child(3)
+      {
+        background-color: transparent;
+        color: #333;
+      }
+      
       .table {
         border-collapse: collapse;
-        width: 100%;
       }
       .table th, .table td {
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
+      }
+      .table, .table button {
+        width: 100%;
       }
       .checkbox-label {
         display: flex;
@@ -40,42 +52,132 @@
         margin-right: 5px;
       }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
   </head>
   <body>
-    <div class="tabs">
-      <div class="tab" id="dashboard-tab">Dashboard</div>
-      <div class="tab" id="dishes-tab">Dishes</div>
-      <div class="tab" id="drinks-tab">Drinks</div>
+    <div id="app">
+      <header class="tabs">
+        <a href="#dashboard" class="tab">Dashboard</a>
+        <a href="#dishes" class="tab">Dishes</a>
+        <a href="#drinks" class="tab">Drinks</a>
+      </header>
+      <main>
+        <div class="tab-content" id="dashboard">
+          <h2>Dashboard</h2>
+          <div class="checkbox-label">
+            <input type="checkbox" id="shop-status">
+            <label for="shop-status">Shop is open</label>
+          </div>
+          
+          <table class="table">
+            <tr>
+              <th v-for="val in dataModel.orders"> {{ val }} </th>
+            </tr>
+            <tr v-for="order in orders">
+              <td v-for="val in order"> {{ val }} </td>
+              <td v-for="opt in ['validate']"><button @click="action(opt, item)"> {{ opt }} </button></td>
+            </tr>
+          </table>
+        </div>
+      
+        <div class="tab-content" id="dishes">
+          <h2>Dishes</h2>
+          <button @click="action('create', 'dishes')"> new </button>
+          <table class="table">
+            <tr>
+              <th v-for="val, key in dataModel.items"> {{ key }} </th>
+            </tr>
+            <tr v-for="item in items.filter(item=>item.type === 'dishes')">
+              <td v-for="v,val in dataModel.items"> {{ item[val] }} </td>
+              <td v-for="opt in ['edit', 'delete']"><button @click="action(opt, item)"> {{ opt }} </button></td>
+            </tr>
+          </table>
+        </div>
+      
+        <div class="tab-content" id="drinks">
+          <h2>Drinks</h2>
+          <button @click="action('create', 'drinks')"> new </button>
+          <table class="table">
+            <tr>
+              <th v-for="val, key in dataModel.items"> {{ key }} </th>
+            </tr>
+            <tr v-for="item in items.filter(item=>item.type === 'drinks')">
+              <td v-for="v,val in dataModel.items"> {{ item[val] }} </td>
+              <td v-for="opt in ['edit', 'delete']"><button @click="action(opt, item)"> {{ opt }} </button></td>
+            </tr>
+          </table>
+        </div>
+      
+        <div class="tab-content">
+          <h2>Not Found</h2>
+        </div>
+      </main>
     </div>
-  
-    <div class="tab-content" id="dashboard">
-      <h2>Dashboard</h2>
-      <div class="checkbox-label">
-        <input type="checkbox" id="shop-status">
-        <label for="shop-status">Shop is open</label>
-      </div>
-    </div>
-  
-    <div class="tab-content" id="dishes">
-      <h2>Dishes</h2>
-      <table class="table">
-        <!-- Table content for dishes CRUD -->
-      </table>
-    </div>
-  
-    <div class="tab-content" id="drinks">
-      <h2>Drinks</h2>
-      <table class="table">
-        <!-- Table content for drinks CRUD -->
-      </table>
-    </div>
-  
     <script>
+      if(!location.hash) location.hash = "dashboard";
+
+      const dataModel = {
+        items: {
+          "titre": "text",
+          "detail": "text",
+          "prix": "text",
+          "image": "file"
+        },
+        orders: ["id","content"]
+      }
+      const
+        items = [
+          {
+            id: "A1",
+            titre: "dish A",
+            detail: "The marvelously delicious dish A",
+            prix: 1,
+            image: false,
+            type: "dishes"
+          },
+          {
+            id: "D1",
+            titre: "drink A",
+            detail: "The marvelously delicious drink A",
+            prix: 1,
+            image: false,
+            type: "drinks"
+          },
+        ],
+        orders = [
+          { id: "O1", content: [] }
+        ],
+        actions = {
+          create(type){
+            items.push({
+              id: Date.now(),
+              type
+            })
+          },
+          edit(item){
+            console.log("edit => ", item)
+          },
+          delete(item){ items.splice(items.indexOf(item), 1) }
+        };
+
+        
+        new Vue({
+            el: '#app',
+            data: {
+              dataModel,
+              items,
+              shopOpen: false,
+              orders,
+            },
+            methods:{
+              getValues(o){ return Object.entries(o).reduce((acc, [key, val])=> (!['type', 'id'].includes(key) && acc.push(val),acc),[]) },
+              action(action, item){ actions[action] ? actions[action](item) : console.log(action, item) }
+            }
+        });
       const ws = new WebSocket(`wss://${location.host}/`);
 
-      if(!location.hash){ location.hash = "dashboard" }
-
-      // Connection opened
+      
+      //Connection opened
       ws.addEventListener('open', function (_event) {
         ws.send('Hello Server!');
       });
