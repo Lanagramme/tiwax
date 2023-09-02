@@ -42,8 +42,9 @@ async function handle(req) {
     }
     if(res.type === "broadcast") {
       console.log("broadcast")
-      sockets.forEach((s, i) => {
-        console.log(i, ' => ', s)
+      let i = 0;
+      sockets.forEach((s) => {
+        console.log(i++, ' => ', s)
         s.send(JSON.stringify(res.body))
       })
     } else socket.send(JSON.stringify(res.body));
