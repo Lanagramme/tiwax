@@ -141,7 +141,11 @@
             ws.send(JSON.stringify({method: "post", item}))
           },
           edit(item){
-            console.log("edit => ", item)
+            item = {
+              detail: "An amazingly awesome edited product",
+              titre: "edited product",
+            }
+            ws.send(JSON.stringify({method: "patch", item}))
           },
           delete(item){ ws.send(JSON.stringify({method: "delete", item})) }
         };
