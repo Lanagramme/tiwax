@@ -62,6 +62,15 @@ export function ws({ socket, response }) {
           } else console.log(data);
           res = { type:"broadcast", body: { method: 'get', data: { items } }}
           break;
+        case data.method == "patch":
+          console.log(data)
+          if(data.item?.type) {
+            const id = data.item.id 
+            Object.assign(items.find(item => item.id === id), data.item)
+            console.log(items)
+          } else console.log(data);
+          res = { type:"broadcast", body: { method: 'get', data: { items } }}
+          break;
         default: res = { type:"message", body: { data: new Date().toString(), dataType }};
           break;
       }
