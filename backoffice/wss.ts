@@ -46,8 +46,20 @@ export function ws({ socket, response }) {
       switch (true) {
         case data.method == "post":
           console.log(data)
-          data.item?.type ? items.push(data.item) : console.log(data);
-          console.log(items)
+          if(data.item?.type) {
+            data.item.id = crypto.randomUUID()
+            items.push(data.item)
+            console.log(items)
+          } else console.log(data);
+          res = { type:"broadcast", body: { method: 'get', data: { items } }}
+          break;
+        case data.method == "delete":
+          console.log(data)
+          if(data.item?.type) {
+            const id = data.item.id 
+            items.splice(items.findIndex(item => item.id === id), 1)
+            console.log(items)
+          } else console.log(data);
           res = { type:"broadcast", body: { method: 'get', data: { items } }}
           break;
         default: res = { type:"message", body: { data: new Date().toString(), dataType }};
