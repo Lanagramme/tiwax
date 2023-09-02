@@ -18,17 +18,11 @@ async function handle(req) {
   const { socket, response } = Deno.upgradeWebSocket(req);
   socket.onopen = () => console.log("socket opened");
   socket.onmessage = (e) => {
-    let data, res;
+    const data = JSON.parse(e.data), dataType = typeof data;
 
-    try {
-      data = JSON.parse(e.data);
-    } catch (error) {
-      data = e.data
-    }
-
-    if(typeof data === "string") {
+    if( ["string", "number"].includes(dataType)) {
       console.log("socket message:", data);
-      res = { type:"message", message: new Date().toString()};
+      res = { type:"message", message: new Date().toString(), dataType};
     } else {
       res = data
     }
