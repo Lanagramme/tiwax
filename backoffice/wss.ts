@@ -34,7 +34,7 @@ export function ws({ socket, response }) {
 	  }
 
 	  if(res.type === "broadcast") broadcast(res.body);
-	  else send(res.body);
+	  else send(socket, res.body);
 	};
   
 	socket.onerror = (e) => console.log("socket errored:", e.message);
