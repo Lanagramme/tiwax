@@ -3,9 +3,9 @@ const sockets = new Set<WebSocket>();
 
 function broadcast(data){
   let i = 0, size = sockets.size;
-	if(size < 2) console.log('less than 2 connection');
+  if(size < 2) console.log('less than 2 connection');
   else console.log(size, ' connection')
-	sockets.forEach(socket => (send(socket, data), i++))
+  sockets.forEach(socket => (send(socket, data), i++))
   console.log(size == i)
 }
 
@@ -19,40 +19,48 @@ function updateSockets(action, socket) {
   return track
 }
 export function ws({ socket, response }) {
-	
-	socket.onopen = () => {
-	  console.log("socket opened", ...updateSockets('add', socket))
-	};
+  
+  socket.onopen = () => {
+    console.log("socket opened", ...updateSockets('add', socket))
+  };
 
-	socket.onmessage = (e) => {
-	  let data, res;
+  socket.onmessage = (e) => {
+    let data, res;
   
-	  try { data = JSON.parse(e.data); } catch (error) { data = e.data }
+    try { data = JSON.parse(e.data); } catch (error) { data = e.data }
   
-	  const dataType = typeof data;
+    const dataType = typeof data;
   
-	  if( ["string", "number"].includes(dataType)) {
-		  console.log("socket message:", data);
-		  switch (data) {
-			case 'getItems':
-				res = { type:"message", body: { req: 'get', data: { items } }}
-				break;
-		  
-			default:
-				break;
-		  }
-		  res = { type:"message", body: { data: new Date().toString(), dataType }};
-	  } else {
-		  res =  data.type === "broadcast" ? data : { type:"message", body: data }
-	  }
+    if( ["string", "number"].includes(dataType)) {
+      console.log("socket message:", data);
+      switch (data) {
+      case 'getItems':
+        res = { type:"message", body: { method: 'get', data: { items } }}
+        break;
+      default: res = { type:"message", body: { data: new Date().toString(), dataType }};
+        break;
+      }
+      
+    } else {
 
-	  if(res.type === "broadcast") broadcast(res.body);
-	  else send(socket, res.body);
-	};
+      switch (true) {
+        case data.method == "post":
+          data.item?.type ? items.push(data.item) : console.log(data);
+          res = { type:"message", body: { msg: "item added" }}
+          break;
+        default: res = { type:"message", body: { data: new Date().toString(), dataType }};
+          break;
+        }
+      res =  data.type === "broadcast" ? data : { type:"message", body: data }
+    }
+
+    if(res.type === "broadcast") broadcast(res.body);
+    else send(socket, res.body);
+  };
   
-	socket.onerror = (e) => console.log("socket errored:", e.message);
-	socket.onclose = () => {
-		console.log("socket closed", ...updateSockets('delete', socket))
-	};
-	return response;
+  socket.onerror = (e) => console.log("socket errored:", e.message);
+  socket.onclose = () => {
+    console.log("socket closed", ...updateSockets('delete', socket))
+  };
+  return response;
 }

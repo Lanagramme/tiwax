@@ -162,7 +162,7 @@
 	            const res = JSON.parse(e.data);
               console.log(res)
               switch (true) {
-                case res.req == 'get': Object.assign(this.$data, res.data)
+                case res.method == 'get': Object.assign(this.$data, res.data)
                   break;
               
                 default:
