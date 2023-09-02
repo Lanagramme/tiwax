@@ -27,13 +27,13 @@ async function handle(req) {
     }
 
     if(typeof data === "string") {
-      console.log("socket message:", e.data);
+      console.log("socket message:", data);
       res = { type:"message", message: new Date().toString()};
     } else {
       res = data
     }
 
-    socket.send(JSON.stringify(data));
+    socket.send(JSON.stringify(res));
   };
   socket.onerror = (e) => console.log("socket errored:", e.message);
   socket.onclose = () => console.log("socket closed");
