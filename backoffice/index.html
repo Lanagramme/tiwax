@@ -159,7 +159,8 @@
             ws.addEventListener('open', function (_event) {
             ws.send('getItems');
             ws.onmessage = (e) => {
-	            const res = JSON.parse(e.data);   
+	            const res = JSON.parse(e.data);
+              console.log(res)
               switch (true) {
                 case res.req == 'get': Object.assign(this.$data, res.data)
                   break;
