@@ -132,10 +132,14 @@
         ],
         actions = {
           create(type){
-            items.push({
+            const item = {
               id: Date.now(),
-              type
-            })
+              type,
+              text: "An amazingly awesome new product",
+              titre: "new product",
+              prix: Math.round(Math.random()*1000)/100
+            }
+            ws.send({method: "post", item})
           },
           edit(item){
             console.log("edit => ", item)
