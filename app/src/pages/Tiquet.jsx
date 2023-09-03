@@ -7,7 +7,7 @@ import '../styles/Tiquet.scss'
 if (localStorage.getItem('panier') == null) localStorage.setItem('panier', JSON.stringify([]))
 
 
-const liste =(item)=> <>
+const liste_render =(item)=> <>
   <div className="btn-produit grida1a">
     <div className="image"></div>
           <div>
@@ -35,13 +35,19 @@ const liste =(item)=> <>
   </div>
 </>
 
-const Tiquet =()=> <>
+const Tiquet =()=> {
+  let liste = JSON.parse(localStorage.getItem('panier'))
+  return <>
   <Page>
     <Header title='COMMANDE' />
     <div className='scroll'>
       <section className='tiquet'>
         <h4>Récapitulatif de commande</h4>
-          local
+        {
+          liste.map(x=>{
+            liste_render(x)
+          })
+        }
         
         <div className='btn-produit grida1a'>
           <div className='image'></div>
@@ -62,5 +68,5 @@ const Tiquet =()=> <>
     </Footer>
 
   </Page>
-</>
+</>}
 export default Tiquet

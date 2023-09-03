@@ -59,22 +59,23 @@ const data_boissons = {
         // titre="Dessert"
       // />
 
-const navigation = sessionStorage.getItem('navigations')
+let navigation = sessionStorage.getItem('navigations')
 console.log("nav", navigation)
 
 const Home=()=> {
   const [serverdata, updateData ] = useState(0)
   if (serverdata != navigation) updateData(navigation)
-const loop=()=>{
-  setTimeout(() => {
-    if (serverdata != navigation) {
-      console.log('loading ...')
-      updateData(navigation)
-    }
-    loop()
-  }, "1000");
-}
-loop()
+  const loop=()=>{
+    setTimeout(() => {
+      navigation = sessionStorage.getItem('navigations')
+      if (serverdata != navigation) {
+        console.log('loading ...')
+        updateData(navigation)
+      }
+      loop()
+    }, "1000");
+  }
+  loop()
   return <div className="App-screen">
     <div className="home_header">
     </div>
