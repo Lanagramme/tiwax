@@ -74,7 +74,7 @@ const Home=()=> {
       if (serverdata != navigation) updateData(navigation)
   }
 
-  if (!interrupteur) linkData(callback) && (interrupteur = true)
+  if (!interrupteur) linkData('navigations',callback) && (interrupteur = true)
 
   return <div className="App-screen">
     <div className="home_header">
