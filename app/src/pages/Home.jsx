@@ -1,5 +1,5 @@
 import '../styles/Home.scss'
-import {Store} from "../store/index.js'
+import {Store} from "../store/index.js"
 import Footer from "../components/Footer.jsx"
 import { NavLink } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -74,7 +74,7 @@ const Home=()=> {
       if (serverdata != navigation) updateData(navigation)
   }
 
-  if (!interrupteur) Store.linkData(callback) && interrupteur = true
+  if (!interrupteur) Store.linkData(callback) && (interrupteur = true)
 
   return <div className="App-screen">
     <div className="home_header">
