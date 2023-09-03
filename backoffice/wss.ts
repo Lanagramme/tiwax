@@ -60,7 +60,7 @@ export function ws({ socket, response }) {
             data.item.id = crypto.randomUUID()
             items.push(data.item)
           } else console.log(data.method,' => ',data);
-          res = { type:"broadcast", body: { method: 'get', data: { items } }}
+          res = { type:"broadcast", body: { method: 'get', data: { items, menus: available } }}
           break;
         case data.method == "delete":
           if(data.item?.type) {
