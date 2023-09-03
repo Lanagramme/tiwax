@@ -12,20 +12,20 @@ ws.addEventListener('open', function (_event) {
     switch (true) {
     case res.method == 'get':
       Object.entries(res.data).forEach(([key, data]) => {
+        console.log('key => ', key)
         switch (key) {
           case "items": Store.items = data; break;
-          case "menu": Store.navigations = data.reduce((acc, val) => {
+          case "menus": Store.navigations = data.reduce((acc, val) => {
               const item = Store.items.find(({id})=> id === val.target)
               delete val.target
               if(item){
-                (acc[item.type] || (acc[item.type] = {
-                    titre: item.type,
-                    liste: []
-                  }))
-                  .liste.push({
-                    ...item,
-                    ...val
-                  })
+                const menu = (acc[item.type] || (acc[item.type] = { titre: item.type, liste: []}))
+                console.log('menu => ',menu)
+                menu.liste.push({
+                  ...item,
+                  ...val
+                })
+                return acc
               }
             },{}); break;
         }
@@ -35,6 +35,7 @@ ws.addEventListener('open', function (_event) {
     default:
       break;
     }
+    Object.entries(Store).forEach(([key, val])=>sessionStorage.setItem(key, JSON.stringify(val)))
     console.log('Store => ',Store)
   };
 });
