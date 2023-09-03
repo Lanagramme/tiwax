@@ -3,6 +3,7 @@ import Footer from "../components/Footer.jsx"
 import { NavLink } from 'react-router-dom'
 
 const Categorie=({titre, url, image, data})=> {
+  localStorage.setItem('page', titre)
   return <NavLink className='btn-categorie' 
     to='Navigateur'
     state={{ from: data }}
@@ -44,6 +45,16 @@ const data_boissons = {
   ]
 }
 
+      // <Categorie 
+        // image=""
+        // data={data_boissons}
+        // titre="Boissons"
+      // />
+      // <Categorie 
+        // image=""
+        // data={data_dessert}
+        // titre="Dessert"
+      // />
 const navigation = sessionStorage.getItem('navigations')
 console.log("nav", navigation)
 const Home=()=> <div className="App-screen">
@@ -60,8 +71,8 @@ const Home=()=> <div className="App-screen">
          JSON.parse(navigation).map(item => 
             <Categorie 
               image=""
-              data={item.liste}
-              titre={item.title}
+              data={item}
+              titre={item.titre}
             />
           )
       }
@@ -69,16 +80,6 @@ const Home=()=> <div className="App-screen">
         image=""
         data={data_plat}
         titre="Plats"
-      />
-      <Categorie 
-        image=""
-        data={data_boissons}
-        titre="Boissons"
-      />
-      <Categorie 
-        image=""
-        data={data_dessert}
-        titre="Dessert"
       />
     </div>
     <Footer>
