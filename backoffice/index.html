@@ -104,7 +104,7 @@
         <div class="tab-content" id="dashboard">
           <h2>Dashboard</h2>
           <div class="checkbox-label">
-            <input v-model="shopOpen" type="checkbox" @click="this.value ? ws.send('openShop') : ws.send('closeShop')">
+            <input v-model="shopOpen" type="checkbox" @click="!this.value ? ws.send('openShop') : ws.send('closeShop')">
             <label for="shop-status">Shop is open</label>
           </div>
           <div id="grid-wrapper">
