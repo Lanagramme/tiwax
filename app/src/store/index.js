@@ -10,7 +10,8 @@ ws.addEventListener('open', function (_event) {
     const res = JSON.parse(e.data);
     console.log(res)
     switch (true) {
-    case res.method == 'get': Object.entries(res.data).forEach((key, data) => {
+    case res.method == 'get':
+      Object.entries(res.data).forEach(([key, data]) => {
         switch (key) {
           case "items": Store.items = data; break;
           case "menu": Store.navigations = data.reduce((acc, val) => {
