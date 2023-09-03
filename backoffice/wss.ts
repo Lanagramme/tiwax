@@ -57,8 +57,11 @@ export function ws({ socket, response }) {
       switch (true) {
         case data.method == "post":
           if(data.item?.type) {
-            data.item.id = crypto.randomUUID()
-            items.push(data.item)
+            const item = {
+              id:crypto.randomUUID(),
+              ...data.item
+            }
+            items.push(item)
           } else console.log(data.method,' => ',data);
           res = { type:"broadcast", body: { method: 'get', data: { items, menus: available.items } }}
           break;
