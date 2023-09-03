@@ -249,6 +249,7 @@
           const self = this
           ws.addEventListener('open', function (_event) {
             ws.send('getMenu');
+            ws.send('getItems');
             ws.send('shopState')
             ws.onmessage = (e) => {
               const res = JSON.parse(e.data);
