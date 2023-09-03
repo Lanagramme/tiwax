@@ -68,8 +68,8 @@ const Home=()=> {
   const loop=()=>{
     setTimeout(() => {
       navigation = sessionStorage.getItem('navigations')
+      navigation == null && console.log('loading ...')
       if (serverdata != navigation) {
-        console.log('loading ...')
         updateData(navigation)
       }
       loop()
