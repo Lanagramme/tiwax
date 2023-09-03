@@ -14,7 +14,7 @@ function broadcast(data){
 function send(socket, data) { socket.send(JSON.stringify(data)) }
 
 function updateSockets(action, socket) {
-  const track = []
+  const track:number[] = []
   track.push(sockets.size)
   sockets[action](socket)
   track.push(sockets.size)
@@ -27,7 +27,7 @@ export function ws({ socket, response }) {
   };
 
   socket.onmessage = (e) => {
-    let data, res;
+    let data:any, res:{type:string, body: any};
   
     try { data = JSON.parse(e.data); } catch (error) { data = e.data }
   
@@ -74,9 +74,12 @@ export function ws({ socket, response }) {
           res = { type:"broadcast", body: { method: 'get', data: { items } }}
           break;
         case data.method == "patch":
-          if(data.item?.type) {
-            const id = data.item.id 
-            Object.assign(items.find(item => item.id === id), data.item)
+
+          const changes:any = data.item
+          if(changes?.type) {
+            const id = changes.id 
+            const item = items.find(item => item.id === id)
+            item && Object.entries(changes).forEach(([key,val]) => { item.hasOwnProperty(key) && (item[key] = val) })
             console.log(items)
           } else console.log(data.method,' => ',data);
           res = { type:"broadcast", body: { method: 'get', data: { items } }}

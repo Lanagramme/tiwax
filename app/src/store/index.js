@@ -1,4 +1,4 @@
-const ws = new WebSocket(`wss://slow-oyster-61.deno.dev/`);
+const ws = new WebSocket(`wss://bold-dolphin-15.deno.dev/`);
 export const Store = {
   
 }
