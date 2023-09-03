@@ -50,6 +50,21 @@ const Home=()=> <div className="App-screen">
     <div className="main home">
       <h3>Bienvenue chez Tiwax</h3>
       <h2>Catégories</h2>
+      {
+        let navigation = sessionStorage.getItem('navigations')
+        if (navigation == null){
+          <p>Chargement ...</p>
+        } else {
+          let data = JSON.parse(navigation)
+          for (item of data) {
+            <Categorie 
+              image=""
+              data={data.liste}
+              titre={data.title}
+            />
+          }
+        }
+      }
       <Categorie 
         image=""
         data={data_plat}
