@@ -112,7 +112,7 @@
               <summary> Order Id:{{ order.id }} Order Date: {{ order.date }} </summary>
               <ul>
                 <li v-for="point,name in order.content"> <bold>{{name}}:</bold> {{ point }} </li>
-                <li v-else> Empty order </li>
+                <li v-if="!order.content.length"> Empty order </li>
               </ul>
               <button v-for="opt in ['validate']" @click="action(opt, order)"> {{ opt }} </button>
             </details>
