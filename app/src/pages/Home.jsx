@@ -1,4 +1,5 @@
 import '../styles/Home.scss'
+import {Store} from "../store/index.js'
 import Footer from "../components/Footer.jsx"
 import { NavLink } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -62,20 +63,19 @@ const data_boissons = {
 let navigation = sessionStorage.getItem('navigations')
 console.log("nav", navigation)
 
+let interrupteur = 0
+
 const Home=()=> {
   const [serverdata, updateData ] = useState(0)
   if (serverdata != navigation) updateData(navigation)
-  const loop=()=>{
-    setTimeout(() => {
+
+  const callback =()=> {
       navigation = sessionStorage.getItem('navigations')
-      navigation == null && console.log('loading ...')
-      if (serverdata != navigation) {
-        updateData(navigation)
-      }
-      loop()
-    }, "1000");
+      if (serverdata != navigation) updateData(navigation)
   }
-  loop()
+
+  if (!interrupteur) Store.linkData(callback) && interrupteur = true
+
   return <div className="App-screen">
     <div className="home_header">
     </div>
