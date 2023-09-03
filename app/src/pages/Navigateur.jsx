@@ -35,7 +35,7 @@ const Navigateur =({data})=>{
              <Select 
               key={Date.now()} 
               detail={item.detail} 
-              image={item.image} 
+              image={item.image || ""} 
               title={item.titre} 
               prix={item.prix+"€"} 
               data={item}

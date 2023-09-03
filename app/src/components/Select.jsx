@@ -9,7 +9,7 @@ const Select=({image, title, prix, url, detail, data, dispo})=> {
         to='/Selecteur'
         state={{from: data}}
       >
-        <div>{image && <div className="image"></div>}</div>
+        <div>{<div className="image"></div>}</div>
         <div><div>{title}</div><h3>{detail}</h3></div>
         <div className="prix">{prix}</div>
       </NavLink>
