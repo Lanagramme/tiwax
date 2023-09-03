@@ -34,5 +34,6 @@ ws.addEventListener('open', function (_event) {
     default:
       break;
     }
+    console.log('Store => ',Store)
   };
 });
