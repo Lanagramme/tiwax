@@ -1,23 +1,48 @@
 import Page from '../components/Page.jsx'
 import Header from "../components/Header.jsx"
 import Footer from '../components/Footer.jsx'
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
 import '../styles/Button.scss'
 import '../styles/Selecteur.scss'
 
+function makeid(length) {
+    let result = '';
+    let counter = 0;
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
 // components
-const Check =({title, qcm, sub = false})=> {
+const Check =({title, qcm, sub = false, max})=> {
   let i = 1
   let incr =()=>{i+=1; return i}
+
+  const handleMax=(max, e)=>{
+    let bb = document.querySelectorAll(`input[name="${e.target.name}"]:checked`).length
+    if (bb > max) {
+      e.target.checked = false
+      alert('Seulement ' + max +' autorisés')
+    }
+  }
+
   return <section key={qcm.choix+incr}>
     <p className="bold">{title}</p>
     {sub ? <p className='mini'>{sub}</p> : null}
     {
       qcm.options.map(item => {
-        return <div className='option'>        
-          <span>{item}</span>
-          <input type="checkbox" value={item} name={qcm.choix} />
+        return <div key={qcm.choix+incr+1} className='option'>        
+          <span>{item.name}</span>
+          {
+            item.stock
+            ? <input type="checkbox" value={item.name} name={qcm.choix} onClick={(e)=>handleMax(max, e)} />
+            : <p>Épuisé</p>
+          }
        </div>
       })
     } 
@@ -33,8 +58,12 @@ const Radio =({title, qcm, sub = false})=> {
     {
       qcm.options.map(item => {
         return <div className='option' key={incr()}>        
-          <span>{item}</span>
-          <input type="radio" value={item} name={qcm.choix} />
+          <span>{item.name}</span>
+          {
+            item.stock 
+            ? <input type="radio" value={item.name} name={qcm.choix} />
+            : <p>Épuisé</p>
+          }
        </div>
       })
     } 
@@ -48,28 +77,45 @@ const Input =()=> {
     </div>
   </section>
 } 
-const Graduate =()=> {
+const Graduate =({max, name})=> {
+  const key = Date.now()
+  const [val, updateval] = useState(0)
+  const handleMax =(dir)=>{
+    if (dir){
+      let all = document.querySelectorAll(`input[name="${name}"]`)
+      let somm = 0
+      all.forEach(x => { somm += Number(x.value) });
+      if (somm > Number(max)-1) alert(`Seulement ${max} autorisé`)
+      else updateval(val +1)
+    }
+    else updateval(val - 1)
+  }
+
   return <div className="input-group input-number-group">
     <div className="input-group-button only-positif">
-      <span className="input-number-decrement">-</span>
+      <span onClick={e=>handleMax(false)} className="input-number-decrement">-</span>
     </div>
-    <input className="input-number only-positif" type="number" value="0" min="0" max="1000" disabled />
+    <input name={name} className="input-number only-positif" id="key" type="number" value={val} min="0" max={max} disabled />
     <div className="input-group-button">
-      <span className="input-number-increment">+</span>
+      <span onClick={e=>handleMax(true)} className="input-number-increment">+</span>
     </div>
   </div>
 }
-const Optionnal =({title, qcm, sub=false})=> {
+const Optionnal =({title, qcm, sub=false, max})=> {
   let i = 1
   let incr =()=>{i+=1; return i}
   return <section key={title+i}>
     <p className="bold">{title}</p>
-    {sub ? <p className='mini'>{sub}</p> : null}
+    {sub ? <p key={Date.now()} className='mini'>{sub}</p> : null}
     {
       qcm.options.map(item => {
-        return <div className='option'>        
-          <span>{item}</span>
-          <Graduate />
+        return <div key={Date.now()+incr()} className='option'>        
+          <span>{item.name}</span>
+          {
+            item.stock
+            ?<Graduate name={qcm.choix} max={max}/>
+            :<p>Épuisé</p>
+          }
        </div>
       })
     } 
@@ -79,43 +125,113 @@ const Optionnal =({title, qcm, sub=false})=> {
 // data
 const test = {
   choix: 'viande',
-  options: ['Poulet', 'Boeuf', 'Poisson']
+  options: [
+    'Poulet', 
+    'Boeuf', 
+    'Poisson'
+  ]
+}
+const test3 = {
+  choix: 'viande',
+  options: [
+    {name:'Poulet', stock: false}, 
+    {name:'Boeuf', stock: true}, 
+    {name:'Poisson', stock: true}, 
+  ]
+}
+const test4 = {
+  choix: "accompagnements",
+  options: [
+    {name:'Riz', stock: false}, 
+    {name:'Pâtes', stock: true}, 
+    {name:'Lentilles consommés', stock: true}, 
+    {name:"Gratin de pomme de terre", stock: true}, 
+    {name:"Haricots rouge", stock: true}, 
+  ]
 }
 const test2 = {
   choix: "accompagnements",
-  options: ['Riz', 'Pâtes', 'Lentilles consommés','Haricots rouge',"gratin de pomme de terre"]
+  options: [
+    'Riz', 
+    'Pâtes', 
+    'Lentilles consommés',
+    'Haricots rouge',
+    "gratin de pomme de terre"
+  ]
 }
 const sauces = {
   choix: "sauces",
-  options: ['Créole', 'Mayonnaise', 'Piment']
+  options: [
+    'Créole', 
+    'Mayonnaise', 
+    'Piment'
+  ]
+}
+const sauces2 = {
+  choix: "sauces",
+  options: [
+    {name:'Créole', stock: false}, 
+    {name:'Mayonnaise', stock: true}, 
+    {name:'Piment', stock: true}, 
+  ]
 }
 const pain = {
   choix: "pain",
-  options: ['Panini', 'Bokit', 'Agoulou']
+  options: [
+    'Panini', 
+    'Bokit', 
+    'Agoulou'
+  ]
+}
+const pain2 = {
+  choix: "pain",
+  options: [
+    {name:'Panini', stock: true}, 
+    {name:'Bokit', stock: true}, 
+    {name:'Agoulou', stock: true}, 
+  ]
+}
+const garniture2 = {
+  choix: "garniture",
+  options: [
+    {name:'Steak', stock: true}, 
+    {name:'Poulet', stock: true}, 
+    {name:'Saucisse', stock: true}, 
+    {name:'Morue', stock: true}, 
+    {name:'Jambon Fromage', stock: true}, 
+  ]
 }
 const garniture = {
   choix: "garniture",
-  options: ['Steak', 'Poulet', 'Saucisse','Morue','Jambon Fromage']
+  options: [
+    'Steak', 
+    'Poulet', 
+    'Saucisse',
+    'Morue',
+    'Jambon Fromage'
+  ]
 }
 const repas_data = {
   options: [
     {
       type: "radio",
       title: "1 viande au choix",
-      qcm: test,
+      qcm: test3,
       sub: false
     },
     {
       type: "check",
       title: "2 accompagnements au choix",
-      qcm: test2,
-      sub: "2max"
+      qcm: test4,
+      sub: "2max",
+      max: 2
     },
     {
       type: "grad",
       title: "Sauces",
-      qcm: sauces,
-      sub: "2 max."
+      qcm: sauces2,
+      sub: "2 max.",
+      max: 2
     },
     {type: "input"}
   ]
@@ -125,20 +241,22 @@ const pain_data = {
     {
       type: "radio",
       title: "1 pain au choix",
-      qcm: pain,
+      qcm: pain2,
       sub: false
     },
     {
       type: "grad",
       title: "garniture au choix",
-      qcm: garniture,
-      sub: "2 max."
+      qcm: garniture2,
+      sub: "2 max.",
+      max: 2
     },
     {
       type: "grad",
       title: "Sauces",
-      qcm: sauces,
-      sub: "2 max."
+      qcm: sauces2,
+      sub: "2 max.",
+      max: 2
     },
     {type: "input"}
   ]
@@ -150,7 +268,16 @@ const boisson_data={
       title: "1 boisson au choix",
       qcm: {
         choix: "boisson",
-        options: ["Coca", "Sprite", "Vaval exotic", "7up","Ice tea", "Sunkist", "Fanta exotic", "Fuze tea"]
+        options: [
+          {name:"Coca" , stock: true},
+          {name:"Sprite", stock: true},
+          {name:"Vaval exotic", stock: true},
+          {name:"7up", stock: true},
+          {name:"Ice tea", stock: true},
+          {name:"Sunkist", stock: true},
+          {name:"Fanta exotic", stock: true},
+          {name:"Fuze tea", stock: true},
+        ]
       }
     },
     {type: "input"}
@@ -170,15 +297,23 @@ const Urender=({content})=> {
       data = boisson_data
       break;
   }
+  console.log(data)
+  for(let i of data.options) {
+    if (!i.hasOwnProperty('qcm')) continue
+    console.log(i.qcm)
+    console.log('data', i.qcm.choix)
+  }
+  let i = 0
   return <>
     {
       data.options.map(x=>{
         console.log(x)
         let comp 
-        x.type == "radio" ? comp = <Radio title={x.title} qcm={x.qcm} />:null
-        x.type == "check" ? comp = <Check title={x.title} qcm={x.qcm} sub={x.sub}/>:null
-        x.type == "grad"  ? comp = <Optionnal title={x.title} qcm={x.qcm} sub={x.sub}/>:null
-        x.type == "input" ? comp = <Input />:null
+        x.type == "radio" ? comp = <Radio key={Date.now()+i} title={x.title}     qcm={x.qcm} max={x.max} />:null
+        x.type == "check" ? comp = <Check key={Date.now()+i} title={x.title}     qcm={x.qcm} max={x.max} sub={x.sub} />:null
+        x.type == "grad"  ? comp = <Optionnal key={Date.now()+i} title={x.title} qcm={x.qcm} max={x.max} sub={x.sub} />:null
+        x.type == "input" ? comp = <Input key={Date.now()+i} />:null
+        i+=1
         return comp
       })
     }
@@ -190,6 +325,53 @@ const Urender=({content})=> {
 const Selecteur =()=> {
   let location = useLocation() 
   let item = location.state.from
+  let data = ''
+  switch(item.titre){
+    case "Menu":
+      data = repas_data
+      break;
+    case "Sandwich":
+      data = pain_data
+      break;
+    default:
+      data = boisson_data
+      break;
+  }
+  console.log(data)
+
+  function panier() {
+    console.log('panier')
+    const pan = {}
+    for (let ii in data.options){
+      let i = data.options[ii]
+      let choix = null
+      let len   = null
+      // console.log(i)
+      switch(i.type){
+        case 'radio':
+          choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
+          len   =  Array.from(choix).some(x=>x.checked)
+          if (!len) alert(`Vous devez sélectionner un(e) ${i.qcm.choix}`)
+          else {
+            let choix = document.querySelector(`input[name="${i.qcm.choix}"]:checked`)
+            pan[i.qcm.choix] = choix.value
+            console.log(pan)
+          }
+          break 
+        case 'check':
+          choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
+          len   =  Array.from(choix).some(x=>x.checked)
+          if (!len) alert(`Vous devez sélectionner un(e) ${i.qcm.choix}`)
+          break 
+        case 'grad':
+          break 
+        case 'input':
+          break 
+      }
+    } 
+  }
+
+      // <NavLink to='/' className='btn m-auto'>Ajouter au panier</NavLink>
   return <>
     <Page>
       <Header title={item.titre} title2={item.detail} price={item.prix+"€"}/>
@@ -198,7 +380,7 @@ const Selecteur =()=> {
       </div>
     </Page>
     <Footer>
-      <NavLink to='/' className='btn m-auto'>Ajouter au panier</NavLink>
+      <div className='btn m-auto' onClick={()=>panier()}>Ajouter au panier</div>
     </Footer>
   </>
 }

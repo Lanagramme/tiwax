@@ -10,36 +10,37 @@ const Categorie=({titre, url, image, data})=> {
       <h2>{titre}</h2>
     </NavLink>
 }
-const item = (titre,detail,prix,image)=> {
+const item = (titre,detail,prix,image,stock)=> {
   return{
     titre,detail,prix, 
-     image: image ? true: false
+    image: image ? true: false,
+    stock
   }
 }
 
 const data_dessert ={
   titre: "DESSERT",
   liste:[
-  item("Gâteau","",2.50,1),
-  item("Glace","",3,1),
-  item('Salade de fruit','',3,1)
+  item("Gâteau","",2.50,1, true),
+  item("Glace","",3,1, true),
+  item('Salade de fruit','',3,1, true)
 ] }
 
 const data_plat ={
   titre: "PLATS",
   liste:[
-  item("Menu","repas",8,1),
-  item('Sandwich','',3,1)
+  item("Menu","repas",8,1, true),
+  item('Sandwich','',3,1, false)
 ] }
 
 const data_boissons = {
   titre: "BOISSONS",
   liste: [
-    item("Canette 33cl","","1.50",0),
-    item("Canette 50cl ","","2.00",0),
-    item("Bouteille 50cl ","","2.50",0),
-    item("Eau 33cl","","1.00",0),
-    item("Eau 1l","","2.00",0)
+    item("Canette 33cl","","1.50",0, true),
+    item("Canette 50cl ","","2.00",0, true),
+    item("Bouteille 50cl ","","2.50",0, true),
+    item("Eau 33cl","","1.00",0, true),
+    item("Eau 1l","","2.00",0, true)
   ]
 }
 
