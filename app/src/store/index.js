@@ -16,10 +16,16 @@ ws.addEventListener('open', function (_event) {
           case "menu": Store.navigations = data.reduce((acc, val) => {
               const item = Store.items.find(({id})=> id === val.target)
               delete val.target
-              item && acc.push({
-                ...item,
-                ...val
-              })
+              if(item){
+                (acc[item.type] || (acc[item.type] = {
+                    titre: item.type,
+                    liste: []
+                  }))
+                  .liste.push({
+                    ...item,
+                    ...val
+                  })
+              }
             },{}); break;
         }
       })
