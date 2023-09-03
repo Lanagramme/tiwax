@@ -77,7 +77,7 @@ const Input =()=> {
     </div>
   </section>
 } 
-const Graduate =({max, name})=> {
+const Graduate =({max, name, item})=> {
   const key = Date.now()
   const [val, updateval] = useState(0)
   const handleMax =(dir)=>{
@@ -95,7 +95,7 @@ const Graduate =({max, name})=> {
     <div className="input-group-button only-positif">
       <span onClick={e=>handleMax(false)} className="input-number-decrement">-</span>
     </div>
-    <input name={name} className="input-number only-positif" id="key" type="number" value={val} min="0" max={max} disabled />
+    <input name={name} className="input-number only-positif" id={item} type="number" value={val} min="0" max={max} disabled />
     <div className="input-group-button">
       <span onClick={e=>handleMax(true)} className="input-number-increment">+</span>
     </div>
@@ -113,7 +113,7 @@ const Optionnal =({title, qcm, sub=false, max})=> {
           <span>{item.name}</span>
           {
             item.stock
-            ?<Graduate name={qcm.choix} max={max}/>
+            ?<Graduate name={qcm.choix} max={max} item={item.name}/>
             :<p>Épuisé</p>
           }
        </div>
@@ -346,7 +346,7 @@ const Selecteur =()=> {
       let i = data.options[ii]
       let choix = null
       let len   = null
-      // console.log(i)
+      // console.log(i.type)
       switch(i.type){
         case 'radio':
           choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
@@ -355,20 +355,40 @@ const Selecteur =()=> {
           else {
             let choix = document.querySelector(`input[name="${i.qcm.choix}"]:checked`)
             pan[i.qcm.choix] = choix.value
-            console.log(pan)
           }
           break 
         case 'check':
           choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
           len   =  Array.from(choix).some(x=>x.checked)
           if (!len) alert(`Vous devez sélectionner un(e) ${i.qcm.choix}`)
+          else {
+            let choix= document.querySelectorAll(`input[name="${i.qcm.choix}"]:checked`)
+            pan[i.qcm.choix] = []
+            for (let ii = 0; ii < choix.length; ii++) {
+              let item = choix[ii]
+              pan[i.qcm.choix].push(item.value)
+            }
+          }
           break 
         case 'grad':
+          choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
+          pan[i.qcm.choix] = []
+          if (choix.length) {
+            for (let ii = 0; ii < choix.length; ii++){
+              if (choix[ii].value > 0)
+                pan[i.qcm.choix].push({name:choix[ii].id, nb:choix[ii].value})
+            } 
+          }
           break 
         case 'input':
+          choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
+          if (choix.value){
+            pan[i.qcm.choix] = choix.value
+          }
           break 
       }
     } 
+    console.log(pan)
   }
 
       // <NavLink to='/' className='btn m-auto'>Ajouter au panier</NavLink>
