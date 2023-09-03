@@ -1,7 +1,18 @@
 const ws = new WebSocket(`wss://bold-dolphin-15.deno.dev/`);
+const Links = {}
 export const Store = {
   
 }
+
+export function linkData(key, callback){
+  (Links[key] || (Links[key] = [])).push(callback)
+}
+
+export function updateData(key, val){
+  sessionStorage.setItem(key, JSON.stringify(val))
+  (Links[key] || []).forEach(cb => cb())
+}
+
 function newMenu(arr, item){
   const menu = { titre: item.type, liste: []}
   arr.push(menu)
@@ -42,6 +53,6 @@ ws.addEventListener('open', function (_event) {
       break;
     }
     console.log(Store)
-    Object.entries(Store).forEach(([key, val])=>sessionStorage.setItem(key, JSON.stringify(val)))
+    Object.entries(Store).forEach(([key, val])=> updateData(key, val))
   };
 });
