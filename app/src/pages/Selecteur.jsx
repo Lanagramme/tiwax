@@ -88,7 +88,7 @@ const Graduate =({max, name, item})=> {
       if (somm > Number(max)-1) alert(`Seulement ${max} autorisé`)
       else updateval(val +1)
     }
-    else updateval(val - 1)
+    else if (val) updateval(val - 1)
   }
 
   return <div className="input-group input-number-group">
@@ -385,7 +385,7 @@ const Selecteur =()=> {
           break 
       }
     } 
-    console.log(pan)
+  localStorage.setItem('panier', pan);
   }
 
       // <NavLink to='/' className='btn m-auto'>Ajouter au panier</NavLink>
