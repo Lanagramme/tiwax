@@ -26,7 +26,6 @@ ws.addEventListener('open', function (_event) {
               delete val.target
               if(item){
                 const menu = (acc.find(menu => menu.titre === item.type) || newMenu(acc, item))
-                console.log('menu => ',menu)
                 menu.liste.push({
                   ...item,
                   ...val
@@ -42,6 +41,5 @@ ws.addEventListener('open', function (_event) {
       break;
     }
     Object.entries(Store).forEach(([key, val])=>sessionStorage.setItem(key, JSON.stringify(val)))
-    console.log('Store => ',Store)
   };
 });
