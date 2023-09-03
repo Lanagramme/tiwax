@@ -40,7 +40,7 @@ export function ws({ socket, response }) {
           res = { type:"message", body: { method: 'get', data: { items } }}
           break;
         case 'getMenus':
-          res = { type:"message", body: { method: 'get', data: { menus: available } }}
+          res = { type:"message", body: { method: 'get', data: { menus: available.items } }}
           break;
         case 'shopState':
           res = { type:"broadcast", body: { method: 'get', data: { shopOpen } }}
@@ -60,7 +60,7 @@ export function ws({ socket, response }) {
             data.item.id = crypto.randomUUID()
             items.push(data.item)
           } else console.log(data.method,' => ',data);
-          res = { type:"broadcast", body: { method: 'get', data: { items, menus: available } }}
+          res = { type:"broadcast", body: { method: 'get', data: { items, menus: available.items } }}
           break;
         case data.method == "delete":
           if(data.item?.type) {
