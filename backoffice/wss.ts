@@ -1,4 +1,4 @@
-import { items, available } from "./data.ts"
+import { items, available } from "./data"
 
 const sockets = new Set<WebSocket>();
 let shopOpen = true;
@@ -44,12 +44,8 @@ export function ws({ socket, response }) {
           break;
         case 'shopState':
           res = { type:"broadcast", body: { method: 'get', data: { shopOpen } }}
-        case 'openShop':
-          shopOpen = true
-          res = { type:"broadcast", body: { method: 'get', data: { shopOpen } }}
-          break;
-        case 'closeShop':
-          shopOpen = false
+        case 'changeShopState':
+          shopOpen = !shopOpen
           res = { type:"broadcast", body: { method: 'get', data: { shopOpen } }}
           break;
         default: res = { type:"message", body: { data: new Date().toString(), dataType }};
