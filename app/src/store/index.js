@@ -2,6 +2,12 @@ const ws = new WebSocket(`wss://slow-oyster-61.deno.dev/`);
 export const Store = {
   
 }
+function newMenu(arr, item){
+  const menu = { titre: item.type, liste: []}
+  arr.push(menu)
+  return menu
+}
+
 ws.addEventListener('open', function (_event) {
   ws.send('getItems');
   ws.send('getMenus');
@@ -19,7 +25,7 @@ ws.addEventListener('open', function (_event) {
               const item = Store.items.find(({id})=> id === val.target)
               delete val.target
               if(item){
-                const menu = (acc[item.type] || (acc[item.type] = { titre: item.type, liste: []}))
+                const menu = (acc.find(menu => menu.titre === item.type) || newMenu(acc, item))
                 console.log('menu => ',menu)
                 menu.liste.push({
                   ...item,
@@ -27,7 +33,7 @@ ws.addEventListener('open', function (_event) {
                 })
                 return acc
               }
-            },{}); break;
+            },[]); break;
         }
       })
       break;
