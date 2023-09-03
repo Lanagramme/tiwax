@@ -23,12 +23,13 @@ ws.addEventListener('open', function (_event) {
           case "items": Store.items = data; break;
           case "menus": Store.navigations = data.reduce((acc, val) => {
               const item = Store.items.find(({id})=> id === val.target)
-              delete val.target
+              const details = {...val};
+              delete details.target
               if(item){
                 const menu = (acc.find(menu => menu.titre === item.type) || newMenu(acc, item))
                 menu.liste.push({
                   ...item,
-                  ...val
+                  ...details
                 })
                 return acc
               }
@@ -40,6 +41,7 @@ ws.addEventListener('open', function (_event) {
     default:
       break;
     }
+    console.log(Store)
     Object.entries(Store).forEach(([key, val])=>sessionStorage.setItem(key, JSON.stringify(val)))
   };
 });
