@@ -7,6 +7,8 @@ import { NavLink } from 'react-router-dom'
 import '../styles/Button.scss'
 import '../styles/Selecteur.scss'
 
+if (localStorage.getItem('panier') == null) localStorage.setItem('panier', JSON.stringify([]))
+
 function makeid(length) {
     let result = '';
     let counter = 0;
@@ -337,10 +339,10 @@ const Selecteur =()=> {
       data = boisson_data
       break;
   }
-  console.log(data)
 
   function panier() {
     console.log('panier')
+    console.log('data ', data)
     const pan = {}
     for (let ii in data.options){
       let i = data.options[ii]
@@ -384,11 +386,23 @@ const Selecteur =()=> {
             pan["instrustions"] = choix.value
           break 
       }
-    } 
-  localStorage.setItem('panier', pan);
+    }
+    console.log(item.titre)
+    let tobuy = {
+      name: item.titre,
+      options: pan
+    }
+    let liste_courses = ""
+    try{
+      liste_courses = JSON.parse(localStorage.getItem('panier'));
+      liste_courses.push(tobuy)
+    }
+    catch {
+      liste_courses = [tobuy]
+    }
+    localStorage.setItem('panier', JSON.stringify(liste_courses));
   }
 
-      // <NavLink to='/' className='btn m-auto'>Ajouter au panier</NavLink>
   return <>
     <Page>
       <Header title={item.titre} title2={item.detail} price={item.prix+"€"}/>

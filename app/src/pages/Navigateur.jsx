@@ -6,6 +6,8 @@ import { NavLink } from 'react-router-dom'
 import '../styles/Selecteur.scss'
 import '../styles/Navigateur.scss'
 
+if (localStorage.getItem('panier') == null) localStorage.setItem('panier', JSON.stringify([]))
+
 // const Select=({image, title, prix, url, detail, data})=> {
   // return <NavLink 
       // className='btn-produit grida1a' 

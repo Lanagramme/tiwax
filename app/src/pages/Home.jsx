@@ -1,6 +1,9 @@
 import '../styles/Home.scss'
 import Footer from "../components/Footer.jsx"
 import { NavLink } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+
+if (localStorage.getItem('panier') == null) localStorage.setItem('panier', JSON.stringify([]))
 
 const Categorie=({titre, url, image, data})=> {
   localStorage.setItem('page', titre)
@@ -55,9 +58,24 @@ const data_boissons = {
         // data={data_dessert}
         // titre="Dessert"
       // />
+
 const navigation = sessionStorage.getItem('navigations')
 console.log("nav", navigation)
-const Home=()=> <div className="App-screen">
+
+const Home=()=> {
+  const [serverdata, updateData ] = useState(0)
+  if (serverdata != navigation) updateData(navigation)
+const loop=()=>{
+  setTimeout(() => {
+    if (serverdata != navigation) {
+      console.log('loading ...')
+      updateData(navigation)
+    }
+    loop()
+  }, "1000");
+}
+loop()
+  return <div className="App-screen">
     <div className="home_header">
     </div>
     <div className="main home">
@@ -68,12 +86,13 @@ const Home=()=> <div className="App-screen">
           <p>Chargement ...</p>
       }{
         navigation != null &&
-         JSON.parse(navigation).map(item => 
-            <Categorie 
+         JSON.parse(navigation).map(item =>{
+            return <Categorie 
               image=""
               data={item}
               titre={item.titre}
             />
+         }
           )
       }
       <Categorie 
@@ -95,4 +114,5 @@ const Home=()=> <div className="App-screen">
     </Footer >
   </div>
 
+} 
 export default Home

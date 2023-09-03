@@ -4,33 +4,45 @@ import Footer from '../components/Footer.jsx'
 import '../styles/Utils.scss'
 import '../styles/Tiquet.scss'
 
+if (localStorage.getItem('panier') == null) localStorage.setItem('panier', JSON.stringify([]))
+
+
+const liste =(item)=> <>
+  <div className="btn-produit grida1a">
+    <div className="image"></div>
+          <div>
+            <div className="flexi">
+              <div className="bold">item.name</div>
+              <div className="prix">item.prix</div>
+            </div>
+            <p>
+              Object.entries(item.options).map(opt=>
+                <>
+                 <span>{opt}:</span><br/>
+                 { typeof item.options[opt] == "string" && <>{item.options[opt]}</> }
+                 { 
+                   typeof item.options[opt] == "array" && item.options[opt].map( x => <>
+                        {typeof x == 'string' && <><span>{x}</span><br/></>}
+                        {typeof x == 'object' && <><span>{x.name} ({opt.nb})</span><br/></>} 
+                     </>
+                   )
+                 }
+                </>
+                 
+              )
+            </p>
+          </div>
+  </div>
+</>
+
 const Tiquet =()=> <>
   <Page>
     <Header title='COMMANDE' />
     <div className='scroll'>
       <section className='tiquet'>
         <h4>Récapitulatif de commande</h4>
-        <div className="btn-produit grida1a">
-
-          <div className="image"></div>
-          <div>
-            <div className="flexi">
-            <div className="bold">Menu Repas</div>
-            <div className="prix">11.50€</div>
-            </div>
-            <p>
-              <span>Viande:</span><br/>
-              Poisson (2.00€)<br/>
-              <span>Accompagnement:</span><br/>
-              Riz<br/>
-              Haricots rouge<br/>
-              <span>sauce:</span><br/>
-              Créole<br/>
-              <span>Boisson:</span><br/>
-              Coca 33cl (1.50€)<br/>
-            </p>
-          </div>
-                  </div>
+          local
+        
         <div className='btn-produit grida1a'>
           <div className='image'></div>
           <div>
