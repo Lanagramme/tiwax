@@ -238,6 +238,7 @@
           shopOpen: true,
           orders,
           form: null,
+          ws,
         },
         methods:{
           action(action, item){ actions[action] ? actions[action](item, this.$data) : console.log(action, item) }
