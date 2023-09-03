@@ -373,18 +373,15 @@ const Selecteur =()=> {
         case 'grad':
           choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
           pan[i.qcm.choix] = []
-          if (choix.length) {
-            for (let ii = 0; ii < choix.length; ii++){
+          if (choix.length) 
+            for (let ii = 0; ii < choix.length; ii++)
               if (choix[ii].value > 0)
                 pan[i.qcm.choix].push({name:choix[ii].id, nb:choix[ii].value})
-            } 
-          }
           break 
         case 'input':
-          choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
-          if (choix.value){
-            pan[i.qcm.choix] = choix.value
-          }
+          choix = document.querySelector(`textarea`)
+          if (choix.value)
+            pan["instrustions"] = choix.value
           break 
       }
     } 
