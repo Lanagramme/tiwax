@@ -6,4 +6,4 @@ export const items = [
   { id: crypto.randomUUID(), titre: 'Drink B', detail: "The marvelously delicious drink B", prix: 4.99,image: false, type: "drinks" },
 ]
 
-export const available = [ 16, 8, 4, 2 ].map((stock, i) => ({ target: items[i].id, stock }))
+export const available = Object.values(items).map((item) => ({ target: item.id, stock: Math.trunc(Math.random()*100) }))
