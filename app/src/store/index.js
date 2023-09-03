@@ -1,5 +1,5 @@
 const ws = new WebSocket(`wss://slow-oyster-61.deno.dev/`);
-const Store = {
+export const Store = {
   
 }
 ws.addEventListener('open', function (_event) {
