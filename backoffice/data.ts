@@ -1,8 +1,9 @@
 // Simulated data storage for dishes
+export const items = [
+  { id: crypto.randomUUID(), titre: 'Dish A', detail: "The marvelously delicious dish A", prix: 10.99, image: false, type: "dishes" },
+  { id: crypto.randomUUID(), titre: 'Dish B', detail: "The marvelously delicious dish B", prix: 8.99,image: false, type: "dishes" },
+  { id: crypto.randomUUID(), titre: 'Drink A', detail: "The marvelously delicious drink A", prix: 5.99, image: false, type: "drinks" },
+  { id: crypto.randomUUID(), titre: 'Drink B', detail: "The marvelously delicious drink B", prix: 4.99,image: false, type: "drinks" },
+]
 
-export const dishesData = [
-    { id: 1, name: 'Dish 1', price: 10.99 },
-    { id: 2, name: 'Dish 2', price: 8.99 },
-    // Add more dishes
-  ];
-  
+export const available = [ 16, 8, 4, 2 ].map((stock, i) => ({ target: items[i].id, stock }))
