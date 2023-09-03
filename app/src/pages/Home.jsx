@@ -44,6 +44,8 @@ const data_boissons = {
   ]
 }
 
+const navigation = sessionStorage.getItem('navigations')
+console.log("nav", navigation)
 const Home=()=> <div className="App-screen">
     <div className="home_header">
     </div>
@@ -51,19 +53,17 @@ const Home=()=> <div className="App-screen">
       <h3>Bienvenue chez Tiwax</h3>
       <h2>Catégories</h2>
       {
-        let navigation = sessionStorage.getItem('navigations')
-        if (navigation == null){
+        navigation == null &&
           <p>Chargement ...</p>
-        } else {
-          let data = JSON.parse(navigation)
-          for (item of data) {
+      }{
+        navigation != null &&
+         JSON.parse(navigation).map(item => 
             <Categorie 
               image=""
-              data={data.liste}
-              titre={data.title}
+              data={item.liste}
+              titre={item.title}
             />
-          }
-        }
+          )
       }
       <Categorie 
         image=""
