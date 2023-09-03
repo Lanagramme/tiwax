@@ -9,7 +9,7 @@ export function linkData(key, callback){
 }
 
 export function updateData(key, val){
-  sessionStorage.setItem(key, JSON.stringify(val))
+  sessionStorage.setItem(key, JSON.stringify(val));
   (Links[key] || []).forEach(cb => cb())
 }
 
