@@ -1,5 +1,5 @@
 import '../styles/Home.scss'
-import {Store} from "../store/index.js'
+import {Store} from "../store/index.js"
 import Footer from "../components/Footer.jsx"
 import { NavLink } from 'react-router-dom'
 import { useState, useEffect } from 'react'
