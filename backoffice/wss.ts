@@ -1,5 +1,6 @@
 import { items } from "./data.ts"
 const sockets = new Set<WebSocket>();
+let shopOpen = true;
 
 function broadcast(data){
   let i = 0, size = sockets.size;
@@ -34,11 +35,21 @@ export function ws({ socket, response }) {
     if( ["string", "number"].includes(dataType)) {
       console.log("socket message:", data);
       switch (data) {
-      case 'getItems':
-        res = { type:"message", body: { method: 'get', data: { items } }}
-        break;
-      default: res = { type:"message", body: { data: new Date().toString(), dataType }};
-        break;
+        case 'getItems':
+          res = { type:"message", body: { method: 'get', data: { items } }}
+          break;
+        case 'shopState':
+          res = { type:"broadcast", body: { method: 'get', data: { shopOpen } }}
+        case 'openShop':
+          shopOpen = true
+          res = { type:"broadcast", body: { method: 'get', data: { shopOpen } }}
+          break;
+        case 'closeShop':
+          shopOpen = false
+          res = { type:"broadcast", body: { method: 'get', data: { shopOpen } }}
+          break;
+        default: res = { type:"message", body: { data: new Date().toString(), dataType }};
+          break;
       }
       
     } else {
