@@ -53,7 +53,6 @@ const Check =({title, qcm, sub = false, max})=> {
 const Radio =({title, qcm, sub = false})=> {
   let i = 1
   let incr =()=>{i+=1; return i}
-  console.log(qcm)
   return <section key={title+incr}>
     <p className="bold">{title}</p>
     {sub ? <p className='mini'>{sub}</p> : null}
@@ -299,17 +298,13 @@ const Urender=({content})=> {
       data = boisson_data
       break;
   }
-  console.log(data)
   for(let i of data.options) {
     if (!i.hasOwnProperty('qcm')) continue
-    console.log(i.qcm)
-    console.log('data', i.qcm.choix)
   }
   let i = 0
   return <>
     {
       data.options.map(x=>{
-        console.log(x)
         let comp 
         x.type == "radio" ? comp = <Radio key={Date.now()+i} title={x.title}     qcm={x.qcm} max={x.max} />:null
         x.type == "check" ? comp = <Check key={Date.now()+i} title={x.title}     qcm={x.qcm} max={x.max} sub={x.sub} />:null
@@ -341,14 +336,11 @@ const Selecteur =()=> {
   }
 
   function panier() {
-    console.log('panier')
-    console.log('data ', data)
     const pan = {}
     for (let ii in data.options){
       let i = data.options[ii]
       let choix = null
       let len   = null
-      // console.log(i.type)
       switch(i.type){
         case 'radio':
           choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
@@ -387,9 +379,9 @@ const Selecteur =()=> {
           break 
       }
     }
-    console.log(item.titre)
     let tobuy = {
       name: item.titre,
+      prix: item.prix,
       options: pan
     }
     let liste_courses = ""

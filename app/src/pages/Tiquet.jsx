@@ -6,37 +6,40 @@ import '../styles/Tiquet.scss'
 
 if (localStorage.getItem('panier') == null) localStorage.setItem('panier', JSON.stringify([]))
 
-
-const liste_render =(item)=> <>
-  <div className="btn-produit grida1a">
-    <div className="image"></div>
-          <div>
-            <div className="flexi">
-              <div className="bold">item.name</div>
-              <div className="prix">item.prix</div>
-            </div>
-            <p>
-              Object.entries(item.options).map(opt=>
-                <>
-                 <span>{opt}:</span><br/>
-                 { typeof item.options[opt] == "string" && <>{item.options[opt]}</> }
-                 { 
-                   typeof item.options[opt] == "array" && item.options[opt].map( x => <>
-                        {typeof x == 'string' && <><span>{x}</span><br/></>}
-                        {typeof x == 'object' && <><span>{x.name} ({opt.nb})</span><br/></>} 
-                     </>
-                   )
-                 }
-                </>
-                 
-              )
-            </p>
+const Liste_render =({item})=> {
+  return <div className="btn-produit grida1a">
+      <div className="image"></div>
+        <div>
+          <div className="flexi">
+            <div className="bold">{item.name}</div>
+            <div className="prix">{item.prix}</div>
           </div>
-  </div>
-</>
+          <p>{
+            Object.getOwnPropertyNames(item.options).map(x=>
+              <>
+               <span>{x}:</span><br/>
+               { typeof item.options[x] == "string" && <>{item.options[x]}<br/></> }
+               { 
+                 item.options[x] instanceof Array && item.options[x].map( x => <>
+                    {typeof x == 'string' && <><span>{x}</span><br/></>}
+                    {typeof x == 'object' && <><span>{x.name} ({x.nb})</span><br/></>} 
+                </>
+                 )
+               }
+              <br/>
+              </>
+            )
+          }</p>
+        </div>
+    </div>
+}
+
+const Test =()=>{
+  return <p>test</p>
+}
 
 const Tiquet =()=> {
-  let liste = JSON.parse(localStorage.getItem('panier'))
+  let monPanier = JSON.parse(localStorage.getItem('panier'))
   return <>
   <Page>
     <Header title='COMMANDE' />
@@ -44,8 +47,8 @@ const Tiquet =()=> {
       <section className='tiquet'>
         <h4>Récapitulatif de commande</h4>
         {
-          liste.map(x=>{
-            liste_render(x)
+          monPanier.map(x=>{
+            return <Liste_render item={x} />
           })
         }
         
