@@ -5,6 +5,7 @@
   position: relative;
   animation: rotate 1s linear infinite
 }
+
 .loader::before , .loader::after {
   content: "";
   box-sizing: border-box;
