@@ -2,24 +2,15 @@ import Page from '../components/Page.jsx'
 import Header from "../components/Header.jsx"
 import Footer from '../components/Footer.jsx'
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { NavLink } from 'react-router-dom'
+import { json, useLocation } from 'react-router-dom'
+import Store from '../store/calls.js'
 import '../styles/Button.scss'
 import '../styles/Selecteur.scss'
+import '../styles/Loader.scss'
+
 
 if (localStorage.getItem('panier') == null) localStorage.setItem('panier', JSON.stringify([]))
 
-function makeid(length) {
-    let result = '';
-    let counter = 0;
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
-}
 // components
 const Check =({title, qcm, sub = false, max})=> {
   let i = 1
@@ -124,64 +115,12 @@ const Optionnal =({title, qcm, sub=false, max})=> {
 }
 
 // data
-const test = {
-  choix: 'viande',
-  options: [
-    'Poulet', 
-    'Boeuf', 
-    'Poisson'
-  ]
-}
-const test3 = {
-  choix: 'viande',
-  options: [
-    {name:'Poulet', stock: false}, 
-    {name:'Boeuf', stock: true}, 
-    {name:'Poisson', stock: true}, 
-  ]
-}
-const test4 = {
-  choix: "accompagnements",
-  options: [
-    {name:'Riz', stock: false}, 
-    {name:'Pâtes', stock: true}, 
-    {name:'Lentilles consommés', stock: true}, 
-    {name:"Gratin de pomme de terre", stock: true}, 
-    {name:"Haricots rouge", stock: true}, 
-  ]
-}
-const test2 = {
-  choix: "accompagnements",
-  options: [
-    'Riz', 
-    'Pâtes', 
-    'Lentilles consommés',
-    'Haricots rouge',
-    "gratin de pomme de terre"
-  ]
-}
-const sauces = {
-  choix: "sauces",
-  options: [
-    'Créole', 
-    'Mayonnaise', 
-    'Piment'
-  ]
-}
 const sauces2 = {
   choix: "sauces",
   options: [
     {name:'Créole', stock: false}, 
     {name:'Mayonnaise', stock: true}, 
     {name:'Piment', stock: true}, 
-  ]
-}
-const pain = {
-  choix: "pain",
-  options: [
-    'Panini', 
-    'Bokit', 
-    'Agoulou'
   ]
 }
 const pain2 = {
@@ -202,35 +141,48 @@ const garniture2 = {
     {name:'Jambon Fromage', stock: true}, 
   ]
 }
-const garniture = {
-  choix: "garniture",
-  options: [
-    'Steak', 
-    'Poulet', 
-    'Saucisse',
-    'Morue',
-    'Jambon Fromage'
-  ]
-}
 const repas_data = {
   options: [
     {
       type: "radio",
       title: "1 viande au choix",
-      qcm: test3,
+      qcm: {
+        choix: 'viande',
+        options: [
+          {name:'Poulet', stock: false}, 
+          {name:'Boeuf', stock: true}, 
+          {name:'Poisson', stock: true}, 
+        ]
+      },
       sub: false
     },
     {
       type: "check",
       title: "2 accompagnements au choix",
-      qcm: test4,
+      qcm: {
+        choix: "accompagnements",
+        options: [
+          {name:'Riz', stock: false}, 
+          {name:'Pâtes', stock: true}, 
+          {name:'Lentilles consommés', stock: true}, 
+          {name:"Gratin de pomme de terre", stock: true}, 
+          {name:"Haricots rouge", stock: true}, 
+        ]
+      },
       sub: "2max",
       max: 2
     },
     {
       type: "grad",
       title: "Sauces",
-      qcm: sauces2,
+      qcm: {
+        choix: "sauces",
+        options: [
+          {name:'Créole', stock: false}, 
+          {name:'Mayonnaise', stock: true}, 
+          {name:'Piment', stock: true}, 
+        ]
+      },
       sub: "2 max.",
       max: 2
     },
@@ -285,6 +237,18 @@ const boisson_data={
   ]
 }
 
+function makeid(length) {
+  let result = '';
+  let counter = 0;
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+}
+
 const Urender=({content})=> {
   let data = ''
   switch(content){
@@ -306,34 +270,46 @@ const Urender=({content})=> {
     {
       data.options.map(x=>{
         let comp 
-        x.type == "radio" ? comp = <Radio key={Date.now()+i} title={x.title}     qcm={x.qcm} max={x.max} />:null
-        x.type == "check" ? comp = <Check key={Date.now()+i} title={x.title}     qcm={x.qcm} max={x.max} sub={x.sub} />:null
-        x.type == "grad"  ? comp = <Optionnal key={Date.now()+i} title={x.title} qcm={x.qcm} max={x.max} sub={x.sub} />:null
-        x.type == "input" ? comp = <Input key={Date.now()+i} />:null
+        x.type == "radio" ? comp = <Radio key={makeid()+i} title={x.title}     qcm={x.qcm} max={x.max} />:null
+        x.type == "check" ? comp = <Check key={makeid()+i} title={x.title}     qcm={x.qcm} max={x.max} sub={x.sub} />:null
+        x.type == "grad"  ? comp = <Optionnal key={makeid()+i} title={x.title} qcm={x.qcm} max={x.max} sub={x.sub} />:null
+        x.type == "input" ? comp = <Input key={makeid()+i} />:null
         i+=1
         return comp
       })
     }
   </>
 }
-        // <Radio title='1 viande au choix' qcm={test} />
-        // <Check title="2 accompagnements au choix" qcm={test2} sub={"2 max"}/>
-        // <Optionnal title="2 accompagnements au choix" qcm={test2} sub={"2 max"}/>
+
 const Selecteur =()=> {
   let location = useLocation() 
   let item = location.state.from
-  let data = ''
-  switch(item.titre){
-    case "Menu":
-      data = repas_data
-      break;
-    case "Sandwich":
-      data = pain_data
-      break;
-    default:
-      data = boisson_data
-      break;
-  }
+  const [data, update] = useState('')
+
+  Store.getMenu(item.id)
+    .then(x => {
+      update(JSON.parse(x))
+      if (data.hasOwnProperty('fail')) {
+        alert('Une erreur est survenue')
+        window.location = "/"
+      }
+    })
+  
+  // if (data == '') {
+  //   switch(item.titre){
+  //   case "Menu":
+  //     data = repas_data
+  //     break;
+  //   case "Sandwich":
+  //     data = pain_data
+  //     break;
+  //   default:
+  //     data = boisson_data
+  //     break;
+  //   }
+  // }
+
+  
 
   function panier() {
     const pan = {}
@@ -345,7 +321,10 @@ const Selecteur =()=> {
         case 'radio':
           choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
           len   =  Array.from(choix).some(x=>x.checked)
-          if (!len) alert(`Vous devez sélectionner un(e) ${i.qcm.choix}`)
+          if (!len) {
+            alert(`Vous devez sélectionner un(e) ${i.qcm.choix}`);
+            return;
+          }
           else {
             let choix = document.querySelector(`input[name="${i.qcm.choix}"]:checked`)
             pan[i.qcm.choix] = choix.value
@@ -354,7 +333,10 @@ const Selecteur =()=> {
         case 'check':
           choix = document.querySelectorAll(`input[name="${i.qcm.choix}"]`)
           len   =  Array.from(choix).some(x=>x.checked)
-          if (!len) alert(`Vous devez sélectionner un(e) ${i.qcm.choix}`)
+          if (!len) {
+            alert(`Vous devez sélectionner un(e) ${i.qcm.choix}`);
+            return;
+          }
           else {
             let choix= document.querySelectorAll(`input[name="${i.qcm.choix}"]:checked`)
             pan[i.qcm.choix] = []
@@ -380,6 +362,7 @@ const Selecteur =()=> {
       }
     }
     let tobuy = {
+      id: makeid(10),
       name: item.titre,
       prix: item.prix,
       options: pan
@@ -393,13 +376,20 @@ const Selecteur =()=> {
       liste_courses = [tobuy]
     }
     localStorage.setItem('panier', JSON.stringify(liste_courses));
+    window.location = "/"
   }
+
+  console.log('data', data)
 
   return <>
     <Page>
       <Header title={item.titre} title2={item.detail} price={item.prix+"€"}/>
       <div className="scroll">
-        <Urender content={item.titre} />
+        {
+          data == '' 
+          && <div className='loader'></div>
+          || <Urender content={item.titre} />
+        }
       </div>
     </Page>
     <Footer>

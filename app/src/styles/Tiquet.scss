@@ -2,3 +2,16 @@
   display: flex;
   justify-content: space-between;
 }
+
+.text-right {
+  text-align: right;
+}
+
+.del { 
+  color: #ea5c5c;
+  margin-top: 10px; 
+  cursor: pointer;
+}
+.del:hover {
+  text-decoration: underline;
+}
