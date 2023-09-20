@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.scss'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 // ======== Pages
