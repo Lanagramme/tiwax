@@ -5,7 +5,7 @@ const formats = {
     titre: ['string'],
     detail: ['string'],
     prix: ['number'],
-    image: ['string'],
+    image: ['string', "boolean"],
   },
   commandes: {
     $item: {
@@ -27,11 +27,11 @@ const formats = {
   options: {
     $choice: ['string'],
     type: ['string'],
-    title: ['string'],
-    qcm(){this.$choice},
-    sub: ['string'],
+    titre: ['string'],
+    qcm(){ return this.$choice},
+    sub: ['string', 'undefined'],
     max: ["number","boolean"],
-    targetedtype: ['string'],
+    typeProduit: ['string'],
   },
   menus: {
     produit: "produits",
@@ -50,10 +50,13 @@ function handleJSON(type, json){
     : Object.entries(type).every(([key,val]) => checkProperty(val,data[key]) )
 }
 
-function checkProperty(type,val){
+function checkProperty(type,val,o){
   switch (true) {
+    // simple type: number, string, bool, etc
     case Array.isArray(type): return type.some(v=> v === typeof val)
-    case type instanceof Function: return handleJSON(type(), val)
+    // JSON format
+    case type instanceof Function: return handleJSON(type.bind(o)(), val)
+    // Identifier
     case typeof type === 'string': return checkItem(type, val)
     default: throw new Error('unknow property format');
   }
@@ -63,14 +66,14 @@ module.exports = Object.entries(formats).reduce((acc, [key, format])=>{
   if(key.charAt(0) === '$') return acc;
   return acc.set(key, class{
     constructor (data){
-      Object.entries(format).forEach(([key,val])=>{
-        try {
-          if(!checkProperty(val,data[key])) throw new Error('Invalid item format');
+      try {
+        Object.entries(format).filter(([key])=>key[0]!=="$").forEach(([key,val])=>{
+          if(!checkProperty(val,data[key], format)) throw new Error('Invalid item format');
           this[key] = data[key]
-        } catch (error) {
-          return error
-        }
-      })
+        })
+      } catch (error) {
+        return {error}
+      }
     }
   })
 },(new Map))
