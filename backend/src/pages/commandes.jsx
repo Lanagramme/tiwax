@@ -58,7 +58,9 @@ const datas = {
 }
 
 
-
+console.log('data', datas.data.filter(x => x.status == 1).length)
+console.log('data', datas.data.filter(x => x.status == 2).length)
+console.log('data', datas.data.filter(x => x.status == 3).length)
 const Commandes = () => {
   return <>
     <TopBar/>
@@ -66,16 +68,30 @@ const Commandes = () => {
       <h2>Commandes</h2>
       <h3>Commandes en attente</h3>
       <Container className="d-flex container flex-wrap my-3">
-        { datas.data.filter(x => x.status == 1).map(y => <CommandCard commande={y}/> ) }
+        { 
+          datas.data.filter(x => x.status == 1).length == 0
+            && <p className="text-muted">Aucune commande prêtes</p>
+            || datas.data.filter(x => x.status == 1).map(y => <CommandCard commande={y}/>)
+        }
         <hr />
       </Container>
-      <h3>Commandes en prêtes</h3>
+      <h3>Commandes prêtes</h3>
       <Container className="d-flex container flex-wrap my-3">
-        { datas.data.filter(x => x.status == 2).map(y => <CommandCard commande={y}/> ) }
+        { 
+          datas.data.filter(x => x.status == 2).length == 0
+            && <p className="text-muted">Aucune commande prêtes</p>
+            || datas.data.filter(x => x.status == 2).map(y => <CommandCard commande={y}/>)
+        }
+        <hr />
       </Container>
-      <h3>Commandes en payée</h3>
+      <h3>Commandes payée</h3>
       <Container className="d-flex container flex-wrap my-3">
-        { datas.data.filter(x => x.status == 3).map(y => <CommandCard commande={y}/> ) }
+        { 
+          datas.data.filter(x => x.status == 3).length == 0
+            && <p className="text-muted">Aucune commande prêtes</p>
+            || datas.data.filter(x => x.status == 3).map(y => <CommandCard commande={y}/>)
+        }
+        <hr />
       </Container>
     </Container>
   </>

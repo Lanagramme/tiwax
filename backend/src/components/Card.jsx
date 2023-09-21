@@ -21,7 +21,7 @@ function CommandCard({commande}) {
                   {
                     Object.getOwnPropertyNames(item.options).map(x=>
                       <>
-                        <span class="text-muted">{x.charAt(0).toUpperCase() + x.slice(1)}:</span><br/>
+                        <span className="text-muted">{x.charAt(0).toUpperCase() + x.slice(1)}:</span><br/>
                         { typeof item.options[x] == "string" && <>{item.options[x]}<br/></> }
                         { 
                           item.options[x] instanceof Array && item.options[x].map( x => 

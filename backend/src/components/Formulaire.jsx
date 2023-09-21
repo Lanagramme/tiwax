@@ -36,7 +36,7 @@ function Formulaire({data, submit}) {
   }
 
   const fields = {
-    Input, Select
+    Input, Select, checkbox
   }
   return (
     <Form>

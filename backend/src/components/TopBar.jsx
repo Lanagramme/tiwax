@@ -13,6 +13,8 @@ const TopBar =()=> {
           <Nav className="me-auto">
             <Nav.Link href="/">Accueil</Nav.Link>
             <Nav.Link href="/Produits">Produits</Nav.Link>
+            <Nav.Link href="/Commandes">Commandes</Nav.Link>
+            <Nav.Link href="/Plats">Plats</Nav.Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
