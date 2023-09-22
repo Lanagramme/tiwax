@@ -1,4 +1,6 @@
-const data = require("../fdb")
+const fdb = require('../fdb')
+// const fdb = require("../fdb")
+console.log(fdb)
 const formats = {
   produits: {
     type: ['string'],
@@ -33,14 +35,19 @@ const formats = {
     max: ["number","boolean"],
     typeProduit: ['string'],
   },
-  menus: {
-    produit: "produits",
-    stock: ["number"]
+  navigation:{
+    $list: {
+      produit: "produits",
+      stock: ["number"]
+    },
+    titre: ['string'],
+    liste(){ return this.$list }
   }
 }
 
 function checkItem(collection, id){
-  return !!data[collection]?.find(item=> item.id === id)
+  collection = fdb[collection]
+  return !!collection?.find(item=> item.id === id)
 }
 
 function handleJSON(type, json){
@@ -58,6 +65,8 @@ function checkProperty(type,val,o){
     case type instanceof Function: return handleJSON(type.bind(o)(), val)
     // Identifier
     case typeof type === 'string': return checkItem(type, val)
+    // 
+    case typeof type === 'object': return Object.entries(type).every(([key,subval]) => checkProperty(subval,val[key]))
     default: throw new Error('unknow property format');
   }
 }

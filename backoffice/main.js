@@ -8,7 +8,7 @@ server
   // api routes
   .add.route({
     method: 'all',
-    path: '/api/:collection/:id?',
+    path: '/api/v1/:collection/:id?',
     callback: controller
   })
   // access to public folder
