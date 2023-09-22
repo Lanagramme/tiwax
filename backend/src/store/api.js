@@ -10,18 +10,28 @@ Api.get = (url)=> {
         Http.send();
     })
 }
+Api.delete = (url)=> {
+    return new Promise((resolve, reject)=> {
+        const Http = new XMLHttpRequest();
+        Http.open("DELETE", SERVER+url);
+        Http.onload = resolve;
+        Http.onerror = reject;
+        Http.send();
+    })
+}
 Api.post = async (url, data)=> {
-    // console.log('sent')
-    // fetch(SERVER+url, {
-    //     method: "POST",
-    //     body: JSON.stringify({ data }),
-    //     headers: { "Content-type": "application/json; charset=UTF-8" }
-    // })
-    // .then( x => { return response.json() })
-    // .catch(x => { return {fail: true} }) 
     return new Promise((resolve, reject)=> {
         const Http = new XMLHttpRequest();
         Http.open("POST", SERVER+url);
+        Http.onload = resolve;
+        Http.onerror = reject;
+        Http.send(data);
+    })   
+}
+Api.put = async (url, data)=> {
+    return new Promise((resolve, reject)=> {
+        const Http = new XMLHttpRequest();
+        Http.open("PUT", SERVER+url);
         Http.onload = resolve;
         Http.onerror = reject;
         Http.send(data);
