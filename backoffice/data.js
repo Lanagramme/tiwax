@@ -3,7 +3,6 @@ const db = require('./fdb')
 const collections = Object.keys(db)
 const createOne = require('./controller/methods').get('createOne')
 const fdb = {}
-module.exports = {}
 fdb.produits = [
   { id: crypto.randomUUID(),titre: 'Dish A', detail: "The marvelously delicious dish A", prix: 10.99, image: false, type: "dishes" },
   { id: crypto.randomUUID(), titre: 'Dish B', detail: "The marvelously delicious dish B", prix: 8.99,image: false, type: "dishes" },

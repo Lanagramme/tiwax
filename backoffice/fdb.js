@@ -1,5 +1,6 @@
 const [...collections] = require('./controller/classes').keys()
-const data = {}
-module.exports = collections.reduce((mod,key)=>{
+const data = collections.reduce((mod,key)=>{
   return (mod[key] = []), mod;
-}, data)
+}, {})
+console.log(data)
+module.exports = data
