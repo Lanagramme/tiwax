@@ -1,49 +1,7 @@
+const crypto = require('crypto')
 const fdb = require('../fdb')
 // const fdb = require("../fdb")
 console.log(fdb)
-const formats = {
-  produits: {
-    type: ['string'],
-    titre: ['string'],
-    detail: ['string'],
-    prix: ['number'],
-    image: ['string', "boolean"],
-  },
-  commandes: {
-    $item: {
-      $option: {
-        type: ['string'],
-        value: ['string'],
-        quantité: ['number']
-      },
-      produit: 'produits',
-      options(){ return this.$option },
-      note: ['string']
-    },
-    items(){
-      return this.$item
-    },
-    number: ["number"],
-    deliveryDate: ['string']
-  },
-  options: {
-    $choice: ['string'],
-    type: ['string'],
-    titre: ['string'],
-    qcm(){ return this.$choice},
-    sub: ['string', 'undefined'],
-    max: ["number","boolean"],
-    typeProduit: ['string'],
-  },
-  navigation:{
-    $list: {
-      produit: "produits",
-      stock: ["number"]
-    },
-    titre: ['string'],
-    liste(){ return this.$list }
-  }
-}
 
 function checkItem(collection, id){
   collection = fdb[collection]
@@ -71,10 +29,11 @@ function checkProperty(type,val,o){
   }
 }
 
-module.exports = Object.entries(formats).reduce((acc, [key, format])=>{
+const myMap = require('./formats').formats.reduce((acc, [key, format])=>{
   if(key.charAt(0) === '$') return acc;
   return acc.set(key, class{
     constructor (data){
+      this.id = crypto.randomUUID()
       try {
         Object.entries(format).filter(([key])=>key[0]!=="$").forEach(([key,val])=>{
           if(!checkProperty(val,data[key], format)) throw new Error('Invalid item format');
@@ -86,3 +45,5 @@ module.exports = Object.entries(formats).reduce((acc, [key, format])=>{
     }
   })
 },(new Map))
+console.log(myMap)
+module.exports = myMap
