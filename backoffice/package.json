@@ -3,8 +3,11 @@
     "start": "node main.js"
   },
   "dependencies": {
+    "dotenv": "^16.3.1",
     "epsjs": "^1.1.0",
     "express": "^4.18.2",
+    "mongodb": "^6.1.0",
+    "mongoose": "^7.5.3",
     "socketio": "^1.0.0"
   }
 }

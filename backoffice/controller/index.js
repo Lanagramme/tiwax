@@ -12,9 +12,17 @@ module.exports = (req, res, next) => {
   }
 
   action += routeParams.id ? 'One' : 'Many';
-  
 
-  methodsMap.has(action) && (result = methodsMap.get(action)(routeParams, methodParams))
-  return result ? res.json(result) : next();
+  // methodsMap.has(action) && (result = methodsMap.get(action)(routeParams, methodParams))
+  // return result ? res.json(result) : next();
+
+  if (!methodsMap.has(action)) next()
+  console.log('==========')
+  console.log(action)
+  methodsMap.get(action)(routeParams, methodParams)
+  .then(result => {
+    console.log(result)
+    res.json(result)
+  })
   
 }
