@@ -58,14 +58,15 @@ const datas = {
 }
 
 
-console.log('data', datas.data.filter(x => x.status == 1).length)
-console.log('data', datas.data.filter(x => x.status == 2).length)
-console.log('data', datas.data.filter(x => x.status == 3).length)
+// console.log('data', datas.data.filter(x => x.status == 1).length)
+// console.log('data', datas.data.filter(x => x.status == 2).length)
+// console.log('data', datas.data.filter(x => x.status == 3).length)
 const Commandes = () => {
   return <>
     <TopBar/>
     <Container>
       <h2>Commandes</h2>
+      
       <h3>Commandes en attente</h3>
       <Container className="d-flex container flex-wrap my-3">
         { 

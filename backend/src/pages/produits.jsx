@@ -1,18 +1,10 @@
-import TopBar from "../components/TopBar";
-import Container from 'react-bootstrap/Container';
-import Tableau from "../components/Table";
-import Formulaire from "../components/Formulaire";
-import Modals from "../components/Modals";
-import Api from "../store/api";
+import { useState } from 'react';
 import Store from "../store/Store";
-
-const data = [
-  {id:"1", nom:"thon", stock: "oui"},
-  {id:"2", nom:"steak", stock: "oui"},
-  {id:"3", nom:"laitue", stock: "oui"},
-  {id:"4", nom:"oeuf", stock: "non"},
-  {id:"5", nom:"tomate", stock: "oui"},
-]
+import TopBar from "../components/TopBar";
+import Modals from "../components/Modals";
+import Tableau from "../components/Table";
+import Container from 'react-bootstrap/Container';
+import Formulaire from "../components/Formulaire";
 
 const data2 = [
   {
@@ -27,63 +19,75 @@ const data2 = [
   }
 ]
 
-const create =()=> {
-  let unfilterdForm = document.getElementsByTagName('form')[0]
-  let data = new FormData(unfilterdForm)
-  return new Promise((resolve,reject)=>{
-    Store.SendProduit(data)
-      .then(x => {
-        console.log(x)
-        resolve(x)
-      })
-  })
-}
-
-const updatestock =(id, stock)=> {
-  return new Promise((resolve,reject)=>{
-    stock = stock == 'oui' 
-    ? false
-    : true
-    Store.SendProduit({id, stock})
-      .then(x => {
-        console.log(x)
-        resolve(x)
-      })
-  })
-}
-
-const DeleteProduit =(id)=> {
-  return new Promise((resolve,reject)=>{
-    Store.DeleteProduit({id})
-      .then(x => {
-        console.log(x)
-        resolve(x)
-      })
-  })
-}
-
 const Produits = () => {
+  const [Ingredients, updateIngredients] = useState(null)
+
+  const createOne =()=> {
+    let unfilterdForm = document.getElementsByTagName('form')[0]
+    // if (unfilterdForm.strip() == '') {
+    //   alert('Erreur, le champs ne peut pas être vide')
+    //   return 
+    // }
+    let data = new FormData(unfilterdForm)
+    var object = {};
+    data.forEach(function(value, key){
+      object[key] = value;
+    });
+    var json = JSON.stringify(object);
+    console.log(json)
+    Store.SendIngredient(json)
+      .then(x => {
+        updateTable()
+      })
+      console.log(Ingredients)
+  }
+
+  const DeleteIngredient =(id)=> {
+    Store.DeleteIngredient(id)
+      .then(x => {
+        if (x.success) x.success && updateIngredients(Ingredients.filter(x => x._id != id))
+        else alert("Erreur, le contenu n'a pas été supprimé")
+      })
+  }
+
+  const updateTable = ()=> {
+    Store.GetIngredients()
+      .then(x => {
+        const data = JSON.parse(x).message
+        console.log(data)
+        updateIngredients(data)
+      })
+  }
+
+  if (Ingredients == null ){ updateTable() }
+
+  console.log(Ingredients)
+
   return <>
     <TopBar/>
     <Container>
       <h2>Ingrédients</h2>
       <div className="mt-4 mb-2">
         <Modals
-          call="Ajouter un produit"
-          title="Ajouter un produit"
+          call="Ajouter un Ingredient"
+          title="Ajouter un Ingredient"
           action="Ajouter"
-          callback={create}
+          callback={createOne}
         >
           <Formulaire data={data2} />
         </Modals>
       </div>
-      <Tableau 
-        names={["nom", "stock"]}
-        data={data}
-        properties={["nom", "stock"]}
-        update={updatestock}
-        remove={DeleteProduit}
+      {
+        Ingredients == null 
+        && <p>LOADING ...</p>
+        || <Tableau 
+        names={["nom"]}
+        data={Ingredients}
+        properties={["name"]}
+        remove={DeleteIngredient}
       />
+      }
+      
     </Container>
   </>
 }

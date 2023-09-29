@@ -6,18 +6,9 @@ function Modals({ children, call , title, action, callback}) {
   const [show, setShow] = useState(false);
 
   const handleClose = (run) => {
-    if (run) {
-      callback.then(x => {
-        if (x != "fail") {
-          alert("Produit ajouté avec success")
-          setShow(false)
-          return
-        }
-        alert("Erreur réseau, le produit n'a pas été ajouté")
-      })
-    }
-    else setShow(false)
-  };
+    if (run) { callback() }
+    setShow(false)
+  }
   const handleShow = () => setShow(true);
 
   return (

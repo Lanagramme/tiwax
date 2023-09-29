@@ -2,6 +2,67 @@ import Api from "./api"
 
 const Store = {}
 
+Store.GetIngredient =(id)=> {
+  return new Promise((resolve, reject) => {
+    Api.get('ingredients/'+ id)
+      .then(e => {
+        var data = JSON.parse(e.target.responseText)
+        if (data.hasOwnProperty('fail')) resolve('fail')
+        else resolve(data)
+      })
+  })
+}
+
+Store.GetIngredients =()=> {
+  return new Promise((resolve, reject) => {
+    Api.get('ingredients/')
+      .then(e => {
+        // var data = JSON.parse(e.target.responseText)
+        // if (data.hasOwnProperty('fail')) resolve('fail')
+        // else resolve(data)
+        resolve(e.target.response)
+      })
+  })
+}
+
+Store.SendIngredient =(data)=> {
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3000/api/v1/ingredients/", {
+      method: "POST",
+      body: data,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+    .then((response) => resolve(response.json()))
+  })
+}
+
+Store.UpdateIngredient =(id, data)=> {
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3000/api/v1/ingredients/"+id, {
+      method: "PUT",
+      body: data,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+    .then((response) => resolve(response.json()))
+  })
+}
+
+Store.DeleteIngredient =(id)=> {
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3000/api/v1/ingredients/"+id, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+    .then((response) => resolve(response.json()))
+  })
+}
+
 Store.GetProduit =(id)=> {
   return new Promise((resolve, reject) => {
     Api.get('produit/'+ id)
@@ -58,7 +119,7 @@ Store.UpdateStock = (data)=> {
 }
 
 
-Store.GetCommande =(id)=> {
+Store.getCommande =(id)=> {
   return new Promise((resolve, reject) => {
     Api.get('commande/'+ id)
       .then(e => {
@@ -69,7 +130,7 @@ Store.GetCommande =(id)=> {
   })
 }
 
-Store.GetCommandes =()=> {
+Store.getCommandes =()=> {
   return new Promise((resolve, reject) => {
     Api.get('commandes/')
       .then(e => {
