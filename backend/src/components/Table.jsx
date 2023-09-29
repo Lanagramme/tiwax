@@ -25,8 +25,6 @@ function Tableau({names, data, properties, update, remove}) {
       </Button>
   }
 
-  console.log(data)
-  
   return (
     <Table striped bordered hover>
       <thead>

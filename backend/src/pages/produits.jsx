@@ -39,7 +39,6 @@ const Produits = () => {
       .then(x => {
         updateTable()
       })
-      console.log(Ingredients)
   }
 
   const DeleteIngredient =(id)=> {
@@ -54,14 +53,11 @@ const Produits = () => {
     Store.GetIngredients()
       .then(x => {
         const data = JSON.parse(x).message
-        console.log(data)
         updateIngredients(data)
       })
   }
 
   if (Ingredients == null ){ updateTable() }
-
-  console.log(Ingredients)
 
   return <>
     <TopBar/>
