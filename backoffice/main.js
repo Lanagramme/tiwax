@@ -6,7 +6,6 @@ const mongoose = require('mongoose')
 const menus = require('./models/menussModel')
 const products = require('./models/produitsModel')
 const { produits } = require('./data')
-const cors = require('cors')
 
 console.log('Connection à la Base de donnée ... ')
 
@@ -28,7 +27,7 @@ mongoose.connect(process.env.MONGO_URL)
     .add.dir('/',__dirname+'/public')
     // websocket
     .add.webSocket(webSocket)
-    .add.middleware(cors())
+    // .add.middleware(cors())
     .run()
 
 }).catch(err => console.log(err))
