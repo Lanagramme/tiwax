@@ -48,16 +48,16 @@ module.exports = (new Map)
     // return db.hasOwnProperty(collection) && db[collection].find(o => o.id===id)
     if (!checkCollection(collection)) return false
 
-    if (collection == "navigation2") {
-      return new Promise((resolve, reject) => {
-        collections["produits"].find({type : id})
-        .then(
-          res => { resolve({success: 1, message: res})},
-          err => { reject({success: 0, message: err.message})}
-        )
-      })
+    // if (collection == "navigation2") {
+    //   return new Promise((resolve, reject) => {
+    //     collections["produits"].find({type : id})
+    //     .then(
+    //       res => { resolve({success: 1, message: res})},
+    //       err => { reject({success: 0, message: err.message})}
+    //     )
+    //   })
 
-    }
+    // }
     
     
     return new Promise((resolve, reject) => {
