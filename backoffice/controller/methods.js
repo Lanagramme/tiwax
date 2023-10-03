@@ -12,7 +12,7 @@ const { checkCollection, collections } = require('../models')
 
 const filters = {
   t(filters, val) { filters.type = val },
-  s(filters, val) { filters.inStock = val }
+  s(filters, val) { filters.onSale = val }
 }
 
 function handlerFilters(acc, [key,val]) {
