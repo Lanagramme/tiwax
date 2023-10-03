@@ -5,7 +5,9 @@ import Store from '../store/calls.js'
 import { NavLink } from 'react-router-dom'
 import { useState } from 'react'
 import '../styles/Utils.scss'
-import '../styles/Tiquet.scss'
+import '../styles/Panier.scss'
+
+// ========== Page de récapitulatif de la commande à envoyer ==========
 
 if (localStorage.getItem('panier') == null) localStorage.setItem('panier', JSON.stringify([]))
 if (localStorage.getItem('panier') == "null") localStorage.setItem('panier', JSON.stringify([]))
@@ -23,6 +25,7 @@ function makeid(length) {
   return result;
 }
 
+// render un item de la liste
 const Liste_render =({item, trigger})=> {
   function del(id) {
     let pan = JSON.parse(localStorage.getItem('panier'))
@@ -63,13 +66,15 @@ const Liste_render =({item, trigger})=> {
       </div>
     </div>
 }
-const Test =()=>{
-  return <p>test</p>
-}
 
-const sendPanier =()=> {
+const sendPanier =(total)=> {
+  console.log(total)
+  if (!total == 0) {
+    alert('Le panier est vide')
+    return
+  }
   console.log('commande')
-  Store.SendCommande(localStorage.getItem('panier'))
+  Store.sendCommande(localStorage.getItem('panier'))
     .then(x => {
       if(x=='success') {
         alert('commande envoyée')
@@ -79,24 +84,27 @@ const sendPanier =()=> {
     })
 }
 
-const Tiquet =()=> {
+const Panier =()=> {
   let monPanier = JSON.parse(localStorage.getItem('panier'))
   const [specimen, trigger] = useState(0)
 
   let total = 0;
   monPanier.forEach(x => total += x.prix)
   total = total.toString().split('.')
-  total = total[0] + "." + total[1][0] + total[1][1]
+  total = total.length == 1 ? total[0]
+    : total[0] + "." + total[1][0] + total[1][1]
 
   return <>
     <Page>
-      <Header title='PANIER' />
+      <Header title='PANIER' home={true}/>
       <div className='scroll'>
-        <section className='tiquet'>
+        <section className='Panier'>
           <h4>Récapitulatif de commande</h4>
-          { monPanier.map( x => <Liste_render item={x} trigger={(trigger)}/> ) }
-
-          
+          { 
+            total == 0 
+            ? <p className='normal'>Le panier est vide</p>
+            : monPanier.map( x => <Liste_render item={x} trigger={(trigger)}/> ) 
+          }
           <div className="grid1a">
             <h1>Sous-total</h1>
             <p className="prix bold">{total}€</p>
@@ -104,10 +112,10 @@ const Tiquet =()=> {
         </section>
       </div>
       <Footer>
-        <button className="btn m-auto" onClick={e => sendPanier()}>Commander</button>
+        <button className="btn m-auto" onClick={e => sendPanier(total)}>Commander</button>
       </Footer>
 
     </Page>
   </>
 }
-export default Tiquet
+export default Panier
