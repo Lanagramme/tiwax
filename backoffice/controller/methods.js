@@ -38,8 +38,6 @@ module.exports = (new Map)
     // return db.hasOwnProperty(collection) && db[collection].find(o => o.id===id)
     if (!checkCollection(collection)) return false
 
-    let filter = {}
-
     if (collection == "navigation2") {
       return new Promise((resolve, reject) => {
         collections["produits"].find({type : id})
@@ -69,11 +67,6 @@ module.exports = (new Map)
     console.log('data',data)
 
     let filter = {}
-
-    if (collection == "navigation") {
-      collection = "produits"
-      filter = {onSale : true}
-    }
     
     return new Promise((resolve, reject) => {
       collections[collection].find(filter)

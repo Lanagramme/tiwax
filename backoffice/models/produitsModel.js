@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 const ProduitsSchema = mongoose.Schema(
   {
     titre : {
-       type: String,
-       required: [true, "Nom manquant pour le produit"]
+      type: String,
+      required: [true, "Nom manquant pour le produit"]
     },
     detail : String,
     prix : Number,
