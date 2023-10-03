@@ -42,7 +42,7 @@ const Navigateur =({data})=>{
               title={item.titre} 
               prix={item.prix+"€"} 
               data={item}
-              dispo={item.stock}
+              dispo={item.inStock}
             />
           )
         }

@@ -294,22 +294,6 @@ const Selecteur =()=> {
         window.location = "/"
       }
     })
-  
-  // if (data == '') {
-  //   switch(item.titre){
-  //   case "Menu":
-  //     data = repas_data
-  //     break;
-  //   case "Sandwich":
-  //     data = pain_data
-  //     break;
-  //   default:
-  //     data = boisson_data
-  //     break;
-  //   }
-  // }
-
-  
 
   function panier() {
     const pan = {}
