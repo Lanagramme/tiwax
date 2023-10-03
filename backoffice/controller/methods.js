@@ -12,10 +12,12 @@ const { checkCollection, collections } = require('../models')
 
 const filters = {
 
+  t(filters, val) { filters.type = val },
+  s(filters, val) { filters.inStock = val }
 }
 
 function handlerFilters(acc, [key,val]) {
-  filters[key] && filters[key](val)
+  filters[key] && filters[key](acc, val)
   return acc
 }
 module.exports = (new Map)
