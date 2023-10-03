@@ -10,6 +10,14 @@
 
 const { checkCollection, collections } = require('../models')
 
+const filters = {
+
+}
+
+function handlerFilters(acc, [key,val]) {
+  filters[key] && filters[key](val)
+  return acc
+}
 module.exports = (new Map)
   .set('createOne', function({collection}, data = {}){
     console.log(`createOne for ${collection} collection`)
@@ -66,7 +74,8 @@ module.exports = (new Map)
     if (!checkCollection(collection)) return false
     console.log('data',data)
 
-    let filter = {}
+    let filter = Object.entries(data).reduce(handlerFilters, {})
+    
     
     return new Promise((resolve, reject) => {
       collections[collection].find(filter)
