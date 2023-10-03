@@ -286,15 +286,19 @@ const Selecteur =()=> {
   let item = location.state.from
   const [data, update] = useState('')
 
-  Store.getMenu(item.id)
-    .then(x => {
-      update(JSON.parse(x))
-      if (data.hasOwnProperty('fail')) {
-        alert('Une erreur est survenue')
-        window.location = "/"
-      }
-    })
-
+  if (data == '') {
+    Store.getMenu(item.menu_id)
+      .then(x => {
+        let data = JSON.parse(x)
+        console.log(data)
+        console.log(data.success)
+        if (data.success == 0) {
+          alert('Une erreur est survenue')
+          window.location = "/"
+        }
+        update(data)
+      })
+  }
   function panier() {
     const pan = {}
     for (let ii in data.options){
