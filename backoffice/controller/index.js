@@ -19,6 +19,7 @@ module.exports = (req, res, next) => {
   if (!methodsMap.has(action)) next()
   console.log('==========')
   console.log(action)
+
   methodsMap.get(action)(routeParams, methodParams)
   .then(result => {
     console.log(result)
