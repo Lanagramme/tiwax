@@ -1,0 +1,65 @@
+@import './styles/Utils.scss';
+
+@font-face {
+  font-family: "Montserrat-bold";
+  src: url("../static/Montserrat-SemiBold.ttf")
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("../static/Montserrat-Regular.ttf")
+}
+
+@font-face {
+  font-family: "Montserrat-Thin";
+  src: url("../static/Montserrat-Thin.ttf")
+}
+
+.App {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  font-family: "Montserrat";
+  *{
+    font-family: "Montserrat";
+    font-size: 1.1rem;
+  }
+}
+
+h3 {
+  font-family: Montserrat-Thin!important;
+  font-size: .9rem!important;
+}
+h2,h1 {
+  font-family: Montserrat!important;
+  font-size: 2rem!important;
+  line-height: 2rem;
+}
+h4 {
+  font-size: 1.5rem!important;
+}
+.bold {
+  font-family: 'Montserrat-bold';
+}
+
+.container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,.6);
+}
+.modal {
+  border-radius: 20px;
+  $espacement: 20px;
+  position: absolute;
+  top: $espacement;
+  bottom: $espacement;
+  left: $espacement;
+  right: $espacement;
+  background: white;
+}
+.hidden {
+  display:none;
+}
