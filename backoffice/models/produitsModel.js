@@ -16,10 +16,7 @@ const ProduitsSchema = mongoose.Schema(
     type: String,
     inStock: Boolean,
     onSale: Boolean,
-    menu_id : {
-       type: String,
-       required: [true, "aucun menu associé au produit"]
-    },
+    menu : [],
   }
 )
 

@@ -6,7 +6,7 @@ const categories = require('../models/categoriesModel')
 const produits = require('../models/produitsModel')
 const menus = require('../models/menussModel')
 
-const collections ={ingredients, categories, produits, menus, navigation : true}
+const collections ={ingredients, categories, produits, menus, navigation : true, navigation2 : true}
 
 
 module.exports = (new Map)
@@ -35,8 +35,21 @@ module.exports = (new Map)
   .set('readOne', function({collection, id}){
     console.log(`read item id:${id} from ${collection}`)
     // return db.hasOwnProperty(collection) && db[collection].find(o => o.id===id)
-    
     if (!collections.hasOwnProperty(collection)) return false
+
+    let filter = {}
+
+    if (collection == "navigation2") {
+      return new Promise((resolve, reject) => {
+        collections["produits"].find({type : id})
+        .then(
+          res => { resolve({success: 1, message: res})},
+          err => { reject({success: 0, message: err.message})}
+        )
+      })
+
+    }
+    
     return new Promise((resolve, reject) => {
       console.log(id)
       collections[collection].findById(id)
