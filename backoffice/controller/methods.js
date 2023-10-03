@@ -1,13 +1,14 @@
-const fdb = require('../fdb'), collectionsMap = require('./classes')
-const db = require('../data')
+// const fdb = require('../fdb'), collectionsMap = require('./classes')
+// const db = require('../data')
 
-const ingredients = require('../models/ingredientsModel')
-const categories = require('../models/categoriesModel')
-const produits = require('../models/produitsModel')
-const menus = require('../models/menussModel')
+// const ingredients = require('../models/ingredientsModel')
+// const categories = require('../models/categoriesModel')
+// const produits = require('../models/produitsModel')
+// const menus = require('../models/menussModel')
 
-const collections ={ingredients, categories, produits, menus, navigation : true, navigation2 : true}
+// const collections ={ingredients, categories, produits, menus, navigation : true}
 
+const { checkCollection, collections } = require('../models')
 
 module.exports = (new Map)
   .set('createOne', function({collection}, data = {}){
@@ -21,7 +22,7 @@ module.exports = (new Map)
     //   fdb[collection]?.push(res)
     //   return 'created'
     // }
-    if (!collections.hasOwnProperty(collection)) return false
+    if (!checkCollection(collection)) return false
     return new Promise((resolve, reject) => {
       console.log(data)
       collections[collection].create(data)
@@ -35,7 +36,7 @@ module.exports = (new Map)
   .set('readOne', function({collection, id}){
     console.log(`read item id:${id} from ${collection}`)
     // return db.hasOwnProperty(collection) && db[collection].find(o => o.id===id)
-    if (!collections.hasOwnProperty(collection)) return false
+    if (!checkCollection(collection)) return false
 
     let filter = {}
 
@@ -50,6 +51,7 @@ module.exports = (new Map)
 
     }
     
+    
     return new Promise((resolve, reject) => {
       console.log(id)
       collections[collection].findById(id)
@@ -63,7 +65,7 @@ module.exports = (new Map)
   .set('readMany', function({collection}, data = {}){
     console.log(`readMany from ${collection} collection`)
     // return db.hasOwnProperty(collection) &&  db[collection]
-    if (!collections.hasOwnProperty(collection)) return false
+    if (!checkCollection(collection)) return false
     console.log('data',data)
 
     let filter = {}
@@ -84,7 +86,7 @@ module.exports = (new Map)
 
   .set('updateOne', function({collection, id}, data = {}){
     console.log(`update item id:${id} from ${collection}`)
-    if (!collections.hasOwnProperty(collection)) return false
+    if (!checkCollection(collection)) return false
     // if(!collectionsMap.has(collection)) return false
     
     return new Promise((resolve, reject) => {
@@ -96,14 +98,14 @@ module.exports = (new Map)
       )
     })
 
-    const item = fdb[collection].find(o => o.id===id)
-    const res = new collectionsMap.get(collection)({...item, ...data})
-    return res.error || (Object.assign(item,data), "successfully updated")
+    // const item = fdb[collection].find(o => o.id===id)
+    // const res = new collectionsMap.get(collection)({...item, ...data})
+    // return res.error || (Object.assign(item,data), "successfully updated")
   })
 
   // .set('updateMany', function(){
   //   console.log(`updateMany from ${collection} collection`)
-  //   if (!collections.hasOwnProperty(collection)) return false
+  //   if (!checkCollection(collection)) return false
   //   // return collectionsMap.has(collection) &&  'updateMany'
   // })
 
@@ -111,7 +113,7 @@ module.exports = (new Map)
     console.log(`delete item id:${id} from ${collection}`)
     // if(!collectionsMap.has(collection)) return false
     // return fdb[collection].splice(i,fdb[collection].findIndex(o => o.id===id))
-    if (!collections.hasOwnProperty(collection)) return false
+    if (!checkCollection(collection)) return false
     return new Promise((resolve, reject) => {
       collections[collection].findByIdAndDelete(id)
       .then(
@@ -124,6 +126,6 @@ module.exports = (new Map)
 
   // .set('deleteMany', function(){
   //   console.log(`deleteMany from ${collection} collection`)
-  //   if (!collections.hasOwnProperty(collection)) return false
+  //   if (!checkCollection(collection)) return false
   //   // return  collectionsMap.has(collection) && 'deleteMany'
   // })
