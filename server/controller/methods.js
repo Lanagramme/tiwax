@@ -30,12 +30,12 @@ function handlerFilters(data) {
  */
 function formatResponse(promise){
   
-  return new Promise((resolve, reject) => {
-    promise
-      .then(res => { resolve({success: 1, message: res})})
-      .catch(err => { resolve({success: 0, message: err.message})}
-    )
-  })
+  // return new Promise((resolve, reject) => {
+  //   promise
+  //     .then(res => { resolve({success: 1, message: res})})
+  //     .catch(err => { resolve({success: 0, message: err.message})}
+  //   )
+  // })
 
   // suggestion to simplify the above promise
   // s'il y a quelque chose que je n'ai pas compris (du genre ce n'est pas une promesse) dis le moi.
@@ -56,17 +56,22 @@ module.exports = (new Map)
     console.log(`createOne for ${collection} collection`)
 
     // Check if collection exist
-    if (!checkCollection(collection)){ 
-      return new Promise((resolve, reject) => {
-        resolve({success: 0, message: `Collection ${collection} introuvable`})
-      })
+    if (!checkCollection(collection)){
+      return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
+      // return new Promise((resolve, reject) => {
+      //   resolve({success: 0, message: `Collection ${collection} introuvable`})
+      // })
     }
     
     console.log(data)
     // execute the request to the database
-    // return formatResponse(collections[collection].create(data))
-    return collections[collection]
-      .create(data)
+    return formatResponse(
+      collections[collection].create(data).then(doc => {
+        if (doc) return doc
+        else throw new Error(`erreur à la création`)
+      })
+    )
+    return collections[collection].create(data)
       .then( doc => {
         if (doc) return {success: 1, message: doc}
         else return {success: 0, message: `erreur à la création`}
@@ -85,23 +90,11 @@ module.exports = (new Map)
     
     // Check if collection exist
     if (!checkCollection(collection)){
-      // return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
-      return new Promise((resolve, reject) => {
-        resolve({success: 0, message: `Collection ${collection} introuvable`})
-      })
+      return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
+      // return new Promise((resolve, reject) => {
+      //   resolve({success: 0, message: `Collection ${collection} introuvable`})
+      // })
     }
-
-    
-    // if (collection == "navigation2") {
-    //   return new Promise((resolve, reject) => {
-    //     collections["produits"].find({type : id})
-    //     .then(
-    //       res => { resolve({success: 1, message: res})},
-    //       err => { reject({success: 0, message: err.message})}
-    //     )
-    //   })
-
-    // }
 
     if (!id || id == 'undefined' || id == undefined){
       // return formatResponse(Promise.reject(new Error(`id ${id} invalide`)))
@@ -113,12 +106,16 @@ module.exports = (new Map)
     console.log(id)
     
     // execute the request to the database
-    // return formatResponse(collections[collection].findById(id))
-    return collections[collection].findById(id)
-    .then( doc => {
-      if (doc) return {success: 1, message: doc}
-      else return {success: 0, message: `Aucune donnée dans ${collection} pour ${id}`}
-    })
+    return formatResponse(collections[collection].findById(id).then(doc => {
+      if (doc) return doc
+      else throw new Error(`Aucune donnée dans ${collection} pour ${id}`)
+    }))
+
+    // return collections[collection].findById(id)
+    // .then( doc => {
+    //   if (doc) return {success: 1, message: doc}
+    //   else return {success: 0, message: `Aucune donnée dans ${collection} pour ${id}`}
+    // })
   })
 
   /** Read all or filtered entries of the specified collection
@@ -130,27 +127,30 @@ module.exports = (new Map)
   .set('readMany', function({collection}, data = {}){
     console.log(`readMany from ${collection} collection`)
     
-    // Check if collection exist=
+    // Check if collection exist
     if (!checkCollection(collection)){ 
-      // return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
-      return new Promise((resolve, reject) => {
-        resolve({success: 0, message: `Collection ${collection} introuvable`})
-      })
+      return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
+      // return new Promise((resolve, reject) => {
+      //   resolve({success: 0, message: `Collection ${collection} introuvable`})
+      // })
     }
 
-    console.log('data',data)
-    // let filter = Object.entries(data).reduce(handlerFilters, {})
+    console.log('data => ',data)
     const filter = handlerFilters(data)
         
     // execute the request to the database
-    // return formatResponse(collections[collection].find(filter))
-    return collections[collection].find(filter)
-      .then(
-        res => { 
-        if (res) return {success: 1, message: res}
-        else return {success: 0, message: `Aucune donnée dans ${collection} pour ${filter}`}
-        }
-      )
+    return formatResponse(collections[collection].find(filter).then(doc => {
+      if (doc) return doc
+      else throw new Error(`Aucune donnée dans ${collection} pour ${JSON.stringify(filter)}`)
+    }))
+
+    // return collections[collection].find(filter)
+    //   .then(
+    //     res => { 
+    //     if (res) return {success: 1, message: res}
+    //     else return {success: 0, message: `Aucune donnée dans ${collection} pour ${filter}`}
+    //     }
+    //   )
   })
 
   /** Update a specified entry of the specified collection
@@ -163,22 +163,26 @@ module.exports = (new Map)
     console.log(`update item id:${id} from ${collection}`)
     // Check if collection exist
     if (!checkCollection(collection)){ 
-      // return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
-      return new Promise((resolve, reject) => {
-        resolve({success: 0, message: `Collection ${collection} introuvable`})
-      })
+      return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
+      // return new Promise((resolve, reject) => {
+      //   resolve({success: 0, message: `Collection ${collection} introuvable`})
+      // })
     }
 
     // execute the request to the database
-    // return formatResponse(collections[collection].findByIdAndUpdate(id, data))
-    return new Promise((resolve, reject) => {
-      console.log(data)
-      collections[collection].findByIdAndUpdate(id, data)
-      .then(
-        res => { resolve({success: 1, message: res})},
-        err => { reject({success: 0, message: err.message})}
-      )
-    })
+    return formatResponse(collections[collection].findByIdAndUpdate(id, data).then(doc => {
+      if (doc) return doc
+      else throw new Error(`Error message: action: deleteOne / collection: ${collection} / id: ${id}`)
+    }))
+
+    // return new Promise((resolve, reject) => {
+    //   console.log(data)
+    //   collections[collection].findByIdAndUpdate(id, data)
+    //   .then(
+    //     res => { resolve({success: 1, message: res})},
+    //     err => { reject({success: 0, message: err.message})}
+    //   )
+    // })
 
   })
 
@@ -199,20 +203,24 @@ module.exports = (new Map)
     
     // Check if collection exist
     if (!checkCollection(collection)){ 
-      // return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
-      return new Promise((resolve, reject) => {
-        resolve({success: 0, message: `Collection ${collection} introuvable`})
-      })
+      return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
+      // return new Promise((resolve, reject) => {
+      //   resolve({success: 0, message: `Collection ${collection} introuvable`})
+      // })
     }
     
     // execute the request to the database
-    // return formatResponse(collections[collection].findByIdAndDelete(id))
-    return new Promise((resolve, reject) => {
-      collections[collection].findByIdAndDelete(id)
-      .then(
-        res => { resolve({success: 1, message: res})},
-        err => { reject({success: 0, message: err.message})}
-      )
-    })
+    return formatResponse(collections[collection].findByIdAndDelete(id).then(doc => {
+      if (doc) return doc
+      else throw new Error(`Error message: action: deleteOne / collection: ${collection} / id: ${id}`)
+    }))
+
+    // return new Promise((resolve, reject) => {
+    //   collections[collection].findByIdAndDelete(id)
+    //   .then(
+    //     res => { resolve({success: 1, message: res})},
+    //     err => { reject({success: 0, message: err.message})}
+    //   )
+    // })
 
   })
