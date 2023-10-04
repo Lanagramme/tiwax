@@ -1,96 +1,84 @@
-// const fdb = require('../fdb'), collectionsMap = require('./classes')
-// const db = require('../data')
-
-// const ingredients = require('../models/ingredientsModel')
-// const categories = require('../models/categoriesModel')
-// const produits = require('../models/produitsModel')
-// const menus = require('../models/menussModel')
-
-// const collections ={ingredients, categories, produits, menus, navigation : true}
-
 const { checkCollection, collections } = require('../models')
 
-const filters = {
-  t(filters, val) { filters.type = val },
-  s(filters, val) { filters.onSale = val }
+// const filters = {
+//   t(filters, val) { filters.type = val },
+//   s(filters, val) { filters.onSale = val }
+// }
+
+// function handlerFilters(acc, [key,val]) {
+//   filters[key] && filters[key](acc, encodeURI(val))
+//   return acc
+// }
+
+function handlerFilters(data) {
+  const filters = {
+    t(filters, val) { filters.type = val },
+    s(filters, val) { filters.onSale = val }
+  }
+
+  return Object.entries(data).reduce((acc, [key,val]) => {
+    filters[key] && filters[key](acc, encodeURI(val))
+    return acc
+  }, {})
 }
 
-function handlerFilters(acc, [key,val]) {
-  filters[key] && filters[key](acc, encodeURI(val))
-  return acc
-}
 module.exports = (new Map)
   .set('createOne', function({collection}, data = {}){
     console.log(`createOne for ${collection} collection`)
-    // if(!collectionsMap.has(collection)) return false
-    // const aclass = collectionsMap.get(collection)
-    // const res = new aclass(data)
-    // if(res.error) {
-    //   return res.error
-    // } else {
-    //   fdb[collection]?.push(res)
-    //   return 'created'
-    // }
-    if (!checkCollection(collection)) return false
-    return new Promise((resolve, reject) => {
-      console.log(data)
-      collections[collection].create(data)
-      .then(
-        res => { resolve({success: 1, message: res})},
-        err => { reject({success: 0, message: err.message})}
-      )
+    if (!checkCollection(collection)){ 
+      return new Promise((resolve, reject) => {
+        resolve({success: 0, message: `Collection ${collection} introuvable`}) })  }
+
+    console.log(data)
+    return collections[collection].create(data)
+    .then( doc => {
+      if (doc) return {success: 1, message: doc}
+      else return {success: 0, message: `erreur à la création`}
     })
+
   })
 
   .set('readOne', function({collection, id}){
     console.log(`read item id:${id} from ${collection}`)
-    // return db.hasOwnProperty(collection) && db[collection].find(o => o.id===id)
-    if (!checkCollection(collection)) return false
+    if (!checkCollection(collection)){ 
+      return new Promise((resolve, reject) => {
+        resolve({success: 0, message: `Collection ${collection} introuvable`}) })   }
+    if (!id || id == 'undefined' || id == undefined){ 
+      return new Promise((resolve, reject) => {
+        resolve({success: 0, message: `id ${id} invalide`}) })  }
 
-    // if (collection == "navigation2") {
-    //   return new Promise((resolve, reject) => {
-    //     collections["produits"].find({type : id})
-    //     .then(
-    //       res => { resolve({success: 1, message: res})},
-    //       err => { reject({success: 0, message: err.message})}
-    //     )
-    //   })
-
-    // }
-    
-    
-    return new Promise((resolve, reject) => {
-      console.log(id)
-      collections[collection].findById(id)
-      .then(
-        res => { resolve({success: 1, message: res})},
-        err => { reject({success: 0, message: err.message})}
-      )
+    console.log(id)
+    return collections[collection].findById(id)
+    .then( doc => {
+      if (doc) return {success: 1, message: doc}
+      else return {success: 0, message: `Aucune donnée dans ${collection} pour ${id}`}
     })
   })
 
   .set('readMany', function({collection}, data = {}){
     console.log(`readMany from ${collection} collection`)
-    // return db.hasOwnProperty(collection) &&  db[collection]
-    if (!checkCollection(collection)) return false
+    if (!checkCollection(collection)){ 
+      return new Promise((resolve, reject) => {
+        resolve({success: 0, message: `Collection ${collection} introuvable`}) })   }
+        
     console.log('data',data)
-
-    let filter = Object.entries(data).reduce(handlerFilters, {})
+    // let filter = Object.entries(data).reduce(handlerFilters, {})
+    const filter = handlerFilters(data)
     
-    
-    return new Promise((resolve, reject) => {
-      collections[collection].find(filter)
+    return collections[collection].find(filter)
       .then(
-        res => { resolve({success: 1, message: res})},
-        err => { reject({success: 0, message: err.message})}
+        res => { 
+        if (res) return {success: 1, message: res}
+        else return {success: 0, message: `Aucune donnée dans ${collection} pour ${filter}`}
+        }
       )
-    })
   })
 
   .set('updateOne', function({collection, id}, data = {}){
     console.log(`update item id:${id} from ${collection}`)
-    if (!checkCollection(collection)) return false
-    // if(!collectionsMap.has(collection)) return false
+    if (!checkCollection(collection)){ 
+      return new Promise((resolve, reject) => {
+        resolve({success: 0, message: `Collection ${collection} introuvable`})  }) }
     
     return new Promise((resolve, reject) => {
       console.log(data)
@@ -106,17 +94,13 @@ module.exports = (new Map)
     // return res.error || (Object.assign(item,data), "successfully updated")
   })
 
-  // .set('updateMany', function(){
-  //   console.log(`updateMany from ${collection} collection`)
-  //   if (!checkCollection(collection)) return false
-  //   // return collectionsMap.has(collection) &&  'updateMany'
-  // })
-
   .set('deleteOne', function({collection, id}){
     console.log(`delete item id:${id} from ${collection}`)
-    // if(!collectionsMap.has(collection)) return false
-    // return fdb[collection].splice(i,fdb[collection].findIndex(o => o.id===id))
-    if (!checkCollection(collection)) return false
+    if (!checkCollection(collection)){ 
+      return new Promise((resolve, reject) => {
+        resolve({success: 0, message: `Collection ${collection} introuvable`})
+      }) 
+    }
     return new Promise((resolve, reject) => {
       collections[collection].findByIdAndDelete(id)
       .then(
@@ -126,9 +110,3 @@ module.exports = (new Map)
     })
 
   })
-
-  // .set('deleteMany', function(){
-  //   console.log(`deleteMany from ${collection} collection`)
-  //   if (!checkCollection(collection)) return false
-  //   // return  collectionsMap.has(collection) && 'deleteMany'
-  // })
