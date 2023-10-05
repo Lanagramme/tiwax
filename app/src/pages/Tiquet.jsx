@@ -86,7 +86,9 @@ const Tiquet =()=> {
   let total = 0;
   monPanier.forEach(x => total += x.prix)
   total = total.toString().split('.')
-  total = total[0] + "." + total[1][0] + total[1][1]
+  total = total.length > 2 
+    ? total[0] + "." + total[1][0] + total[1][1]
+    : total
 
   return <>
     <Page>

@@ -301,6 +301,7 @@ const Selecteur =()=> {
   }
   function panier() {
     const pan = {}
+    console.log(data)
     for (let ii in data.options){
       let i = data.options[ii]
       let choix = null

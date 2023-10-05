@@ -51,7 +51,7 @@ Store.getNavigation =()=> {
 // Obtenire les informations d'un menu
 Store.getMenu =(id)=> {
     return new Promise((resolve, reject) => {
-        Api.get('menu/' + id)
+        Api.get('menus/' + id)
             .then(e => {
                 resolve(e.target.response)
             })
