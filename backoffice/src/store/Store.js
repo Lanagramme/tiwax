@@ -175,7 +175,6 @@ Store.Getstore =()=> {
 }
 
 Store.updateStore =(id, data)=> {
-  console.log(id, data)
   return new Promise((resolve, reject) => {
     fetch("http://localhost:3000/api/v1/store/"+id, {
       method: "PUT",
@@ -185,7 +184,6 @@ Store.updateStore =(id, data)=> {
       }
     })
     .then((response) =>{
-      console.log(response)
       resolve(response.json())
     })
 

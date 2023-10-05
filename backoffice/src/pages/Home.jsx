@@ -41,10 +41,7 @@ const Home =()=> {
       if (first){
         Store['Get'+i]()
         .then(x => {
-          console.log('collection', i)
-          console.log("res", x)
           if (x.success) {
-            console.log(x.message[0])
             if (i == 'store ') console.log(store)
             else DATA['set'+i](x.message)
           }
@@ -54,20 +51,14 @@ const Home =()=> {
     first = false
   }
   updt()
-  // console.log('store', store)
 
   const door=() => {
-    let status = store.open
-    console.log("store", store)
-
-    Store.updateStore(store._id, JSON.stringify({open: !status}))
+    Store.updateStore(store._id, JSON.stringify({open: !store.open}))
     .then(x => {
       if (x.success){
         x.message.open = !x.message.open
-        console.log(x)
         setstore(x.message)
       }
-      console.log(x.message)
     })
   }
 
@@ -79,9 +70,10 @@ const Home =()=> {
           <Modal.Title>Plat du jour</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <h5>Plats disponibles</h5>
           <div className="d-flex">
           {
-            Produits.filter(x => x.type == "Plats").map( x => {
+            Produits != null && Produits.filter(x => x.type == "Plats").map( x => {
               return <Card style={{ width: '10rem' }} className="shadow mx-2">
                 <Card.Body>
                   {x.titre}
@@ -90,6 +82,8 @@ const Home =()=> {
             })
           }
           </div>
+          <h5>Plats du jour</h5>
+          <ul></ul>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleClose}>
