@@ -1,19 +1,19 @@
 const mongoose = require('mongoose')
 
-const IngredientSchema = mongoose.Schema(
-  {
-   name : {
-      type: String,
-      required: [true, "Nom manquant pour l'ingrédient"]
-    },
-    stock : {
-      type: Boolean,
-      required: true,
-      default: false
-    }
-  }
-)
+const modelIngredients = {
+  name : {
+     type: "String",
+     required: [true, "Nom manquant pour l'ingrédient"]
+   },
+   stock : {
+     type: "Boolean",
+     required: true,
+     default: false
+   }
+ }
 
-const Ingredient = mongoose.model('Ingredient', IngredientSchema)
+const IngredientsSchema = mongoose.Schema(modelIngredients)
 
-module.exports = Ingredient
+const Ingredients = mongoose.model('Ingredient', IngredientsSchema)
+
+module.exports = {Ingredients, modelIngredients}

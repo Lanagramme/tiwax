@@ -70,7 +70,7 @@ function Tableau({names, data, properties, update, remove, tab}) {
       </thead>
       <tbody>
         {
-          data.map(item => {
+          (Array.isArray(data) ? data : []).map(item => {
             return <tr key={makeid()}>
               <td><input type={"checkbox"} id={item['id']} /></td>
               { properties.map(prop => {return <td key={makeid()}>{item[prop]}</td>}) }

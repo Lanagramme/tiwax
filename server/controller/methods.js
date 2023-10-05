@@ -1,4 +1,4 @@
-const { checkCollection, collections } = require('../models')
+const { checkCollection, collections, models } = require('../models')
 
 
 /** List of methods to process filters
@@ -88,6 +88,12 @@ module.exports = (new Map)
   .set('readOne', function({collection, id}){
     console.log(`read item id:${id} from ${collection}`)
     
+    if(collection === 'models') {
+      return formatResponse(new Promise((resolve, reject)=>{
+        const data = models[id]
+        data ? resolve(data) : reject(new Error(`Collection ${collection} introuvable`))
+      }))
+    }
     // Check if collection exist
     if (!checkCollection(collection)){
       return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
@@ -127,6 +133,8 @@ module.exports = (new Map)
   .set('readMany', function({collection}, data = {}){
     console.log(`readMany from ${collection} collection`)
     
+    if(collection === 'models') { return formatResponse(Promise.resolve(models)) }
+
     // Check if collection exist
     if (!checkCollection(collection)){ 
       return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
