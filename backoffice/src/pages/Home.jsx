@@ -74,11 +74,11 @@ const Home =()=> {
           <div className="d-flex">
           {
             Produits != null && Produits.filter(x => x.type == "Plats").map( x => {
-              return <Card style={{ width: '10rem' }} className="shadow mx-2">
-                <Card.Body>
-                  {x.titre}
-                </Card.Body>
-              </Card>
+              return <Button 
+                variant={x.jour ? "primary" :"outline-primary"}
+                onClick={door}
+                className="m-1"
+              >{x.titre}</Button>
             })
           }
           </div>
