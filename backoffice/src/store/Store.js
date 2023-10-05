@@ -235,4 +235,15 @@ Store.CommandeStatus =(id, data)=> {
       })
   })
 }
+
+Store.GetModel =(id)=> {
+  return new Promise((resolve, reject) => {
+    Api.get('models/'+ id)
+      .then(e => {
+        var data = JSON.parse(e.target.responseText)
+        if (data.hasOwnProperty('fail')) resolve('fail')
+        else resolve(data)
+      })
+  })
+}
 export default Store

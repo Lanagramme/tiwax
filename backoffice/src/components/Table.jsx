@@ -5,41 +5,42 @@ import makeid from '../store/makeid';
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
 import Store from '../store/Store';
-
-const data2 = [
-  {
-    type: "Input",
-    detail: {
-      name: "name",
-      label: "Name",  
-      placeholder:"",
-      required: true,
-      disabled: false
+const types = {
+  Boolean: "Checkbox",
+}
+function Tableau({names, data, properties, update, remove, tab, collection}) {
+  const data2 = [
+    {
+      type: "Input",
+      detail: {
+        name: "name",
+        label: "Name",  
+        placeholder:"",
+        required: true,
+        disabled: false
+      }
+    },
+    {
+      type: "Select",
+      detail: {
+        name: "type",
+        label: "Type",  
+        placeholder:"",
+        required: true,
+        disabled: false
+      }
+    },
+    {
+      type: "Checkbox",
+      detail: {
+        name: "good",
+        label: "Good",  
+        placeholder:"",
+        required: true,
+        disabled: false
+      }
     }
-  },
-  {
-    type: "Select",
-    detail: {
-      name: "type",
-      label: "Type",  
-      placeholder:"",
-      required: true,
-      disabled: false
-    }
-  },
-  {
-    type: "Checkbox",
-    detail: {
-      name: "good",
-      label: "Good",  
-      placeholder:"",
-      required: true,
-      disabled: false
-    }
-  }
-]
-
-function Tableau({names, data, properties, update, remove, tab}) {
+  ]
 
   const Upd_btn =({item})=> {
     const [Stock, updStock] = useState(item.stock)
@@ -60,6 +61,24 @@ function Tableau({names, data, properties, update, remove, tab}) {
       </Button>
   }
   console.log(...arguments)
+  Store.GetModel(collection).then(res => {
+    data2.length = 0
+    console.log(data2)
+    Object.entries(res.message).forEach(([key,val]) => {
+      
+      data2.push({
+        type: types[val.type] || "Input",
+        detail: {
+          name: key,
+          label: val.label || key,  
+          placeholder:"",
+          required: !!val.required,
+          disabled: false
+        }
+      })
+    })
+    console.log(data2)
+  })
   return (
     <Table striped bordered hover>
       <thead>

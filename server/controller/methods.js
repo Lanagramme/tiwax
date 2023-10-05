@@ -91,7 +91,7 @@ module.exports = (new Map)
     if(collection === 'models') {
       return formatResponse(new Promise((resolve, reject)=>{
         const data = models[id]
-        data ? resolve(data) : reject(new Error(`Collection ${collection} introuvable`))
+        data ? resolve(data) : reject(new Error(`Collection ${id} introuvable`))
       }))
     }
     // Check if collection exist
