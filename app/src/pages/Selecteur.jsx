@@ -41,6 +41,7 @@ const Check =({title, qcm, sub = false, max})=> {
     } 
     </section>
 }
+
 const Radio =({title, qcm, sub = false})=> {
   let i = 1
   let incr =()=>{i+=1; return i}
@@ -61,6 +62,7 @@ const Radio =({title, qcm, sub = false})=> {
     } 
     </section>
 }
+
 const Input =()=> {
   return <section>
     <div className='commentaires'>
@@ -69,6 +71,7 @@ const Input =()=> {
     </div>
   </section>
 } 
+
 const Graduate =({max, name, item})=> {
   const key = Date.now()
   const [val, updateval] = useState(0)

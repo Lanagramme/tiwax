@@ -1,10 +1,25 @@
 import Table from 'react-bootstrap/Table';
+import Modals from "./Modals";
+import Formulaire from "./Formulaire";
 import makeid from '../store/makeid';
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
 import Store from '../store/Store';
 
-function Tableau({names, data, properties, update, remove}) {
+const data2 = [
+  {
+    type: "Input",
+    detail: {
+      name: "name",
+      label: "Produit",  
+      placeholder:"",
+      required: true,
+      disabled: false
+    }
+  }
+]
+
+function Tableau({names, data, properties, update, remove, tab}) {
 
   const Upd_btn =({item})=> {
     const [Stock, updStock] = useState(item.stock)
@@ -24,7 +39,7 @@ function Tableau({names, data, properties, update, remove}) {
         {Stock ? "Disponible" : "Non disponible"}
       </Button>
   }
-
+  console.log(...arguments)
   return (
     <Table striped bordered hover>
       <thead>
@@ -40,7 +55,15 @@ function Tableau({names, data, properties, update, remove}) {
               <td><input type={"checkbox"} id={item['id']} /></td>
               { properties.map(prop => {return <td key={makeid()}>{item[prop]}</td>}) }
               <td>
-                <Button variant="primary" className='me-2'>Modifier</Button> 
+                <Modals
+                  call="Modifier"
+                  title={`Modifer un ${tab}`}
+                  action="Modifier"
+                  callback={update}
+                >
+                  <Formulaire data={data2} />
+                </Modals>
+                {/* <Button variant="primary" className='me-2' onClick={e => update(item)}>Modifier</Button>  */}
                 <Button variant="danger"  className='me-2' onClick={e => remove(item._id)}>Supprimer</Button>
                 <Upd_btn item={item} />
               </td>

@@ -27,7 +27,7 @@ module.exports = (req, res, next) => {
   if (!methodsMap.has(action)) next()
 
   console.log('==========')
-  console.log(action)
+  // console.log(action)
 
   // execute the route's action
   methodsMap.get(action)(routeParams, methodParams)

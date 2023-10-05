@@ -76,6 +76,10 @@ const Produits = () => {
       })
   }
 
+  const UpdateIngredient =(x)=> {
+    console.log(x)
+  }
+
   const updateTable = ()=> {
     Store["Get"+key]()
       .then(x => {
@@ -167,6 +171,8 @@ const Produits = () => {
             data={Produits}
             properties={["titre", "detail", "prix", 'type']}
             remove={DeleteIngredient}
+            tab = {"produit"}
+            update={UpdateIngredient}
           />
           }
         </>
