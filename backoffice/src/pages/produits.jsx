@@ -121,6 +121,8 @@ const Produits = () => {
               data={Ingredients}
               properties={["name"]}
               remove={DeleteIngredient}
+              tab = {"ingrédient"}
+              update={UpdateIngredient}
             />
             }
           </>
@@ -146,6 +148,8 @@ const Produits = () => {
             data={Categories}
             properties={["name"]}
             remove={DeleteIngredient}
+            tab = {"catégorie"}
+            update={UpdateIngredient}
           />
           }
         </>

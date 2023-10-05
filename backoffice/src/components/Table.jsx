@@ -11,7 +11,27 @@ const data2 = [
     type: "Input",
     detail: {
       name: "name",
-      label: "Produit",  
+      label: "Name",  
+      placeholder:"",
+      required: true,
+      disabled: false
+    }
+  },
+  {
+    type: "Select",
+    detail: {
+      name: "type",
+      label: "Type",  
+      placeholder:"",
+      required: true,
+      disabled: false
+    }
+  },
+  {
+    type: "Checkbox",
+    detail: {
+      name: "good",
+      label: "Good",  
       placeholder:"",
       required: true,
       disabled: false

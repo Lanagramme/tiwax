@@ -22,12 +22,12 @@ function Formulaire({data, submit}) {
       <Form.Group className="mb-3">
         <Form.Label>{label}</Form.Label>
         <Form.Select name={name} required={required} disabled={disabled}>
-          { options.map(x => <option>{x}</option>)}
+          { options?.map(x => <option>{x}</option>)}
         </Form.Select>
       </Form.Group>
     )
   }
-  const checkbox = ({name, required, label, disabled=false})=> {
+  const Checkbox = ({name, required, label, disabled=false})=> {
     return (
       <Form.Group className="mb-3">
         <Form.Check type="checkbox" label={label} name={name} required={required} disabled={disabled} />
@@ -36,7 +36,7 @@ function Formulaire({data, submit}) {
   }
 
   const fields = {
-    Input, Select, checkbox
+    Input, Select, Checkbox
   }
   return (
     <Form>
