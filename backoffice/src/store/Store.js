@@ -106,6 +106,19 @@ Store.SendProduit =(data)=> {
   })
 }
 
+Store.UpdateProduit =(id, data)=> {
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3000/api/v1/produits/"+id, {
+      method: "PUT",
+      body: data,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+    .then((response) => resolve(response.json()))
+  })
+}
+
 Store.DeleteProduit =(data)=> {
   return new Promise((resolve, reject) => {
     Api.post('produits/', data)

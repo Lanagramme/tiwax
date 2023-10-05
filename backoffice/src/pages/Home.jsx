@@ -62,6 +62,21 @@ const Home =()=> {
     })
   }
 
+  const updateProduit = () => {
+    Store.GetProduits()
+    .then(x => {
+      setProduits(x.message)
+    })
+  }
+
+  const jour=(id)=> {
+    let produit = Produits.find(x => x._id == id)
+    Store.UpdateProduit(id, JSON.stringify({'jour': !produit.jour}))
+    .then(x => {
+      updateProduit()
+    })
+  }
+
   if (Array.isArray(store)) setstore(store[0])
 
   return <>
@@ -76,14 +91,25 @@ const Home =()=> {
             Produits != null && Produits.filter(x => x.type == "Plats").map( x => {
               return <Button 
                 variant={x.jour ? "primary" :"outline-primary"}
-                onClick={door}
+                onClick={e => jour(x._id)}
                 className="m-1"
               >{x.titre}</Button>
             })
           }
           </div>
           <h5>Plats du jour</h5>
-          <ul></ul>
+          <ul>
+            {
+              Produits != null  && Produits.filter(x => x.jour ).length ? "" : <li>...</li>
+            }
+            {
+              Produits != null 
+              && Produits.filter(x => x.jour ).map(x => {
+                return <li>{x.titre}</li>
+              })
+              || <li>...</li>
+            }
+          </ul>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleClose}>
@@ -150,9 +176,16 @@ const Home =()=> {
         <Card.Body>
           <h1>Plat du jour</h1>
           <ul>
-            <li>Plat</li>
-            <li>Plat</li>
-            <li>Plat</li>
+            {
+              Produits != null && Produits.filter(x => x.jour ).length ? "" : <li>...</li>
+            }
+            {
+              Produits != null 
+              && Produits.filter(x => x.jour ).map(x => {
+                return <li>{x.titre}</li>
+              })
+              || <li>...</li>
+            }
           </ul>
           <div className="d-flex justify-content-end">
             <Button variant="outline-light" onClick={handleShow}>Choisir le plat du jour</Button>
