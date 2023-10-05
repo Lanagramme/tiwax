@@ -75,14 +75,17 @@ function Tableau({names, data, properties, update, remove, tab}) {
               <td><input type={"checkbox"} id={item['id']} /></td>
               { properties.map(prop => {return <td key={makeid()}>{item[prop]}</td>}) }
               <td>
-                <Modals
-                  call="Modifier"
-                  title={`Modifer un ${tab}`}
-                  action="Modifier"
-                  callback={update}
-                >
-                  <Formulaire data={data2} />
-                </Modals>
+                <span className='me-2' >
+                  <Modals
+                    call="Modifier"
+                    title={`Modifer un ${tab}`}
+                    action="Modifier"
+                    callback={update}
+                  >
+                    <Formulaire data={data2} />
+                  </Modals>
+                  
+                </span>
                 {/* <Button variant="primary" className='me-2' onClick={e => update(item)}>Modifier</Button>  */}
                 <Button variant="danger"  className='me-2' onClick={e => remove(item._id)}>Supprimer</Button>
                 <Upd_btn item={item} />
