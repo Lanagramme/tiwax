@@ -79,6 +79,9 @@ module.exports = (new Map)
     if (!checkCollection(collection)){ 
       return new Promise((resolve, reject) => {
         resolve({success: 0, message: `Collection ${collection} introuvable`})  }) }
+    if (!id || id == 'undefined' || id == undefined){ 
+      return new Promise((resolve, reject) => {
+        resolve({success: 0, message: `id ${id} invalide`}) })  }
     
     return new Promise((resolve, reject) => {
       console.log(data)
@@ -101,6 +104,11 @@ module.exports = (new Map)
         resolve({success: 0, message: `Collection ${collection} introuvable`})
       }) 
     }
+    
+    if (!id || id == 'undefined' || id == undefined){ 
+      return new Promise((resolve, reject) => {
+        resolve({success: 0, message: `id ${id} invalide`}) })  }
+        
     return new Promise((resolve, reject) => {
       collections[collection].findByIdAndDelete(id)
       .then(

@@ -13,15 +13,25 @@ Store.GetIngredient =(id)=> {
   })
 }
 
+Store.GetCategories =()=> {
+  return new Promise((resolve, reject) => {
+    Api.get('categories/')
+    .then(e => {
+      var data = JSON.parse(e.target.responseText)
+      if (data.hasOwnProperty('fail')) resolve('fail')
+      else resolve(data)
+    })
+  })
+}
+
 Store.GetIngredients =()=> {
   return new Promise((resolve, reject) => {
     Api.get('ingredients/')
-      .then(e => {
-        // var data = JSON.parse(e.target.responseText)
-        // if (data.hasOwnProperty('fail')) resolve('fail')
-        // else resolve(data)
-        resolve(e.target.response)
-      })
+    .then(e => {
+      var data = JSON.parse(e.target.responseText)
+      if (data.hasOwnProperty('fail')) resolve('fail')
+      else resolve(data)
+    })
   })
 }
 
@@ -116,10 +126,11 @@ Store.UpdateStock = (data)=> {
         else resolve("success")
       })
   })
+  
 }
 
 
-Store.getCommande =(id)=> {
+Store.GetCommande =(id)=> {
   return new Promise((resolve, reject) => {
     Api.get('commande/'+ id)
       .then(e => {
@@ -130,7 +141,7 @@ Store.getCommande =(id)=> {
   })
 }
 
-Store.getCommandes =()=> {
+Store.GetCommandes =()=> {
   return new Promise((resolve, reject) => {
     Api.get('commandes/')
       .then(e => {
@@ -141,14 +152,43 @@ Store.getCommandes =()=> {
   })
 }
 
-Store.GetPlat =(id)=> {
+// Store.GetPlat =(id)=> {
+//   return new Promise((resolve, reject) => {
+//     Api.get('commande/'+ id)
+//       .then(e => {
+//         var data = JSON.parse(e.target.responseText)
+//         if (data.hasOwnProperty('fail')) resolve('fail')
+//         else resolve(data)
+//       })
+//   })
+// }
+
+Store.Getstore =()=> {
   return new Promise((resolve, reject) => {
-    Api.get('commande/'+ id)
+    Api.get('store/')
       .then(e => {
         var data = JSON.parse(e.target.responseText)
         if (data.hasOwnProperty('fail')) resolve('fail')
         else resolve(data)
       })
+  })
+}
+
+Store.updateStore =(id, data)=> {
+  console.log(id, data)
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3000/api/v1/store/"+id, {
+      method: "PUT",
+      body: data,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+    .then((response) =>{
+      console.log(response)
+      resolve(response.json())
+    })
+
   })
 }
 

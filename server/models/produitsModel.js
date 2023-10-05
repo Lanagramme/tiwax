@@ -14,7 +14,7 @@ const ProduitsSchema = mongoose.Schema(
       default: "0"
     },
     type: String,
-    inStock: Boolean,
+    stock: Boolean,
     onSale: Boolean,
     menu : [],
   }

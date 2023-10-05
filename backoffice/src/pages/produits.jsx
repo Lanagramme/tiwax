@@ -5,6 +5,9 @@ import Modals from "../components/Modals";
 import Tableau from "../components/Table";
 import Container from 'react-bootstrap/Container';
 import Formulaire from "../components/Formulaire";
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+
 
 const data2 = [
   {
@@ -21,13 +24,35 @@ const data2 = [
 
 const Produits = () => {
   const [Ingredients, updateIngredients] = useState(null)
+  const [Produits, updateProduits] = useState(null)
+  const [Categories, updateCategories] = useState(null)
+  const [key, setKey] = useState('Ingredients');
+
+  const DATA = {
+    Categories: Categories,
+    updateCategories: updateCategories,
+    Ingredients: Ingredients,
+    updateIngredients: updateIngredients,
+    Produits: Produits,
+    updateProduits: updateProduits
+  }
+
+  const TabControl = (key) => {
+    // debugger
+    if (DATA[key] == null) {
+      console.log(Store['get'+key])
+      Store['Get'+key]()
+        .then(x => {
+          const data = x.message
+          console.log('produit', data)
+          DATA['update'+key](data)
+      })
+    }
+    setKey(key)
+  }
 
   const createOne =()=> {
     let unfilterdForm = document.getElementsByTagName('form')[0]
-    // if (unfilterdForm.strip() == '') {
-    //   alert('Erreur, le champs ne peut pas être vide')
-    //   return 
-    // }
     let data = new FormData(unfilterdForm)
     var object = {};
     data.forEach(function(value, key){
@@ -35,7 +60,9 @@ const Produits = () => {
     });
     var json = JSON.stringify(object);
     console.log(json)
-    Store.SendIngredient(json)
+    const Key = key.slice(0, -1);
+    console.log("send"+Key)
+    Store["Send"+Key](json)
       .then(x => {
         updateTable()
       })
@@ -50,10 +77,10 @@ const Produits = () => {
   }
 
   const updateTable = ()=> {
-    Store.GetIngredients()
+    Store["Get"+key]()
       .then(x => {
-        const data = JSON.parse(x).message
-        updateIngredients(data)
+        const data = x.message
+        DATA['update'+key](data)
       })
   }
 
@@ -62,27 +89,89 @@ const Produits = () => {
   return <>
     <TopBar/>
     <Container>
-      <h2>Ingrédients</h2>
-      <div className="mt-4 mb-2">
-        <Modals
-          call="Ajouter un Ingredient"
-          title="Ajouter un Ingredient"
-          action="Ajouter"
-          callback={createOne}
-        >
-          <Formulaire data={data2} />
-        </Modals>
-      </div>
-      {
-        Ingredients == null 
-        && <p>LOADING ...</p>
-        || <Tableau 
-        names={["nom"]}
-        data={Ingredients}
-        properties={["name"]}
-        remove={DeleteIngredient}
-      />
-      }
+      <h1>Gestion des stocks</h1>
+      <Tabs
+        id="controlled-tab-example"
+        activeKey={key}
+        onSelect={(k) => TabControl(k)}
+        className="mb-3 mt-3"
+      >
+        <Tab eventKey="Ingredients" title="Ingredients">
+          <>
+            <h2>Ingrédients</h2>
+            <div className="mt-4 mb-2">
+              <Modals
+                call="Ajouter un ingrédient"
+                title="Ajouter un ingrédient"
+                action="Ajouter"
+                callback={createOne}
+              >
+                <Formulaire data={data2} />
+              </Modals>
+            </div>
+            {
+              Ingredients == null 
+              && <p>LOADING ...</p>
+              || <Tableau 
+              names={["nom"]}
+              data={Ingredients}
+              properties={["name"]}
+              remove={DeleteIngredient}
+            />
+            }
+          </>
+        </Tab>
+        <Tab eventKey="Categories"  title="Categories">
+        <>
+          <h2>Catégories</h2>
+          <div className="mt-4 mb-2">
+            <Modals
+              call="Ajouter une catégorie"
+              title="Ajouter une catégorie"
+              action="Ajouter"
+              callback={createOne}
+            >
+              <Formulaire data={data2} />
+            </Modals>
+          </div>
+          {
+            Categories == null 
+            && <p>LOADING ...</p>
+            || <Tableau 
+            names={["nom"]}
+            data={Categories}
+            properties={["name"]}
+            remove={DeleteIngredient}
+          />
+          }
+        </>
+        </Tab>
+        <Tab eventKey="Produits"    title="Produits">
+        <>
+          <h2>Produits</h2>
+          <div className="mt-4 mb-2">
+            <Modals
+              call="Ajouter un produit"
+              title="Ajouter un produit"
+              action="Ajouter"
+              callback={createOne}
+            >
+              <Formulaire data={data2} />
+            </Modals>
+          </div>
+          {
+            Produits == null 
+            && <p>LOADING ...</p>
+            || <Tableau 
+            names={["nom", "Détail", "Prix", 'Catégorie']}
+            data={Produits}
+            properties={["titre", "detail", "prix", 'type']}
+            remove={DeleteIngredient}
+          />
+          }
+        </>
+        </Tab>
+      </Tabs>
       
     </Container>
   </>
