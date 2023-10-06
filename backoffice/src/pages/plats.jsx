@@ -1,7 +1,7 @@
 import TopBar from "../components/TopBar";
 import Container from 'react-bootstrap/Container';
 import Tableau from "../components/Table";
-import Formulaire from "../components/Formulaire";
+import Formulaire from "../components/formulaire";
 import Modals from "../components/Modals";
 import Store from "../store/Store";
 

@@ -4,7 +4,7 @@ import TopBar from "../components/TopBar";
 import Modals from "../components/Modals";
 import Tableau from "../components/Table";
 import Container from 'react-bootstrap/Container';
-import Formulaire from "../components/Formulaire";
+import Formulaire from "../components/formulaire";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import FormulaireCreationProduit from '../components/FormulaireProduit';

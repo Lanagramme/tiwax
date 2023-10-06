@@ -1,5 +1,5 @@
 import Form from 'react-bootstrap/Form';
-import makeid from '../store/makeid';
+import makeid from '../../store/makeid';
 
 const FormCheckbox = ({name, label, disabled=false})=> {
     return (

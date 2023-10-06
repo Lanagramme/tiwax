@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Store from '../store/Store';
-import makeid from '../store/makeid';
+import Store from '../../store/Store';
+import makeid from '../../store/makeid';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/esm/Button';
 

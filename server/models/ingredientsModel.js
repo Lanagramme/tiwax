@@ -2,13 +2,22 @@ const mongoose = require('mongoose')
 
 const modelIngredients = {
   name : {
-     type: "String",
-     required: [true, "Nom manquant pour l'ingrédient"]
+    type: String,
+    required: [true, "Nom manquant pour l'ingrédient"],
+    fieldDescription: {
+      type: "Input",
+      label: "Nom",
+      placeholder: "Nom de l'ingrédient"
+    }
    },
    stock : {
-     type: "Boolean",
-     required: true,
-     default: false
+    type: Boolean,
+    required: true,
+    default: false,
+    fieldDescription: {
+      type: "Checkbox",
+      label: "Stock",
+    }
    }
  }
 

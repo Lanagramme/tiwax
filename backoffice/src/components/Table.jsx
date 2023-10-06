@@ -1,6 +1,6 @@
 import Table from 'react-bootstrap/Table';
 import Modals from "./Modals";
-import Formulaire from "./Formulaire";
+import Formulaire from "./formulaire";
 import makeid from '../store/makeid';
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
@@ -62,9 +62,11 @@ function Tableau({names, data, properties, update, remove, tab, collection}) {
         {Stock ? "Disponible" : "Non disponible"}
       </Button>
   }
+  data2.length = 0
   Store.GetModel(collection).then(res => {
-    data2.length = 0
+    // Object.entries(res.message).forEach(([key,val]) => {
     Object.entries(res.message).forEach(([key,val]) => {
+      const {fieldDescription} = val
       const getType=(val)=> {
         let type = ''
         if (typeof(val)== "string") type = types[val]
@@ -75,20 +77,27 @@ function Tableau({names, data, properties, update, remove, tab, collection}) {
         console.log(type)
         return type
       }
-      data2.push({
+      fieldDescription && data2.push(
+        {
+          name: key,
+          disabled: false,
+          ... fieldDescription,
+          required: !!fieldDescription.required
+        } || {
         type: getType(val),
         // type: types[val.type] || "Input",
         detail: {
           name: key,
-          label: val.label || key,  
+          label: val.label || key,  
           placeholder:"",
           required: !!val.required,
           disabled: false
         }
       })
     })
+    console.log(data2)
   })
-  
+
   return (
     <Table striped bordered hover>
       <thead>

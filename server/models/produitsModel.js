@@ -3,18 +3,60 @@ const mongoose = require('mongoose')
 const modelProduits = {
   titre : {
     type: "String",
-    required: [true, "Nom manquant pour le produit"]
+    required: [true, "Nom manquant pour le produit"],
+    fieldDescription: {
+      type: "Input",
+      label: "Nom",
+      placeholder: "Nom du produit"
+    }
   },
-  detail : "String",
-  prix : "Number",
+  detail : {
+    type: String,
+    fieldDescription: {
+      type: "TextArea",
+      label: "Description",
+      placeholder: "Description du produit"
+    }
+  },
+  prix : {
+    type: Number,
+    fieldDescription: {
+      type: "Number",
+      label: "Prix",
+      placeholder: "Prix du produit"
+    }
+  },
+  onSale: {
+    type: Boolean,
+    fieldDescription: {
+      type: "Checkbox",
+      label: "Ajouter à la carte",
+    }
+  },
+  type: {
+    type: String,
+    fieldDescription: {
+      type: "Select",
+      label: "Type",
+      placeholder: "Catégorie"
+    }
+  },
   image : {
     type: "String",
     required: true,
-    default: "0"
+    default: "0",
+    fieldDescription: {
+      type: "Input",
+      label: "Illustration",
+    }
   },
-  type: "String",
-  stock: "Boolean",
-  onSale: "Boolean",
+  // stock: {
+  //   type: Boolean,
+  //   fieldDescription: {
+  //     type: "Checkbox",
+  //     label: "Stock",
+  //   }
+  // },
   menu : [],
 }
 
