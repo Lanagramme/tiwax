@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Store from "../store/Store";
 import CommandCard from "../components/Card";
 
+
 const data = [
   {id:"1", nom:"thon", stock: "oui"},
   {id:"2", nom:"steak", stock: "oui"},
@@ -68,7 +69,7 @@ const Commandes = () => {
       <h2>Commandes</h2>
       
       <h3>Commandes en attente</h3>
-      <Container className="d-flex container flex-wrap my-3">
+      <Container className="d-flex container flex-wrap my-3 border-bottom">
         { 
           datas.data.filter(x => x.status == 1).length == 0
             && <p className="text-muted">Aucune commande prêtes</p>
@@ -77,7 +78,7 @@ const Commandes = () => {
         <hr />
       </Container>
       <h3>Commandes prêtes</h3>
-      <Container className="d-flex container flex-wrap my-3">
+      <Container className="d-flex container flex-wrap my-3 border-bottom">
         { 
           datas.data.filter(x => x.status == 2).length == 0
             && <p className="text-muted">Aucune commande prêtes</p>

@@ -1,12 +1,13 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import makeid from '../store/makeid';
 
 function CommandCard({commande}) {
 
   console.log(commande)
 
   return (
-    <Card style={{ width: '18rem' }} className='m-2'>
+    <Card key={makeid()} style={{ width: '18rem' }} className='m-2 border-0 shadow'>
       <Card.Body>
         <Card.Title>Commande n°: {commande.numero}</Card.Title>
         <Card.Text>

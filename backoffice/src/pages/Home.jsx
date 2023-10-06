@@ -86,7 +86,7 @@ const Home =()=> {
         </Modal.Header>
         <Modal.Body>
           <h5>Plats disponibles</h5>
-          <div className="d-flex">
+          <div className>
           {
             Produits != null && Produits.filter(x => x.type == "Plats").map( x => {
               return <Button 

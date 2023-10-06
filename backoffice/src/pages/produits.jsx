@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Formulaire from "../components/Formulaire";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import FormulaireCreationProduit from '../components/FormulaireProduit';
 
 
 const data2 = [
@@ -166,7 +167,7 @@ const Produits = () => {
               action="Ajouter"
               callback={createOne}
             >
-              <Formulaire data={data2} />
+              <FormulaireCreationProduit />
             </Modals>
           </div>
           {
