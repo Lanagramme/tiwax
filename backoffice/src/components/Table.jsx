@@ -60,10 +60,8 @@ function Tableau({names, data, properties, update, remove, tab, collection}) {
         {Stock ? "Disponible" : "Non disponible"}
       </Button>
   }
-  console.log(...arguments)
   Store.GetModel(collection).then(res => {
     data2.length = 0
-    console.log(data2)
     Object.entries(res.message).forEach(([key,val]) => {
       
       data2.push({
@@ -77,7 +75,6 @@ function Tableau({names, data, properties, update, remove, tab, collection}) {
         }
       })
     })
-    console.log(data2)
   })
   return (
     <Table striped bordered hover>
