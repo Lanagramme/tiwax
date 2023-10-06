@@ -4,9 +4,13 @@ import makeid from '../../store/makeid';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/esm/Button';
 
-const pikaboo = (id)=> { document.getElementById(id).classList.toggle('hidden') }
+const pikaboo = (id, setDisplay)=> {
+  /* document.getElementById(id).classList.toggle('hidden') */
+  setDisplay(!id)
+}
 const TagSelect =({collection, placeholder})=> {
   const [options, setOptions] = useState(collection)
+  const [hidden, setHidden] = useState(true)
   const [Liste, setListe] = useState([])
   const tagContainerId = makeid(8)
   console.log(Liste)
@@ -35,16 +39,17 @@ const TagSelect =({collection, placeholder})=> {
         className='mb-2' 
         variant='dark' 
         key={makeid()}
-        onClick={()=>pikaboo(tagContainerId)}
+        onClick={()=>pikaboo(/* tagContainerId */ hidden, setHidden)}
       >{placeholder || "Selectionnez un ou plusieurs tags"}</Button>
       <div  key={makeid()}>
         <section key={makeid()}>
-          <div key={makeid()} className='hidden' id={tagContainerId}>
+          <div key={makeid()} id={tagContainerId} hidden={hidden}>
           {
             Array.isArray(options) && options.map( x => {
               console.log(Liste, x._id, Liste.includes(x._id))
               let css = Liste.includes(x._id) ? "success" :"outline-success"
-              return <Button 
+              return <Button
+                key={makeid()}
                 variant={css}
                 onClick={e => handleClick(x._id)}
                 className="m-1"
