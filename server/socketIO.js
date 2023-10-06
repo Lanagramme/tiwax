@@ -10,12 +10,28 @@ const listenners = {
 }
 
 exports.attach = (server)=>{
-  const io = new Server(server);
-  io.on('connection', (socket) => {
-    console.log('a user connected');
+  console.log(Server)
+  const io = Server(server,{
+    transports: ["polling", "websocket"],
+    cors: {
+      origin: "http://localhost:5173"
+    }
+  
+  });
+  io.on("connection", (socket) => {
+    console.log(`connected with transport ${socket.conn.transport.name}`);
+  
+    socket.conn.on("upgrade", (transport) => {
+      console.log(`transport upgraded to ${transport.name}`);
+    });
+  
+    socket.on("disconnect", (reason) => {
+      console.log(`disconnected due to ${reason}`);
+    });
 
-    Object.entries(listenners).forEach(([key, callback]) =>{
-      socket.on(key, (...args)=>{ callback(socket, ...args) })
-    })
+    console.log('a user connected');
+    // Object.entries(listenners).forEach(([key, callback]) =>{
+    //   socket.on(key, (...args)=>{ callback(socket, ...args) })
+    // })
   });
 }

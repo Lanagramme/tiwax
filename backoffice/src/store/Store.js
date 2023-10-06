@@ -1,3 +1,4 @@
+import socket from "./websocket"
 import Api from "./api"
 
 const Store = {}
@@ -246,4 +247,9 @@ Store.GetModel =(id)=> {
       })
   })
 }
+
+Store.wsConnect = () => {
+  socket.connect()
+}
+
 export default Store
