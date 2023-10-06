@@ -39,8 +39,8 @@ const modelProduits = {
       type: "Select",
       label: "Catégorie",
       collection: [
-        { value: "dish", label: "Plat" },
-        { value: "drink", label: "Boisson" },
+        { value: "dish", label: "Plats" },
+        { value: "drink", label: "Boissons" },
       ]
     }
   },
@@ -66,6 +66,7 @@ const modelProduits = {
       type: "TagSelect",
       label: "Ingrédients",
       collection: "ingredients",
+      placeholder: "Ajoutez des ingrédients"
     }
   },
   // options: {

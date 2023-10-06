@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/esm/Button';
 
 const pikaboo = (id)=> { document.getElementById(id).classList.toggle('hidden') }
-const TagSelect =({collection})=> {
+const TagSelect =({collection, placeholder})=> {
   const [options, setOptions] = useState(collection)
   const [Liste, setListe] = useState([])
   const tagContainerId = makeid(8)
@@ -36,7 +36,7 @@ const TagSelect =({collection})=> {
         variant='dark' 
         key={makeid()}
         onClick={()=>pikaboo(tagContainerId)}
-      >Ajouter des options</Button>
+      >{placeholder || "Selectionnez un ou plusieurs tags"}</Button>
       <div  key={makeid()}>
         <section key={makeid()}>
           <div key={makeid()} className='hidden' id={tagContainerId}>
