@@ -3,6 +3,7 @@ import FormNumber from './FormNumber';
 import FormInput from './FormInput';
 import FormSelect from './FormSelect';
 import FormCheckbox from './FormCheckbox';
+import makeid from '../store/makeid';
 
 function Formulaire({data, submit}) {
 
