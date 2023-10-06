@@ -7,6 +7,8 @@ import { useState } from 'react';
 import Store from '../store/Store';
 const types = {
   Boolean: "Checkbox",
+  String: "Input",
+  Number: "Number"
 }
 function Tableau({names, data, properties, update, remove, tab, collection}) {
   const data2 = [
@@ -63,9 +65,19 @@ function Tableau({names, data, properties, update, remove, tab, collection}) {
   Store.GetModel(collection).then(res => {
     data2.length = 0
     Object.entries(res.message).forEach(([key,val]) => {
-      
+      const getType=(val)=> {
+        let type = ''
+        if (typeof(val)== "string") type = types[val]
+        else {
+          if (Array.isArray(val)) type = 'Select'
+          else type = types[val.type]
+        }
+        console.log(type)
+        return type
+      }
       data2.push({
-        type: types[val.type] || "Input",
+        type: getType(val),
+        // type: types[val.type] || "Input",
         detail: {
           name: key,
           label: val.label || key,  
@@ -76,6 +88,7 @@ function Tableau({names, data, properties, update, remove, tab, collection}) {
       })
     })
   })
+  
   return (
     <Table striped bordered hover>
       <thead>
