@@ -248,8 +248,8 @@ Store.GetModel =(id)=> {
   })
 }
 
-Store.wsConnect = () => {
-  socket.connect()
-}
+Store.wsConnect = () => { socket.connect() }
+
+Store.wsDisconnect = () => { socket.disconnect() }
 
 export default Store
