@@ -1,23 +1,18 @@
 import { useState } from 'react';
-import Store from '../../store/Store';
+import {getOptions} from './helpers';
 import makeid from '../../store/makeid';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/esm/Button';
 
-const TagSelect =({Liste, setListe})=> {
+const pikaboo = (id)=> { document.getElementById(id).classList.toggle('hidden') }
+const TagSelect =({collection})=> {
+  const [options, setOptions] = useState(collection)
+  const [Liste, setListe] = useState([])
+  const tagContainerId = makeid(8)
   console.log(Liste)
-  const [ingredients, setIngredients] = useState(null)
 
-  if(ingredients == null) {
-    Store.GetIngredients()
-    .then(x => {
-      if (x.success) setIngredients(x.message)
-      else {
-        console.log(x.message)
-        setIngredients(['erreur base de donnée'])
-      }
-    })
-  }
+
+  !Array.isArray(options) && getOptions(collection, setOptions)
 
 
   const handleClick=(id)=> {
@@ -31,40 +26,49 @@ const TagSelect =({Liste, setListe})=> {
     else {
       setListe([...aa.filter(x => x != id)])
     }
-  }
+  }   
 
 
   return (
-    <section key={makeid()}>
-      <div key={makeid()} className='hidden' id='ingredients'>
-      {
-        ingredients != null && ingredients.map( x => {
-          console.log(Liste, x._id, Liste.includes(x._id))
-          let css = Liste.includes(x._id) ? "success" :"outline-success"
-          return <Button 
-            variant={css}
-            onClick={e => handleClick(x._id)}
-            className="m-1"
-          >{x.name}</Button>
-        })
-      }
+    <section className='border-top pt-3'  key={makeid()}>
+      <Button 
+        className='mb-2' 
+        variant='dark' 
+        key={makeid()}
+        onClick={()=>pikaboo(tagContainerId)}
+      >Ajouter des options</Button>
+      <div  key={makeid()}>
+        <section key={makeid()}>
+          <div key={makeid()} className='hidden' id={tagContainerId}>
+          {
+            Array.isArray(options) && options.map( x => {
+              console.log(Liste, x._id, Liste.includes(x._id))
+              let css = Liste.includes(x._id) ? "success" :"outline-success"
+              return <Button 
+                variant={css}
+                onClick={e => handleClick(x._id)}
+                className="m-1"
+              >{x.name}</Button>
+            })
+          }
+          </div>
+          <Card>
+            <Card.Body>
+              <h5 key={makeid()}>Composition</h5>
+              <ul key={makeid()}>
+                { Liste.length ? "" : <li key={makeid()}>...</li> }
+                {
+                  Array.isArray(options) && Liste.map(x => {
+                    return <li key={makeid()}>{options.find(w => w._id == x).name}</li>
+                  })
+                  || <li key={makeid()}>...</li>
+                }
+              </ul>
+            </Card.Body>
+          </Card>
+          
+        </section>
       </div>
-      <Card>
-        <Card.Body>
-          <h5 key={makeid()}>Composition</h5>
-          <ul key={makeid()}>
-            { Liste.length ? "" : <li key={makeid()}>...</li> }
-            {
-              ingredients != null 
-              && Liste.map(x => {
-                return <li key={makeid()}>{ingredients.find(w => w._id == x).name}</li>
-              })
-              || <li key={makeid()}>...</li>
-            }
-          </ul>
-        </Card.Body>
-      </Card>
-      
     </section>
   )
 }

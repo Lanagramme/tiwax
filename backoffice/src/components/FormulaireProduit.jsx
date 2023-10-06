@@ -16,9 +16,7 @@ const Number = FormNumber
 
 const FormulaireCreationProduit =()=> {
   const [Liste, setListe] = useState([])
-  const pikaboo = ()=> {
-    document.getElementById('ingredients').classList.toggle('hidden')
-  }
+  
   return (
     <>
       <Input
@@ -48,9 +46,9 @@ const FormulaireCreationProduit =()=> {
       <Select
         name='type'
         label='Catégorie'
-        options={['Plats', 'Boissons', "Déssert"]}
+        collection={['Plats', 'Boissons', "Déssert"]}
       />
-      <section className='border-top pt-3'  key={makeid()}>
+      {/* <section className='border-top pt-3'  key={makeid()}>
         <Button 
           className='mb-2' 
           variant='dark' 
@@ -61,6 +59,7 @@ const FormulaireCreationProduit =()=> {
             <TagSelect
               Liste ={Liste}
               setListe={setListe}
+              collection="ingredients"
             />
         </div>
         <p  key={makeid()}>Ajouter une option à choix unique</p>
@@ -71,7 +70,18 @@ const FormulaireCreationProduit =()=> {
         <div  key={makeid()}>
           
         </div>
-      </section>
+      </section> */}
+      <TagSelect
+        Liste ={Liste}
+        setListe={setListe}
+        collection="Ingredients"
+      />
+      <p  key={makeid()}>Ajouter une option à choix unique</p>
+      <div  key={makeid()}>
+        
+      </div>
+      <p  key={makeid()}>Ajouter une option à choix multiple</p>
+      <div  key={makeid()}></div>
     </>
   )
 }

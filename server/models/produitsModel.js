@@ -37,8 +37,11 @@ const modelProduits = {
     type: String,
     fieldDescription: {
       type: "Select",
-      label: "Type",
-      placeholder: "Catégorie"
+      label: "Catégorie",
+      collection: [
+        { value: "dish", label: "Plat" },
+        { value: "drink", label: "Boisson" },
+      ]
     }
   },
   image : {
@@ -55,6 +58,22 @@ const modelProduits = {
   //   fieldDescription: {
   //     type: "Checkbox",
   //     label: "Stock",
+  //   }
+  // },
+  ingredients: {
+    type: Array,
+    fieldDescription: {
+      type: "TagSelect",
+      label: "Ingrédients",
+      collection: "ingredients",
+    }
+  },
+  // options: {
+  //   type: Array,
+  //   fieldDescription: {
+  //     type: "TagSelect",
+  //     label: "Options",
+  //     collection: "options",
   //   }
   // },
   menu : [],
