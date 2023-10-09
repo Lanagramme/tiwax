@@ -32,7 +32,7 @@ module.exports = (req, res, next) => {
   // execute the route's action
   methodsMap.get(action)(routeParams, methodParams)
   .then(result => {
-    console.log(result)
+    // console.log(result)
     res.json(result)
   })
   

@@ -4,11 +4,18 @@
  * Module dependencies.
  */
 require('dotenv').config()
-var app = require('../app');
 var debug = require('debug')('main:server');
 var http = require('http');
 const mongoose = require('mongoose')
 const webSocket = require('../socketIO')
+const session = require('express-session');
+
+const sessionMiddleware = session({
+  secret: "g9H6F4J9H76GD245HK8",
+  resave: true,
+  saveUninitialized: true,
+});
+var app = require('../app')(sessionMiddleware);
 
 /**
  * Get port from environment and store in Express.
@@ -22,7 +29,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-webSocket.attach(server)
+webSocket.attach(server, sessionMiddleware)
 
 /**
  * Listen on provided port, on all network interfaces.

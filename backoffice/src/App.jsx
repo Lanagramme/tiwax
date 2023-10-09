@@ -6,7 +6,9 @@ import Home from './pages/Home.jsx'
 import Produits from './pages/produits'
 import Plats from './pages/plats'
 import Commandes from './pages/commandes'
+import Store from './store/Store'
 
+Store.wsConnect()
 function App() {
   return (
     <ThemeProvider
