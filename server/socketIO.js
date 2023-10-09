@@ -1,15 +1,21 @@
 const Server  = require("socket.io");
-const orders = new Map;
+const crypto = require('crypto')
+const Orders = new Map;
 const listenners = {
   order(socket, order){
-    console.log("order")
-    if(order.id) orders.set(order.id, socket), socket.emit('msg', "order passed")
+    console.log("\nnew order from id: ",socket.sessionID," => ", order)
+    if(order.id) Orders.set(order.id, socket.sessionID), socket.emit('msg', "order passed")
     else socket.emit('msg', "error: couldnt pass the order")
   },
-  notify(socket, id){ console.log("notify"), (orders.get(id)?.emit('msg', `order ready n°${id}`) || socket.emit('msg', `order n°${id} not found`)) }
+  notify(socket, id){
+    console.log("\nnotification for order id: ", id)
+    const sessionID = Orders.get(id)
+    if(sessionID) console.log("UserId:", sessionID, "found for order id: ", id), socket.to(Orders.get(id))?.emit('msg', `order ready n°${id}`)
+    else socket.emit('msg', `error: No user found for order n°${id}`)
+  }
 }
 
-exports.attach = (server, sessionMiddleware)=>{
+exports.attach = (server)=>{
   const io = Server(server,{
     transports: ["polling", "websocket"],
     cors: {
@@ -17,10 +23,17 @@ exports.attach = (server, sessionMiddleware)=>{
     }
   
   });
-  io.engine.use(sessionMiddleware);
+  
+  io.use((socket, next) => {
+    socket.sessionID = socket.handshake.auth.sessionID || crypto.randomUUID();
+    next();
+  });
+
   io.on("connection", (socket) => {
-    const session =socket.request.session
-    console.log(session, session?.id);
+    const sessionID = socket.sessionID
+    socket.join(sessionID);
+
+    socket.emit("session", sessionID);
 
     console.log(`connected with transport ${socket.conn.transport.name}`);
   
@@ -30,6 +43,7 @@ exports.attach = (server, sessionMiddleware)=>{
   
     socket.on("disconnect", (reason) => {
       console.log(`disconnected due to ${reason}`);
+      // Sockets.delete(sessionID)
     });
 
     console.log('a user connected');
