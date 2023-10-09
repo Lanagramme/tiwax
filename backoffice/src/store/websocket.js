@@ -16,6 +16,7 @@ window.socket = socket // for testing purpose
 if (sessionID) { socket.auth = { sessionID }; }
 
 socket.on('msg', function(e){console.log(e)})
+socket.on('error', function(e){console.error(e)})
 socket.on("connect", () => {
   console.log(`connected with transport ${socket.io.engine.transport.name}`);
 

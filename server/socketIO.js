@@ -5,13 +5,13 @@ const listenners = {
   order(socket, order){
     console.log("\nnew order from id: ",socket.sessionID," => ", order)
     if(order.id) Orders.set(order.id, socket.sessionID), socket.emit('msg', "order passed")
-    else socket.emit('msg', "error: couldnt pass the order")
+    else socket.emit('error', "error: couldnt pass the order")
   },
   notify(socket, id){
     console.log("\nnotification for order id: ", id)
     const sessionID = Orders.get(id)
     if(sessionID) console.log("UserId:", sessionID, "found for order id: ", id), socket.to(Orders.get(id))?.emit('msg', `order ready n°${id}`)
-    else socket.emit('msg', `error: No user found for order n°${id}`)
+    else socket.emit('error', `error: No user found for order n°${id}`)
   }
 }
 
