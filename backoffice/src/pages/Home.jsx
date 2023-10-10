@@ -56,7 +56,6 @@ const Home =()=> {
     Store.updateStore(store._id, JSON.stringify({open: !store.open}))
     .then(x => {
       if (x.success){
-        x.message.open = !x.message.open
         setstore(x.message)
       }
     })
@@ -71,7 +70,7 @@ const Home =()=> {
 
   const jour=(id)=> {
     let produit = Produits.find(x => x._id == id)
-    Store.UpdateProduit(id, JSON.stringify({'jour': !produit.jour}))
+    Store.UpdateProduit(id, JSON.stringify({"jour": !produit.jour}))
     .then(x => {
       updateProduit()
     })

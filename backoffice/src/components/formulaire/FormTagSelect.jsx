@@ -8,20 +8,17 @@ const pikaboo = (id, setDisplay)=> {
   /* document.getElementById(id).classList.toggle('hidden') */
   setDisplay(!id)
 }
-const TagSelect =({collection, placeholder})=> {
+const TagSelect =({collection, placeholder, Liste, setListe, titre})=> {
   const [options, setOptions] = useState(collection)
   const [hidden, setHidden] = useState(true)
-  const [Liste, setListe] = useState([])
   const tagContainerId = makeid(8)
-  console.log(Liste)
+  // console.log(Liste)
 
 
   !Array.isArray(options) && getOptions(collection, setOptions)
 
 
   const handleClick=(id)=> {
-    console.log(id)
-    console.log(Liste)
     let aa = Liste
     if (!aa.includes(id)) {
       aa.push(id)
@@ -34,19 +31,19 @@ const TagSelect =({collection, placeholder})=> {
 
 
   return (
-    <section className='border-top pt-3'  key={makeid()}>
+    <section className=''  key={makeid()}>
       <Button 
         className='mb-2' 
         variant='dark' 
         key={makeid()}
         onClick={()=>pikaboo(/* tagContainerId */ hidden, setHidden)}
-      >{placeholder || "Selectionnez un ou plusieurs tags"}</Button>
+      >{placeholder || "Selectionnez un ou plusieurs tag"}</Button>
       <div  key={makeid()}>
         <section key={makeid()}>
           <div key={makeid()} id={tagContainerId} hidden={hidden}>
           {
             Array.isArray(options) && options.map( x => {
-              console.log(Liste, x._id, Liste.includes(x._id))
+              // console.log(Liste, x._id, Liste.includes(x._id))
               let css = Liste.includes(x._id) ? "success" :"outline-success"
               return <Button
                 key={makeid()}
@@ -59,7 +56,7 @@ const TagSelect =({collection, placeholder})=> {
           </div>
           <Card>
             <Card.Body>
-              <h5 key={makeid()}>Composition</h5>
+              <h5 key={makeid()}>{titre}</h5>
               <ul key={makeid()}>
                 { Liste.length ? "" : <li key={makeid()}>...</li> }
                 {

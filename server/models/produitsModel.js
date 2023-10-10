@@ -53,13 +53,20 @@ const modelProduits = {
       label: "Illustration",
     }
   },
-  // stock: {
-  //   type: Boolean,
-  //   fieldDescription: {
-  //     type: "Checkbox",
-  //     label: "Stock",
-  //   }
-  // },
+  stock: {
+    type: Boolean,
+    fieldDescription: {
+      type: "Checkbox",
+      label: "Stock",
+    }
+  },
+  jour: {
+    type: Boolean,
+    fieldDescription: {
+      type: "Checkbox",
+      label: "Stock",
+    }
+  },
   ingredients: {
     type: Array,
     fieldDescription: {

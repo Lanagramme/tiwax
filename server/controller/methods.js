@@ -181,19 +181,19 @@ module.exports = (new Map)
         resolve({success: 0, message: `id ${id} invalide`}) })  }
 
     // execute the request to the database
-    return formatResponse(collections[collection].findByIdAndUpdate(id, data).then(doc => {
-      if (doc) return doc
-      else throw new Error(`Error message: action: deleteOne / collection: ${collection} / id: ${id}`)
-    }))
+    // return formatResponse(collections[collection].findByIdAndUpdate(id, data, { new: true }).then(doc => {
+    //   if (doc) return doc
+    //   else throw new Error(`Error message: action: deleteOne / collection: ${collection} / id: ${id}`)
+    // }))
 
-    // return new Promise((resolve, reject) => {
-    //   console.log(data)
-    //   collections[collection].findByIdAndUpdate(id, data)
-    //   .then(
-    //     res => { resolve({success: 1, message: res})},
-    //     err => { reject({success: 0, message: err.message})}
-    //   )
-    // })
+    return new Promise((resolve, reject) => {
+      console.log(data)
+      collections[collection].findOneAndUpdate({"_id":id}, data, { new: true })
+      .then(
+        res => { resolve({success: 1, message: res})},
+        err => { reject({success: 0, message: err.message})}
+      )
+    })
 
   })
 

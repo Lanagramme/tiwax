@@ -67,7 +67,7 @@ const Produits = () => {
       .then(x => {
         updateTable()
       })
-  }
+  } 
 
   const DeleteIngredient =(id)=> {
     Store.DeleteIngredient(id)
@@ -128,34 +128,6 @@ const Produits = () => {
             />
             }
           </>
-        </Tab>
-        <Tab eventKey="Categories"  title="Categories">
-        <>
-          <h2>Catégories</h2>
-          <div className="mt-4 mb-2">
-            <Modals
-              call="Ajouter une catégorie"
-              title="Ajouter une catégorie"
-              action="Ajouter"
-              callback={createOne}
-            >
-              <Formulaire data={data2} />
-            </Modals>
-          </div>
-          {
-            Categories == null 
-            && <p>LOADING ...</p>
-            || <Tableau 
-            names={["nom"]}
-            data={Categories}
-            properties={["name"]}
-            remove={DeleteIngredient}
-            tab = {"catégorie"}
-            collection = {"categories"}
-            update={UpdateIngredient}
-          />
-          }
-        </>
         </Tab>
         <Tab eventKey="Produits"    title="Produits">
         <>
