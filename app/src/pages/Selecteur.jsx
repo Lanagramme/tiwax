@@ -41,7 +41,6 @@ const Check =({title, qcm, sub = false, max})=> {
     } 
     </section>
 }
-
 const Radio =({title, qcm, sub = false})=> {
   let i = 1
   let incr =()=>{i+=1; return i}
@@ -62,7 +61,6 @@ const Radio =({title, qcm, sub = false})=> {
     } 
     </section>
 }
-
 const Input =()=> {
   return <section>
     <div className='commentaires'>
@@ -70,9 +68,8 @@ const Input =()=> {
       <textarea placeholder="Ajouter un commentaire..."/>
     </div>
   </section>
-} 
-
-const Graduate =({max, name, item})=> {
+}
+const Graduate  =({max, name, item})=> {
   const key = Date.now()
   const [val, updateval] = useState(0)
   const handleMax =(dir)=>{
@@ -265,14 +262,14 @@ const Urender=({content})=> {
       data = boisson_data
       break;
   }
-  for(let i of data.options) {
-    if (!i.hasOwnProperty('qcm')) continue
-  }
+  for(let i of data.options) if (!i.hasOwnProperty('qcm')) continue
+  
   let i = 0
   return <>
     {
       data.options.map(x=>{
         let comp 
+        console.log(x)
         x.type == "radio" ? comp = <Radio key={makeid()+i} title={x.title}     qcm={x.qcm} max={x.max} />:null
         x.type == "check" ? comp = <Check key={makeid()+i} title={x.title}     qcm={x.qcm} max={x.max} sub={x.sub} />:null
         x.type == "grad"  ? comp = <Optionnal key={makeid()+i} title={x.title} qcm={x.qcm} max={x.max} sub={x.sub} />:null
@@ -294,12 +291,11 @@ const Selecteur =()=> {
       .then(x => {
         let data = JSON.parse(x)
         console.log(data)
-        console.log(data.success)
-        if (data.success == 0) {
-          alert('Une erreur est survenue')
-          window.location = "/"
-        }
-        update(data)
+        // if (data.success == 0) {
+        //   alert('Une erreur est survenue')
+        //   window.location = "/"
+        // }
+        update(data.message)
       })
   }
   function panier() {
@@ -380,7 +376,7 @@ const Selecteur =()=> {
         {
           data == '' 
           && <div className='loader'></div>
-          || <Urender content={item.titre} />
+          || <Urender content={item.titre} data={data}/>
         }
       </div>
     </Page>
