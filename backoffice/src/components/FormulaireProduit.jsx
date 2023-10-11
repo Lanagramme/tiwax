@@ -1,5 +1,6 @@
 import Modals from './Modals';
 import { useState } from 'react';
+import {getOptions} from './formulaire/helpers'
 import Store from '../store/Store';
 import FormInput from './formulaire/FormInput';
 import FormRadio from './formulaire/FormRadio';
@@ -18,8 +19,14 @@ const Radio = FormRadio
 
 const Options = (addOption)=> {
   const [Liste, setListe] = useState([])
+  const [options, setOptions] = useState(null)
   const [hidden, setHidden] = useState(true)
   const pikaboo = (id, setDisplay)=> { setDisplay(!id) }
+
+  !Array.isArray(options) && Store.GetIngredients().then(x => {
+    console.log('message', x.message)
+    setOptions(x.message)
+  })
 
   const add_option = ()=> {
 
@@ -31,7 +38,7 @@ const Options = (addOption)=> {
     const option = {
       id: makeid(),
       type: type,
-      liste: liste
+      liste: Liste
     }
 
     addOption(option)
@@ -70,24 +77,7 @@ const Options = (addOption)=> {
       titre='Choisir les options'
     />
   </div>
-  <Card>
-    <Card.Body>
-      <h5 key={makeid()}>Options</h5>
-      <ul key={makeid()}>
-        { Liste.length ? "" : <li key={makeid()}>...</li> }
-        {
-          Array.isArray(Liste) && Liste.map(x => {
-            return <>
-              <li key={makeid()}>
-                {options.find(w => w._id == x).name}
-              </li>
-            </>
-          })
-          || <li key={makeid()}>...</li>
-        }
-      </ul>
-    </Card.Body>
-  </Card>
+
 
 </section>
 }
