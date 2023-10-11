@@ -1,4 +1,4 @@
-import socket from "./websocket"
+import Socket from "./websocket"
 import Api from "./api"
 
 const Store = {}
@@ -248,8 +248,10 @@ Store.GetModel =(id)=> {
   })
 }
 
-Store.wsConnect = () => socket.connect()
+Store.notify = Socket.notify
 
-Store.wsDisconnect = () => socket.disconnect()
+Store.wsConnect = Socket.connect
+
+Store.wsDisconnect = Socket.disconnect
 
 export default Store

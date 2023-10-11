@@ -41,4 +41,8 @@ socket.on("session", (sessionID) => {
   // socket.userID = userID;
 });
 
-export default socket
+export default {
+  connect(){ socket.connect() },
+  disconnect(){ socket.disconnect() },
+  notify(id){ socket.emit('order', data) }
+}
