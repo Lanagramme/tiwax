@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { Schema } = mongoose;
 
 const modelMenus = {
   options : [
@@ -26,10 +27,7 @@ const modelMenus = {
           type: String,
           required: [true, "Erreur format, choix manquant"]
         },
-        options:{
-          type: "Array",
-          required: [true, "Erreur format, options de qcm manquant"]
-        },
+        options:[{ type: Schema.Types.ObjectId, ref: 'Ingredients' }],
       }, 
       sub: {
         type: String,
@@ -51,7 +49,7 @@ const modelMenus = {
   ]
 }
 
-const MenusSchema = mongoose.Schema(modelMenus)
+const MenusSchema = Schema(modelMenus)
 
 const Menus = mongoose.model('Menus', MenusSchema)
 

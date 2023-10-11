@@ -94,6 +94,18 @@ module.exports = (new Map)
         data ? resolve(data) : reject(new Error(`Collection ${id} introuvable`))
       }))
     }
+    
+    if(collection === 'menus') {
+      console.log("menus")
+      return formatResponse(collections['menus'].findById(id)
+        .populate('Ingredients')
+        .then(doc => {
+          if (doc) return doc
+          else throw new Error(`Aucune donnée dans ${collection} pour ${id}`)
+      }))
+    }
+
+    
     // Check if collection exist
     if (!checkCollection(collection)){
       return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
