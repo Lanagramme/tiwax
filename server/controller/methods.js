@@ -1,5 +1,5 @@
 const { checkCollection, collections, models } = require('../models')
-
+const edgeCases = require('./edgeCases')
 
 /** List of methods to process filters
  * @constant filters
@@ -88,23 +88,25 @@ module.exports = (new Map)
   .set('readOne', function({collection, id}){
     console.log(`read item id:${id} from ${collection}`)
     
-    if(collection === 'models') {
-      return formatResponse(new Promise((resolve, reject)=>{
-        const data = models[id]
-        data ? resolve(data) : reject(new Error(`Collection ${id} introuvable`))
-      }))
-    }
+    // if(collection === 'models') {
+    //   return formatResponse(new Promise((resolve, reject)=>{
+    //     const data = models[id]
+    //     data ? resolve(data) : reject(new Error(`Collection ${id} introuvable`))
+    //   }))
+    // }
     
-    if(collection === 'menus') {
-      console.log("menus")
-      return formatResponse(collections['menus'].findById(id)
-        .populate('Ingredients')
-        .then(doc => {
-          if (doc) return doc
-          else throw new Error(`Aucune donnée dans ${collection} pour ${id}`)
-      }))
-    }
+    // if(collection === 'menus') {
+    //   console.log("menus")
+    //   return formatResponse(collections['menus'].findById(id)
+    //     .populate('Ingredients')
+    //     .then(doc => {
+    //       if (doc) return doc
+    //       else throw new Error(`Aucune donnée dans ${collection} pour ${id}`)
+    //   }))
+    // }
 
+    const edgeCase = edgeCases(collection).get('one')
+    if(edgeCase) return formatResponse(edgeCase(id))
     
     // Check if collection exist
     if (!checkCollection(collection)){
@@ -145,7 +147,10 @@ module.exports = (new Map)
   .set('readMany', function({collection}, data = {}){
     console.log(`readMany from ${collection} collection`)
     
-    if(collection === 'models') { return formatResponse(Promise.resolve(models)) }
+    // if(collection === 'models') { return formatResponse(Promise.resolve(models)) }
+
+    const edgeCase = edgeCases(collection).get('many')
+    if(edgeCase) return formatResponse(edgeCase())
 
     // Check if collection exist
     if (!checkCollection(collection)){ 
