@@ -1,11 +1,10 @@
-import Api from '../../../backoffice/src/store/api'
+import Api from './api.js'
 function getBool(){ return Math.random() > .5 }
 function getString(word){ return `some amazing ${word} ` }
 function getArray(word){ return [..."ABC"].map(key=>word+key) }
 function getNumber(){ return Math.floor(Math.random() * 15)+1 }
-
 function getData(){
-  return {
+  return JSON.stringify({
     name: getString('name'),
     titre: getString('titre'),
     detail: getString('detail'),
@@ -19,23 +18,49 @@ function getData(){
     options: getArray('option') ,
     // menu : [],
     open : getBool()
+  })
+}
+function testApi(method, url, data, toLog){
+  return Api[method](url, data)
+    .then(data => {
+      if (data.hasOwnProperty('fail') || data.success !== 1) throw data.message
+      else return data.message
+    })
+    .then(res=> ( toLog(!0, method, url, res), res ))
+    .catch(err => { toLog(!1, method, url, err); throw err })
+}
+function setTests(collection){
+  const tests = {}
+
+  return {
+    show(){ console.table(tests) },
+    add(key){ return (success, method, url, response) => tests[`${collection}: ${key}`] = {success, method, url, response} }
   }
 }
-
-function testApi(method, url, data){
-  return Api[method](url, data)
-    .then(response=> (console.table({method, url, response}), response))
-    .catch(err => console.error(err))
+function runTests(collections){
+  collections.forEach(collection => {
+    const { show, add } = setTests(collection)
+    const Promises = []
+    // create
+    testApi('post', collection, getData(), add(`create`)).then((item) => {
+      const id = item._id
+      if(id){
+        // readOne
+        Promises.push(testApi('get',`${collection}/${id}`, undefined, add(`read one`)))
+        
+        // readMany
+        Promises.push(testApi('get', collection, undefined, add(`read many`)))
+        
+        // update
+        collection !== "commandes" && Promises.push(testApi('put', `${collection}/${id}`, getData(), add(`update`)))
+  
+        // delete
+        Promises.push(testApi('delete', `${collection}/${id}`, undefined, add(`delete`)))
+      } else console.error('cannot find id => ', item, id)
+      
+    }).finally(()=>Promise.all(Promises).finally(show)).catch(()=>{})
+    
+  })
 }
 
-['ingredients', 'categories', 'produits', 'menus'].forEach(collection => {
-  testApi('post', `/api/v1/${collection}`, getData()).then(() =>
-  testApi('get', `/api/v1/${collection}`).then(records => {
-  const id = records[records.length-1]?.id
-  console.log(records,id)
-  if(id){
-    testApi('get',`/api/v1/${collection}/${id}`)
-    collection !== "commandes" && testApi('put', `/api/v1/${collection}/${id}`, getData())
-    testApi('delete', `/api/v1/${collection}/${id}`)
-  } else console.error('cannot find id => ', records, id)
-}))})
+runTests(['ingredients', 'categories', 'produits', 'menus'])
