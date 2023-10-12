@@ -64,6 +64,7 @@ function setTests(collection){
     }
   }
 }
+
 function runTests(collections){
   collections.forEach(collection => {
     const { show, add } = setTests(collection)
