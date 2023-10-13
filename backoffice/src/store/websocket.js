@@ -12,38 +12,27 @@ const socket = io("ws://localhost:3000", {
   // }
 });
 
+function sessionHandler() {
+  function addID(sessionID) { return (socket.auth = { sessionID }), sessionID }
+  function newID() { socket.on("session", (id) => { store(addID(id)) }) }
+  function store(sessionID) { localStorage.setItem("sessionID", addID(sessionID)) }
+
+  sessionID ? addID(sessionID) : newID();
+}
+
 window.socket = socket // for testing purpose
-if (sessionID) { socket.auth = { sessionID }; }
+sessionHandler()
 
-socket.on('msg', function(e){ console.log(e, ""+e, `${e}`) })
-socket.on('error', function(e){
-  console.error(e)
-  console.error(""+e)
-  console.error(`${e}`)
-})
+socket.on('msg', function(e){ console.log(e) })
+socket.on('error', function(e){ console.error(e) })
 socket.on("connect", () => {
-  console.log(`connected with transport ${socket.io.engine.transport.name}`);
+  const engine = socket.io.engine
+  console.log(`connected with transport ${engine.transport.name}`);
+  engine.on("upgrade", (transport) => { console.log(`transport upgraded to ${transport.name}`) });
+});
+socket.on("connect_error", (err) => {   console.log(`connect_error due to ${err.message}`) });
 
-  socket.io.engine.on("upgrade", (transport) => {
-    console.log(`transport upgraded to ${transport.name}`);
-  });
-});
-socket.on("connect_error", (err) => {
-  console.log(`connect_error due to ${err.message}`);
-});
-
-socket.on("disconnect", (reason) => {
-  console.log(`disconnect due to ${reason}`);
-});
-
-socket.on("session", (sessionID) => {
-  // attach the session ID to the next reconnection attempts
-  socket.auth = { sessionID };
-  // store it in the localStorage
-  localStorage.setItem("sessionID", sessionID);
-  // save the ID of the user
-  // socket.userID = userID;
-});
+socket.on("disconnect", (reason) => { console.log(`disconnect due to ${reason}`) });
 
 export default {
   connect(){ socket.connect() },

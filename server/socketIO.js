@@ -2,21 +2,24 @@ const Server  = require("socket.io");
 const crypto = require('crypto')
 const Orders = new Map;
 const listenners = {
-  order({socket}, order) {
-    console.log("\nnew order from id: ",socket.sessionID," => ", order)
-    if(order.id) Orders.set(order.id, socket.sessionID), this.msg("order passed")
+  order(order) {
+    const sessionID = this.sessionID, id = order.id
+    console.log("\nnew order from id: ",sessionID," => ", order)
+    if(id) Orders.set(id, sessionID), this.msg("order passed")
     else this.error("couldnt pass the order")
   },
 
-  notify({io}, id) {
+  notify(id) {
     console.log("\nnotification for order id: ", id)
     const sessionID = Orders.get(id)
     if(sessionID) console.log("UserId:", sessionID, "found for order id: ", id), this.broadcast(`order ready n°${id}`, Orders.get(id))
     else this.error(`No user found for order n°${id}`)
-  }
+  },
+
+  shopState(state){ this.broadcast(state,undefined,"shopState") },
 }
 
-function sendMsg(emitter, message){ return emitter.emit('msg', message) }
+function send(emitter, event, message){ return emitter.emit(event, message) }
 
 exports.attach = (server)=>{
   const io = Server(server,{
@@ -29,17 +32,21 @@ exports.attach = (server)=>{
   
   io.use((socket, next) => {
     socket.sessionID = socket.handshake.auth.sessionID || crypto.randomUUID();
+    (socket.isNew = !socket.handshake.auth.sessionID) && console.log("sessionID created")
     next();
   });
 
   io.on("connection", (socket) => {
 
-    const emitters = {io, socket}
-    const sessionID = socket.sessionID
-    const listennerResponses = {
-      msg(message){ return sendMsg(socket, message) },
-      broadcast(message, id){ return sendMsg( (id?io.to(id):io), message) },
-      error(message){ return socket.emit('error', new Error(message)) },
+    const {sessionID, isNew} = socket
+    const listennerTools = {
+      // datas
+      sessionID,
+
+      // responses
+      msg(message){ return send(socket, 'msg', message) },
+      broadcast(message, id, event="msg"){ return send( (id?io.to(id):io), event, message) },
+      error(message){ return send(socket, 'error', new Error(message)) },
     }
 
     console.log(`connected with transport ${socket.conn.transport.name}`);
@@ -51,10 +58,10 @@ exports.attach = (server)=>{
     socket.emit("session", sessionID)
     socket.join(sessionID);
     
-    console.log('a user connected');
+    isNew ? console.log('new user') : console.log('new connection')
 
     Object.entries(listenners).forEach(([key, callback]) =>{
-      socket.on(key, (...args)=>{ callback.bind(listennerResponses)(emitters, ...args) })
+      socket.on(key, callback.bind(listennerTools))
     })
   });
 }
