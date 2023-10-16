@@ -7,6 +7,7 @@ import Produits from './pages/produits'
 import Plats from './pages/plats'
 import Commandes from './pages/commandes'
 import Store from './store/Store'
+import Erreur from './pages/error'
 
 Store.wsConnect()
 function App() {
@@ -18,10 +19,13 @@ function App() {
       <div className="App">
         <Router>
           <Routes>
-            <Route exact path='/'          element={<Home  />} />
-            <Route exact path='/Plats'     element={<Plats />} />
-            <Route exact path='/Produits'  element={<Produits  />} />
-            <Route exact path='/Commandes' element={<Commandes />} />
+            <Route exact path='/'           element={<Home  />} />
+            <Route exact path='/Plats'      element={<Plats />} />
+            <Route exact path='/Produits'   element={<Produits  />} />
+            <Route exact path='/Commandes'  element={<Commandes />} />
+
+            {/* must be the last one */}
+            <Route exact path='*'           element={<Erreur />} />
           </Routes>
         </Router>
     </div>
