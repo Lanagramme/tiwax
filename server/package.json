@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "node bin/www",
-    "dev": "node bin/www"
+    "vite": "vite backoffice",
+    "build": "vite build backoffice"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -9,9 +10,22 @@
     "express": "^4.18.2",
     "mongodb": "^6.1.0",
     "mongoose": "^7.5.3",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "bootstrap": "^5.3.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.8.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
-    "sass": "^1.68.0"
+    "sass": "^1.68.0",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "vite": "^4.4.5"
   }
 }
