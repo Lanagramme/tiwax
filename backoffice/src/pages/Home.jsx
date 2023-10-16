@@ -11,6 +11,7 @@ import Store from "../store/Store";
 import Modal from 'react-bootstrap/Modal';
 
 import "../App.scss"
+localStorage.setItem('lastError', null);
 let first = true
 
 const Home =()=> {

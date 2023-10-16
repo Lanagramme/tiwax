@@ -19,3 +19,25 @@ body {
 .hidden {
   display: none;
 }
+
+.center {
+  display: grid;
+  place-items: center;
+}
+
+.full {
+  height: 100vh;
+  width: 100vw;
+}
+
+.fullH {
+  height: 100vh;
+}
+
+.fullW {
+  width: 100vw;
+}
+
+.bigText {
+  font-size: xxx-large;
+}
