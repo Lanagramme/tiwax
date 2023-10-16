@@ -18,9 +18,9 @@ const
         <div className="center fullH">
           <div>
             <MsgErreur
-              status={appError.status||404}
-              message={appError.message}
-              title={appError.title}
+              status={appError?.status||404}
+              message={appError?.message}
+              title={appError?.title}
             />
             <a href="/">Retour à l'accueil</a>
           </div>
