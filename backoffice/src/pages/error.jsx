@@ -11,9 +11,10 @@ const Erreur = () => {
           <p>Une erreur s'est produite, veuillez nous en excuser</p>
           {
             localStorage.getItem('lastError') != null && 
-            <p>localStorage.getItem('lastError')</p>
+            localStorage.getItem('lastError') != 'null' && 
+            <p>{localStorage.getItem('lastError')}</p>
           }
-          <a href="">Retour à l'accueil</a>
+          <a href="/">Retour à l'accueil</a>
         </div>
 
       </div>
