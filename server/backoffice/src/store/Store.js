@@ -7,7 +7,7 @@ Store.GetIngredient =(id)=> {
   return new Promise((resolve, reject) => {
     Api.get('ingredients/'+ id)
       .then(e => {
-        var data = JSON.parse(e.target.responseText)
+        const data = JSON.parse(e.target.responseText)
         if (data.hasOwnProperty('fail')) resolve('fail')
         else resolve(data)
       })
@@ -18,7 +18,7 @@ Store.GetCategories =()=> {
   return new Promise((resolve, reject) => {
     Api.get('categories/')
     .then(e => {
-      var data = JSON.parse(e.target.responseText)
+      const data = JSON.parse(e.target.responseText)
       if (data.hasOwnProperty('fail')) resolve('fail')
       else resolve(data)
     })
@@ -29,7 +29,7 @@ Store.GetIngredients =()=> {
   return new Promise((resolve, reject) => {
     Api.get('ingredients/')
     .then(e => {
-      var data = JSON.parse(e.target.responseText)
+      const data = JSON.parse(e.target.responseText)
       if (data.hasOwnProperty('fail')) resolve('fail')
       else resolve(data)
     })
@@ -78,7 +78,7 @@ Store.GetProduit =(id)=> {
   return new Promise((resolve, reject) => {
     Api.get('produit/'+ id)
       .then(e => {
-        var data = JSON.parse(e.target.responseText)
+        const data = JSON.parse(e.target.responseText)
         if (data.hasOwnProperty('fail')) resolve('fail')
         else resolve(data)
       })
@@ -89,7 +89,7 @@ Store.GetProduits =()=> {
   return new Promise((resolve, reject) => {
     Api.get('produits/')
       .then(e => {
-        var data = JSON.parse(e.target.responseText)
+        const data = JSON.parse(e.target.responseText)
         if (data.hasOwnProperty('fail')) resolve('fail')
         else resolve(data)
       })
@@ -148,7 +148,7 @@ Store.GetCommande =(id)=> {
   return new Promise((resolve, reject) => {
     Api.get('commande/'+ id)
       .then(e => {
-        var data = JSON.parse(e.target.responseText)
+        const data = JSON.parse(e.target.responseText)
         if (data.hasOwnProperty('fail')) resolve('fail')
         else resolve(data)
       })
@@ -159,7 +159,7 @@ Store.GetCommandes =()=> {
   return new Promise((resolve, reject) => {
     Api.get('commandes/')
       .then(e => {
-        var data = JSON.parse(e.target.responseText)
+        const data = JSON.parse(e.target.responseText)
         if (data.hasOwnProperty('fail')) resolve('fail')
         else resolve(data)
       })
@@ -170,7 +170,7 @@ Store.GetCommandes =()=> {
 //   return new Promise((resolve, reject) => {
 //     Api.get('commande/'+ id)
 //       .then(e => {
-//         var data = JSON.parse(e.target.responseText)
+//         const data = JSON.parse(e.target.responseText)
 //         if (data.hasOwnProperty('fail')) resolve('fail')
 //         else resolve(data)
 //       })
@@ -181,7 +181,7 @@ Store.Getstore =()=> {
   return new Promise((resolve, reject) => {
     Api.get('store/')
       .then(e => {
-        var data = JSON.parse(e.target.responseText)
+        const data = JSON.parse(e.target.responseText)
         if (data.hasOwnProperty('fail')) resolve('fail')
         else resolve(data)
       })
@@ -208,7 +208,7 @@ Store.GetPlats =()=> {
   return new Promise((resolve, reject) => {
     Api.get('commandes/')
       .then(e => {
-        var data = JSON.parse(e.target.responseText)
+        const data = JSON.parse(e.target.responseText)
         if (data.hasOwnProperty('fail')) resolve('fail')
         else resolve(data)
       })
@@ -241,7 +241,7 @@ Store.GetModel =(id)=> {
   return new Promise((resolve, reject) => {
     Api.get('models/'+ id)
       .then(e => {
-        var data = JSON.parse(e.target.responseText)
+        const data = JSON.parse(e.target.responseText)
         if (data.hasOwnProperty('fail')) resolve('fail')
         else resolve(data)
       })

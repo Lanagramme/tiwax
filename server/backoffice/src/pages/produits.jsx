@@ -55,11 +55,11 @@ const Produits = () => {
   const createOne =()=> {
     let unfilterdForm = document.querySelector('form input').value
     // let data = new FormData(unfilterdForm)
-    var object = {name: unfilterdForm};
+    const object = {name: unfilterdForm};
     // data.forEach(function(value, key){
     //   object[key] = value;
     // });
-    var json = JSON.stringify(object);
+    const json = JSON.stringify(object);
     console.log('form data for post', data)
     const Key = key.slice(0, -1);
     console.log("send"+Key)
