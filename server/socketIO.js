@@ -4,18 +4,9 @@ const apiActions = (map => map.get.bind(map))(require('./controller/methods'));
 const idsMap = new Map;
 const Orders = [];
 const toLog = [idsMap, Orders]
-const collection = {collection:'commandes'};
-const fullfilled = {fullfilled: true};
+const collection = { collection:'commandes'};
+const fullfilled = { fullfilled: true};
 const assign = Object.assign;
-
-read(collection).then(({message, success})=>{
-  if(!success) throw message
-  message.forEach(entry=> {
-    Orders.push(entry._doc)
-    !entry.fullfilled && idsMap.set(entry.id, entry.clientID)
-  })
-}).catch(err => console.error(new Error(err)))
-
 const listenners = {
   order(order) {
     const sessionID = order.clientID = this.sessionID
@@ -58,6 +49,14 @@ function update(collection, id)         { return apiActions ('updateOne' ) (assi
 function updateObject(id, o)            { return idsMap.delete(id), (Orders[Orders.findIndex(({_id})=>_id == id)] = o) }
 function send(emitter, event, message)  { return emitter.emit(event, message) }
 function log()                          { toLog.forEach(o=>console.table(o)) }
+
+read(collection).then(({message, success})=>{
+  if(!success) throw message
+  message.forEach(entry=> {
+    Orders.push(entry._doc)
+    !entry.fullfilled && idsMap.set(entry.id, entry.clientID)
+  })
+}).catch(err => console.error(new Error(err)))
 
 exports.attach = (server)=>{
   const io = Server(server,{

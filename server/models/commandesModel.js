@@ -18,16 +18,16 @@ const modelCommandes = {
        label: "Toto",
      }
     },
-   tata : {
-     type: String,
-     required: [true, "Tata manquant"],
-     fieldDescription: {
-       type: "Input",
-       label: "Tata",
-       placeholder: "Nom de la catégorie"
+    tata : {
+      type: String,
+      required: [true, "Tata manquant"],
+      fieldDescription: {
+        type: "Input",
+        label: "Tata",
+        placeholder: "Nom de la catégorie"
      }
     }
- }
+}
 
 const CommandesSchema = mongoose.Schema(modelCommandes)
 
