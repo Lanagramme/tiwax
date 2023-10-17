@@ -23,6 +23,7 @@ function sessionHandler() {
 window.socket = socket // for testing purpose
 sessionHandler()
 
+socket.on('new order', function(e){ console.log('new order passed =>', e) })
 socket.on('msg', function(e){ console.log(e) })
 socket.on('error', function(e){ console.error(e) })
 socket.on("connect", () => {
