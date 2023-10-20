@@ -3,12 +3,14 @@
 /**
  * Module dependencies.
  */
-require('dotenv').config()
-const debug = require('debug')('main:server');
-const http = require('http');
-const mongoose = require('mongoose')
-const webSocket = require('../socketIO')
-const app = require('../app');
+import dotenv from 'dotenv';
+import debug from 'debug';
+dotenv.config()
+debug('main:server');
+import { createServer } from 'http';
+import { set, connect } from 'mongoose';
+import { attach } from '../socketIO.js';
+import app from '../app.js';
 
 /**
  * Get port from environment and store in Express.
@@ -21,14 +23,14 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
-webSocket.attach(server)
+const server = createServer(app);
+attach(server)
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-mongoose.set("strictQuery", false)
-mongoose.connect(process.env.MONGO_URL)
+set("strictQuery", false)
+connect(process.env.MONGO_URL)
 .then(() => {
   console.log('Base de donnée connectée !')
   server.listen(port);

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+import { Schema, model } from 'mongoose'
 
-const StoreSchema = mongoose.Schema(
+const StoreSchema = Schema(
   {
    open : "Boolean"
   }, {
@@ -8,6 +8,6 @@ const StoreSchema = mongoose.Schema(
 })
 
 
-const Store = mongoose.model('Store', StoreSchema)
+const Store = model('Store', StoreSchema)
 
-module.exports = {Store}
+export default {Store}

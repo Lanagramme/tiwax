@@ -1,31 +1,34 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
+import createError from 'http-errors';
+import express from 'express';
+import { join } from 'path';
+import cors from 'cors';
+import indexRouter from './routes/index.js'
+import usersRouter from './routes/users.js'
 // const cookieParser = require('cookie-parser');
 // const logger = require('morgan');
-const cors = require('cors')
 // const indexRouter = require('./routes/index');
 // const usersRouter = require('./routes/users');
 
 // const app = express();
+const __dirname = import.meta.url
 
 // create app
-module.exports = express()
+export default express()
 
   // view engine setup
-  .set('views', path.join(__dirname, 'views'))
+  .set('views', join(__dirname, 'views'))
 
   // .use(logger('dev'))
   .use(cors())
   .use(express.json())
   .use(express.urlencoded({ extended: false }))
   // .use(cookieParser())
-  .use(express.static(path.join(__dirname, 'public')))
+  .use(express.static(join(__dirname, 'public')))
 
   // .use('/', indexRouter);
   // .use('/users', usersRouter);
-  .use('/', require('./routes/index'))
-  .use('/users', require('./routes/users'))
+  .use('/', indexRouter)
+  .use('/users', usersRouter)
 
   // catch 404 and forward to error handler
   .use(function(req, res, next) { next(createError(404)) })

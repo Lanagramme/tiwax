@@ -1,6 +1,8 @@
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+import "../../../../../tools/index.mjs";
+// const { reduceDir, capitalize } = tools
 const sessionID = localStorage.getItem("sessionID");
-
+console.log('tools => ',reduceDir, capitalize)
 const socket = io("ws://localhost:3000", {
   autoConnect: false,
   reconnectionDelayMax: 10000,

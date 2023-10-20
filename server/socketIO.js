@@ -1,6 +1,8 @@
-const Server  = require("socket.io");
-const crypto = require('crypto')
-const apiActions = (map => map.get.bind(map))(require('./controller/methods'));
+import { Server } from "socket.io";
+import { randomUUID } from 'crypto';
+import controller from './controller/methods.js';
+
+const apiActions = (map => map.get.bind(map))(controller);
 const idsMap = new Map;
 const Orders = [];
 const toLog = [idsMap, Orders]
@@ -43,9 +45,9 @@ const listenners = {
   log
 }
 
-function create(collection, data)       { return apiActions ('createOne' ) ({collection},data) }
-function read(collection)               { return apiActions ('readMany'  ) (collection) }
-function update(collection, id)         { return apiActions ('updateOne' ) (assign({id},collection), fullfilled) }
+function create(collection, data)       { return apiActions ( 'createOne' ) ({collection},data) }
+function read(collection)               { return apiActions ( 'readMany'  ) (collection) }
+function update(collection, id)         { return apiActions ( 'updateOne' ) (assign({id},collection), fullfilled) }
 function updateObject(id, o)            { return idsMap.delete(id), (Orders[Orders.findIndex(({_id})=>_id == id)] = o) }
 function send(emitter, event, message)  { return emitter.emit(event, message) }
 function log()                          { toLog.forEach(o=>console.table(o)) }
@@ -58,8 +60,8 @@ read(collection).then(({message, success})=>{
   })
 }).catch(err => console.error(new Error(err)))
 
-exports.attach = (server)=>{
-  const io = Server(server,{
+export function attach(server){
+  const io = new Server(server,{
     transports: ["polling", "websocket"],
     cors: {
       origin: "http://localhost:5173"
@@ -68,7 +70,7 @@ exports.attach = (server)=>{
   });
   
   io.use((socket, next) => {
-    socket.sessionID = socket.handshake.auth.sessionID || crypto.randomUUID();
+    socket.sessionID = socket.handshake.auth.sessionID || randomUUID();
     (socket.isNew = !socket.handshake.auth.sessionID) && console.log("sessionID created")
     next();
   });

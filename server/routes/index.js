@@ -1,7 +1,6 @@
-const 
-  express = require('express'),
-  router = express.Router(),
-  controller = require('../controller')
+import { Router } from 'express';
+const router = Router();
+import controller from '../controller/index.js';
 
 /* GET home page. */
 router.get(
@@ -13,5 +12,5 @@ router.get(
 )
 router.all('/api/v1/:collection/:id?', controller)
 
-module.exports = router;
+export default router;
  

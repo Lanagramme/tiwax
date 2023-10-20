@@ -1,5 +1,5 @@
 
-const mongoose = require('mongoose')
+import { Schema, model } from 'mongoose'
 
 const modelProduits = {
   titre : {
@@ -88,8 +88,8 @@ const modelProduits = {
   menu : [],
 }
 
-const ProduitsSchema = mongoose.Schema(modelProduits)
+const ProduitsSchema = Schema(modelProduits)
 
-const Produits = mongoose.model('Produits', ProduitsSchema)
+const Produits = model('Produits', ProduitsSchema)
 
-module.exports = {Produits, modelProduits}
+export default {Produits, modelProduits}

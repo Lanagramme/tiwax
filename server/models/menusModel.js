@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose, { model } from 'mongoose';
 const { Schema } = mongoose;
 
 const modelMenus = {
@@ -51,6 +51,6 @@ const modelMenus = {
 
 const MenusSchema = Schema(modelMenus)
 
-const Menus = mongoose.model('Menus', MenusSchema)
+const Menus = model('Menus', MenusSchema)
 
-module.exports = {Menus, modelMenus}
+export default {Menus, modelMenus}

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import { Schema, model } from 'mongoose'
 
 const modelIngredients = {
   name : {
@@ -21,8 +21,8 @@ const modelIngredients = {
    }
  }
 
-const IngredientsSchema = mongoose.Schema(modelIngredients)
+const IngredientsSchema = Schema(modelIngredients)
 
-const Ingredients = mongoose.model('Ingredient', IngredientsSchema)
+const Ingredients = model('Ingredient', IngredientsSchema)
 
-module.exports = {Ingredients, modelIngredients}
+export default {Ingredients, modelIngredients}

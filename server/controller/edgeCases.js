@@ -1,4 +1,4 @@
-const { /* checkCollection, */ collections, models } = require('../models')
+import { collections, models } from '../models/index.js'
 
 const edgeCases = (new Map)
 
@@ -28,4 +28,4 @@ const edgeCases = (new Map)
     //.set('many', function(){ return (Promise.resolve(models)) })
   )
 
-module.exports = (edgeCase) => (edgeCases.get(edgeCase) || (new Map))
+export default (edgeCase) => (edgeCases.get(edgeCase) || (new Map))

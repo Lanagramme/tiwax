@@ -1,5 +1,5 @@
-const methodsMap = require('./methods') // list of api's actions
-
+import { has, get } from './methods.js'; // list of api's actions
+console.log(has, get)
 /** Handle all api's routes
  * 
  * @param {object} req request object
@@ -7,7 +7,7 @@ const methodsMap = require('./methods') // list of api's actions
  * @param {Function} next function calling the next middleware
  * @returns {void}
  */
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
   let action, methodParams = req.body;
   const routeParams = req.params
   
@@ -24,13 +24,13 @@ module.exports = (req, res, next) => {
   action += routeParams.id ? 'One' : 'Many';
 
   // check if action exist
-  if (!methodsMap.has(action)) next()
+  if (!has(action)) next()
 
   console.log('==========')
   // console.log(action)
 
   // execute the route's action
-  methodsMap.get(action)(routeParams, methodParams)
+  get(action)(routeParams, methodParams)
   .then(result => {
     // console.log(result)
     res.json(result)

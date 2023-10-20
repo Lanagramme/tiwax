@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose, { model } from 'mongoose';
 const { Schema } = mongoose;
 
 const personSchema = Schema({
@@ -14,7 +14,7 @@ const storySchema = Schema({
   fans: [{ type: Schema.Types.ObjectId, ref: 'Person' }]
 });
 
-const Story = mongoose.model('Story', storySchema);
-const Person = mongoose.model('Person', personSchema);
+export const Story = model('Story', storySchema);
+export const Person = model('Person', personSchema);
 
-module.exports = {Person, Story}
+export default {Person, Story}

@@ -1,5 +1,5 @@
-const { checkCollection, collections, models } = require('../models')
-const edgeCases = require('./edgeCases')
+import { checkCollection, collections } from '../models/index.js'
+import edgeCases from './edgeCases.js'
 
 /** List of methods to process filters
  * @constant filters
@@ -44,214 +44,217 @@ function formatResponse(promise){
     .catch( err => ({success: 0, message: err.message}) )
 }
 
-module.exports = (new Map)
+const methods = (new Map)
 
-  /** Create one entry in the specified collection
-   * 
-   * @param {Object} routeParameter Request path parameters
-   * @param {Object} bodyParameter Request body parameters
-   * @returns { Promise } database promise
-   */
-  .set('createOne', function({collection}, data = {}){
-    console.log(`createOne for ${collection} collection`)
+/** Create one entry in the specified collection
+ * 
+ * @param {Object} routeParameter Request path parameters
+ * @param {Object} bodyParameter Request body parameters
+ * @returns { Promise } database promise
+ */
+.set('createOne', function({collection}, data = {}){
+  console.log(`createOne for ${collection} collection`)
 
-    // Check if collection exist
-    if (!checkCollection(collection)){
-      return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
-      // return new Promise((resolve, reject) => {
-      //   resolve({success: 0, message: `Collection ${collection} introuvable`})
-      // })
-    }
-    
-    console.log(data)
-    // execute the request to the database
-    return formatResponse(
-      collections[collection].create(data).then(doc => {
-        if (doc) return doc
-        else throw new Error(`erreur à la création`)
-      })
-    )
-    return collections[collection].create(data)
-      .then( doc => {
-        if (doc) return {success: 1, message: doc}
-        else return {success: 0, message: `erreur à la création`}
-      })
-
-  })
-
-  /** Read a specified entry of the specified collection
-    * 
-    * @param {Object} routeParameter Request path parameters
-    * param {Object} queryParameter Request query parameters
-    * @returns { Promise } database promise
-    */
-  .set('readOne', function({collection, id}){
-    console.log(`read item id:${id} from ${collection}`)
-    
-    // if(collection === 'models') {
-    //   return formatResponse(new Promise((resolve, reject)=>{
-    //     const data = models[id]
-    //     data ? resolve(data) : reject(new Error(`Collection ${id} introuvable`))
-    //   }))
-    // }
-    
-    // if(collection === 'menus') {
-    //   console.log("menus")
-    //   return formatResponse(collections['menus'].findById(id)
-    //     .populate('Ingredients')
-    //     .then(doc => {
-    //       if (doc) return doc
-    //       else throw new Error(`Aucune donnée dans ${collection} pour ${id}`)
-    //   }))
-    // }
-
-    const edgeCase = edgeCases(collection).get('one')
-    if(edgeCase) return formatResponse(edgeCase(id))
-    
-    // Check if collection exist
-    if (!checkCollection(collection)){
-      return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
-      // return new Promise((resolve, reject) => {
-      //   resolve({success: 0, message: `Collection ${collection} introuvable`})
-      // })
-    }
-
-    if (!id || id == 'undefined' || id == undefined){
-      // return formatResponse(Promise.reject(new Error(`id ${id} invalide`)))
-      return new Promise((resolve, reject) => {
-        resolve({success: 0, message: `id ${id} invalide`})
-      })
-    }
-    
-    console.log(id)
-    
-    // execute the request to the database
-    return formatResponse(collections[collection].findById(id).then(doc => {
-      if (doc) return doc
-      else throw new Error(`Aucune donnée dans ${collection} pour ${id}`)
-    }))
-
-    // return collections[collection].findById(id)
-    // .then( doc => {
-    //   if (doc) return {success: 1, message: doc}
-    //   else return {success: 0, message: `Aucune donnée dans ${collection} pour ${id}`}
+  // Check if collection exist
+  if (!checkCollection(collection)){
+    return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
+    // return new Promise((resolve, reject) => {
+    //   resolve({success: 0, message: `Collection ${collection} introuvable`})
     // })
-  })
-
-  /** Read all or filtered entries of the specified collection
-   * 
-   * @param {Object} routeParameter Request path parameters
-   * @param {Object} queryParameter Request query parameters
-   * @returns { Promise } database promise
-   */
-  .set('readMany', function({collection}, data = {}){
-    console.log(`readMany from ${collection} collection`)
-    
-    // if(collection === 'models') { return formatResponse(Promise.resolve(models)) }
-
-    const edgeCase = edgeCases(collection).get('many')
-    if(edgeCase) return formatResponse(edgeCase())
-
-    // Check if collection exist
-    if (!checkCollection(collection)){ 
-      return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
-      // return new Promise((resolve, reject) => {
-      //   resolve({success: 0, message: `Collection ${collection} introuvable`})
-      // })
-    }
-
-    console.log('data => ',data)
-    const filter = handlerFilters(data)
-        
-    // execute the request to the database
-    return formatResponse(collections[collection].find(filter).then(doc => {
+  }
+  
+  console.log(data)
+  // execute the request to the database
+  return formatResponse(
+    collections[collection].create(data).then(doc => {
       if (doc) return doc
-      else throw new Error(`Aucune donnée dans ${collection} pour ${JSON.stringify(filter)}`)
-    }))
-
-    // return collections[collection].find(filter)
-    //   .then(
-    //     res => { 
-    //     if (res) return {success: 1, message: res}
-    //     else return {success: 0, message: `Aucune donnée dans ${collection} pour ${filter}`}
-    //     }
-    //   )
-  })
-
-  /** Update a specified entry of the specified collection
-   * 
-   * @param {Object} routeParameter Request path parameters
-   * @param {Object} bodyParameter Request body parameters
-   * @returns { Promise } database promise
-   */
-  .set('updateOne', function({collection, id}, data = {}){
-    console.log(`update item id:${id} from ${collection}`)
-    // Check if collection exist
-    if (!checkCollection(collection)){ 
-      return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
-      // return new Promise((resolve, reject) => {
-      //   resolve({success: 0, message: `Collection ${collection} introuvable`})
-      // })
-    }
-    if (!id || id == 'undefined' || id == undefined){ 
-      return new Promise((resolve, reject) => {
-        resolve({success: 0, message: `id ${id} invalide`}) })  }
-
-    // execute the request to the database
-    // return formatResponse(collections[collection].findByIdAndUpdate(id, data, { new: true }).then(doc => {
-    //   if (doc) return doc
-    //   else throw new Error(`Error message: action: deleteOne / collection: ${collection} / id: ${id}`)
-    // }))
-
-    return new Promise((resolve, reject) => {
-      console.log(data)
-      collections[collection].findOneAndUpdate({"_id":id}, data, { new: true })
-      .then(
-        res => { resolve({success: 1, message: res})},
-        err => { reject({success: 0, message: err.message})}
-      )
+      else throw new Error(`erreur à la création`)
+    })
+  )
+  return collections[collection].create(data)
+    .then( doc => {
+      if (doc) return {success: 1, message: doc}
+      else return {success: 0, message: `erreur à la création`}
     })
 
+})
+
+/** Read a specified entry of the specified collection
+  * 
+  * @param {Object} routeParameter Request path parameters
+  * param {Object} queryParameter Request query parameters
+  * @returns { Promise } database promise
+  */
+.set('readOne', function({collection, id}){
+  console.log(`read item id:${id} from ${collection}`)
+  
+  // if(collection === 'models') {
+  //   return formatResponse(new Promise((resolve, reject)=>{
+  //     const data = models[id]
+  //     data ? resolve(data) : reject(new Error(`Collection ${id} introuvable`))
+  //   }))
+  // }
+  
+  // if(collection === 'menus') {
+  //   console.log("menus")
+  //   return formatResponse(collections['menus'].findById(id)
+  //     .populate('Ingredients')
+  //     .then(doc => {
+  //       if (doc) return doc
+  //       else throw new Error(`Aucune donnée dans ${collection} pour ${id}`)
+  //   }))
+  // }
+
+  const edgeCase = edgeCases(collection).get('one')
+  if(edgeCase) return formatResponse(edgeCase(id))
+  
+  // Check if collection exist
+  if (!checkCollection(collection)){
+    return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
+    // return new Promise((resolve, reject) => {
+    //   resolve({success: 0, message: `Collection ${collection} introuvable`})
+    // })
+  }
+
+  if (!id || id == 'undefined' || id == undefined){
+    // return formatResponse(Promise.reject(new Error(`id ${id} invalide`)))
+    return new Promise((resolve, reject) => {
+      resolve({success: 0, message: `id ${id} invalide`})
+    })
+  }
+  
+  console.log(id)
+  
+  // execute the request to the database
+  return formatResponse(collections[collection].findById(id).then(doc => {
+    if (doc) return doc
+    else throw new Error(`Aucune donnée dans ${collection} pour ${id}`)
+  }))
+
+  // return collections[collection].findById(id)
+  // .then( doc => {
+  //   if (doc) return {success: 1, message: doc}
+  //   else return {success: 0, message: `Aucune donnée dans ${collection} pour ${id}`}
+  // })
+})
+
+/** Read all or filtered entries of the specified collection
+ * 
+ * @param {Object} routeParameter Request path parameters
+ * @param {Object} queryParameter Request query parameters
+ * @returns { Promise } database promise
+ */
+.set('readMany', function({collection}, data = {}){
+  console.log(`readMany from ${collection} collection`)
+  
+  // if(collection === 'models') { return formatResponse(Promise.resolve(models)) }
+
+  const edgeCase = edgeCases(collection).get('many')
+  if(edgeCase) return formatResponse(edgeCase())
+
+  // Check if collection exist
+  if (!checkCollection(collection)){ 
+    return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
+    // return new Promise((resolve, reject) => {
+    //   resolve({success: 0, message: `Collection ${collection} introuvable`})
+    // })
+  }
+
+  console.log('data => ',data)
+  const filter = handlerFilters(data)
+      
+  // execute the request to the database
+  return formatResponse(collections[collection].find(filter).then(doc => {
+    if (doc) return doc
+    else throw new Error(`Aucune donnée dans ${collection} pour ${JSON.stringify(filter)}`)
+  }))
+
+  // return collections[collection].find(filter)
+  //   .then(
+  //     res => { 
+  //     if (res) return {success: 1, message: res}
+  //     else return {success: 0, message: `Aucune donnée dans ${collection} pour ${filter}`}
+  //     }
+  //   )
+})
+
+/** Update a specified entry of the specified collection
+ * 
+ * @param {Object} routeParameter Request path parameters
+ * @param {Object} bodyParameter Request body parameters
+ * @returns { Promise } database promise
+ */
+.set('updateOne', function({collection, id}, data = {}){
+  console.log(`update item id:${id} from ${collection}`)
+  // Check if collection exist
+  if (!checkCollection(collection)){ 
+    return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
+    // return new Promise((resolve, reject) => {
+    //   resolve({success: 0, message: `Collection ${collection} introuvable`})
+    // })
+  }
+  if (!id || id == 'undefined' || id == undefined){ 
+    return new Promise((resolve, reject) => {
+      resolve({success: 0, message: `id ${id} invalide`}) })  }
+
+  // execute the request to the database
+  // return formatResponse(collections[collection].findByIdAndUpdate(id, data, { new: true }).then(doc => {
+  //   if (doc) return doc
+  //   else throw new Error(`Error message: action: deleteOne / collection: ${collection} / id: ${id}`)
+  // }))
+
+  return new Promise((resolve, reject) => {
+    console.log(data)
+    collections[collection].findOneAndUpdate({"_id":id}, data, { new: true })
+    .then(
+      res => { resolve({success: 1, message: res})},
+      err => { reject({success: 0, message: err.message})}
+    )
   })
 
-  // .set('updateMany', function(){
-  //   console.log(`updateMany from ${collection} collection`)
-  //   if (!checkCollection(collection)) return false
-  //   // return collectionsMap.has(collection) &&  'updateMany'
+})
+
+// .set('updateMany', function(){
+//   console.log(`updateMany from ${collection} collection`)
+//   if (!checkCollection(collection)) return false
+//   // return collectionsMap.has(collection) &&  'updateMany'
+// })
+
+/** Delete a specified entry of the specified collection
+ * 
+ * @param {Object} routeParameter Request path parameters
+ * @param {Object} bodyParameter Request body parameters
+ * @returns { Promise } database promise
+ */
+.set('deleteOne', function({collection, id}){
+  console.log(`delete item id:${id} from ${collection}`)
+  
+  // Check if collection exist
+  if (!checkCollection(collection)){ 
+    return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
+    // return new Promise((resolve, reject) => {
+    //   resolve({success: 0, message: `Collection ${collection} introuvable`})
+    // })
+  }
+  if (!id || id == 'undefined' || id == undefined){ 
+    return new Promise((resolve, reject) => {
+      resolve({success: 0, message: `id ${id} invalide`}) })  }
+  
+  // execute the request to the database
+  return formatResponse(collections[collection].findByIdAndDelete(id).then(doc => {
+    if (doc) return doc
+    else throw new Error(`Error message: action: deleteOne / collection: ${collection} / id: ${id}`)
+  }))
+
+  // return new Promise((resolve, reject) => {
+  //   collections[collection].findByIdAndDelete(id)
+  //   .then(
+  //     res => { resolve({success: 1, message: res})},
+  //     err => { reject({success: 0, message: err.message})}
+  //   )
   // })
 
-  /** Delete a specified entry of the specified collection
-   * 
-   * @param {Object} routeParameter Request path parameters
-   * @param {Object} bodyParameter Request body parameters
-   * @returns { Promise } database promise
-   */
-  .set('deleteOne', function({collection, id}){
-    console.log(`delete item id:${id} from ${collection}`)
-    
-    // Check if collection exist
-    if (!checkCollection(collection)){ 
-      return formatResponse(Promise.reject(new Error(`Collection ${collection} introuvable`)))
-      // return new Promise((resolve, reject) => {
-      //   resolve({success: 0, message: `Collection ${collection} introuvable`})
-      // })
-    }
-    if (!id || id == 'undefined' || id == undefined){ 
-      return new Promise((resolve, reject) => {
-        resolve({success: 0, message: `id ${id} invalide`}) })  }
-    
-    // execute the request to the database
-    return formatResponse(collections[collection].findByIdAndDelete(id).then(doc => {
-      if (doc) return doc
-      else throw new Error(`Error message: action: deleteOne / collection: ${collection} / id: ${id}`)
-    }))
+})
+const { get, has } = methods
 
-    // return new Promise((resolve, reject) => {
-    //   collections[collection].findByIdAndDelete(id)
-    //   .then(
-    //     res => { resolve({success: 1, message: res})},
-    //     err => { reject({success: 0, message: err.message})}
-    //   )
-    // })
-
-  })
+export { methods as default, get, has }

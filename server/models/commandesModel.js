@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import { Schema, model } from 'mongoose'
 
 const modelCommandes = {
   clientID : {
@@ -29,8 +29,8 @@ const modelCommandes = {
     }
 }
 
-const CommandesSchema = mongoose.Schema(modelCommandes)
+const CommandesSchema = Schema(modelCommandes)
 
-const Commandes = mongoose.model('Commandes', CommandesSchema)
+const Commandes = model('Commandes', CommandesSchema)
 
-module.exports = {Commandes, modelCommandes}
+export default {Commandes, modelCommandes}
