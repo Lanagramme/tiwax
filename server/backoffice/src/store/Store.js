@@ -120,15 +120,25 @@ Store.UpdateProduit =(id, data)=> {
   })
 }
 
-Store.DeleteProduit =(data)=> {
-  return new Promise((resolve, reject) => {
-    Api.post('produits/', data)
-      .then(e => {
-        console.log(e)
-        if (e.target.status == 404) resolve('fail')
-        else resolve("success")
-      })
-  })
+// Store.DeleteProduit =(data)=> {
+//   return new Promise((resolve, reject) => {
+//     Api.delete('produits/', data)
+//       .then(e => {
+//         console.log(e)
+//         if (e.target.status == 404) resolve('fail')
+//         else resolve("success")
+//       })
+//   })
+// }
+
+Store.DeleteProduit =(id)=> {
+  return fetch("http://localhost:3000/api/v1/produits/"+id, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+    .then((response) => response.json())
 }
 
 Store.UpdateStock = (data)=> {

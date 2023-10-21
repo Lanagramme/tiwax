@@ -4,6 +4,7 @@ import ThemeProvider from 'react-bootstrap/ThemeProvider'
 // ======== Pages
 import Home from './pages/Home.jsx'
 import Produits from './pages/produits'
+import Produits2 from './pages/produits2'
 import Plats from './pages/plats'
 import Commandes from './pages/commandes'
 import Store from './store/Store'
@@ -22,6 +23,7 @@ function App() {
             <Route exact path='/'           element={<Home  />} />
             <Route exact path='/Plats'      element={<Plats />} />
             <Route exact path='/Produits'   element={<Produits  />} />
+            <Route exact path='/Produits2'   element={<Produits2  />} />
             <Route exact path='/Commandes'  element={<Commandes />} />
 
             {/* must be the last one */}

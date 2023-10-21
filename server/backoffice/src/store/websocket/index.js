@@ -1,8 +1,15 @@
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
-import "../../../../../tools/index.mjs";
-// const { reduceDir, capitalize } = tools
+import evtsMaps from "./events.js";
+
+function sessionHandler() {
+  function addID(sessionID) { return (socket.auth = { sessionID }), sessionID }
+  function newID() { socket.on("session", (id) => { store(addID(id)) }) }
+  function store(sessionID) { localStorage.setItem("sessionID", addID(sessionID)) }
+
+  sessionID ? addID(sessionID) : newID();
+}
+
 const sessionID = localStorage.getItem("sessionID");
-console.log('tools => ',reduceDir, capitalize)
 const socket = io("ws://localhost:3000", {
   autoConnect: false,
   reconnectionDelayMax: 10000,
@@ -14,28 +21,13 @@ const socket = io("ws://localhost:3000", {
   // }
 });
 
-function sessionHandler() {
-  function addID(sessionID) { return (socket.auth = { sessionID }), sessionID }
-  function newID() { socket.on("session", (id) => { store(addID(id)) }) }
-  function store(sessionID) { localStorage.setItem("sessionID", addID(sessionID)) }
-
-  sessionID ? addID(sessionID) : newID();
-}
-
-window.socket = socket // for testing purpose
 sessionHandler()
+window.socket = socket // for testing purpose
 
-socket.on('new order', function(e){ console.log('new order passed =>', e) })
-socket.on('msg', function(e){ console.log(e) })
-socket.on('error', function(e){ console.error(e) })
-socket.on("connect", () => {
-  const engine = socket.io.engine
-  console.log(`connected with transport ${engine.transport.name}`);
-  engine.on("upgrade", (transport) => { console.log(`transport upgraded to ${transport.name}`) });
+for(const action of ['on','emit']) [...evtsMaps[action]||[]].forEach(([evt,fn]) => {
+  socket[action](evt,fn.bind(socket))
 });
-socket.on("connect_error", (err) => {   console.log(`connect_error due to ${err.message}`) });
 
-socket.on("disconnect", (reason) => { console.log(`disconnect due to ${reason}`) });
 
 export default {
   connect(){ socket.connect() },

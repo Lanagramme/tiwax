@@ -10,7 +10,7 @@ import usersRouter from './routes/users.js'
 // const usersRouter = require('./routes/users');
 
 // const app = express();
-const __dirname = import.meta.url
+const __dirname = process.cwd()
 
 // create app
 export default express()

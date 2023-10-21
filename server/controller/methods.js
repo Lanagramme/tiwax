@@ -255,6 +255,8 @@ const methods = (new Map)
   // })
 
 })
-const { get, has } = methods
+const 
+  get = methods.get.bind(methods),
+  has = methods.has.bind(methods)
 
 export { methods as default, get, has }

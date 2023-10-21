@@ -1,5 +1,5 @@
 import { has, get } from './methods.js'; // list of api's actions
-console.log(has, get)
+
 /** Handle all api's routes
  * 
  * @param {object} req request object

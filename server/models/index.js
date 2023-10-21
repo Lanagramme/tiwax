@@ -6,16 +6,14 @@
 // const { Menus: menus, modelMenus} = require('./menussModel')
 import { Story, Person } from './test.js'
 import Tools from '../../tools/index.mjs';
-const { reduceDir, capitalize } = Tools
-console.log(Tools)
+
 // const store = require('./storeModel')
-
 // const collections ={ingredients, categories, commandes, produits, menus, navigation : true, store, Person, Story} // set the collection models banks
-export const collections = { Story, Person } // set the collection models banks
-export const models = {} // set the model objects banks
-
 // const models = { ingredients: modelIngredients, categories: modelCategories, commandes: modelCommandes, produits: modelProduits, menus: modelMenus }
 
+const { reduceDir, capitalize } = Tools
+export const collections = { Story, Person } // set the collection models banks
+export const models = {} // set the model objects banks
 export const checkCollection = ({}).hasOwnProperty.bind(collections) // shorthand to check if collections has own property
 
 
@@ -35,5 +33,4 @@ async function reducer(o, dirent) {
   return o;
 }
 
-const module = await reduceDir('models', reducer, { collections, checkCollection, models })
-export default module
+export default await reduceDir('models/*', reducer, { collections, checkCollection, models })
