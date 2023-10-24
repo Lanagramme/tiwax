@@ -11,6 +11,7 @@ const types = {
   Number: "Number"
 }
 function Tableau({names, data, properties, update, remove, tab, collection}) {
+  console.log('render => Tableau')
   const data2 = [
     {
       type: "Input",
@@ -62,8 +63,10 @@ function Tableau({names, data, properties, update, remove, tab, collection}) {
         {Stock ? "Disponible" : "Non disponible"}
       </Button>
   }
+
   data2.length = 0
-  Store.GetModel(collection).then(res => {
+  console.log('collection =>',collection)
+  typeof collection === "string" ? Store.GetModel(collection).then(res => {
     // Object.entries(res.message).forEach(([key,val]) => {
     Object.entries(res.message).forEach(([key,val]) => {
       const {fieldDescription} = val
@@ -96,7 +99,7 @@ function Tableau({names, data, properties, update, remove, tab, collection}) {
       })
     })
     console.log(data2)
-  })
+  }) : (data2.push(...collection || []))
 
   return (
     <Table striped bordered hover>

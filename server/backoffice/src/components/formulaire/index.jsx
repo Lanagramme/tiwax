@@ -21,21 +21,21 @@ function formatter(acc, [key, val]) {
 function formatData(data){
   return Object.entries(data).reduce(formatter, {disabled: false})
 }
-function Formulaire({data, submit}) {
+const fields = {
+  Input:FormInput,
+  TagSelect:FormTagSelect,
+  Select:FormSelect,
+  Checkbox:FormCheckbox, 
+  Number:FormNumber,
+  TextArea: FormTextArea
+}
 
-  const fields = {
-    Input:FormInput,
-    TagSelect:FormTagSelect,
-    Select:FormSelect,
-    Checkbox:FormCheckbox, 
-    Number:FormNumber,
-    TextArea: FormTextArea
-  }
-  
+function Formulaire({data:fieldsData, submit}) {
+  console.log('render => Formulaire')
   return (
     <Form  key={makeid()}>
-      { data.map(x => {
-        console.log(x.type)
+      { fieldsData.map(x => {
+        // console.log(x.type)
         const field = fields[x.type]
 
         return (field||notFound)(formatData(x))

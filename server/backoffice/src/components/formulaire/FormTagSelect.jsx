@@ -3,31 +3,21 @@ import {getOptions} from './helpers';
 import makeid from '../../store/makeid';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/esm/Button';
-
-const pikaboo = (id, setDisplay)=> {
-  /* document.getElementById(id).classList.toggle('hidden') */
-  setDisplay(!id)
+const actions = {
+  addOption(arr,id){ return arr.push(id), arr },
+  removeOption(arr,id){ return arr.splice(arr.findIndex(x => x === id),1), arr },
 }
-const TagSelect =({collection, placeholder, Liste, setListe, titre})=> {
+function getActions(arr,entry) { return (!arr.includes(entry) ? 'add':'remove')+'Option' }
+function TagSelect ({collection, placeholder, titre}) {
+  console.log('render => TagSelect')
+  const [Liste, setListe] = useState([])
   const [options, setOptions] = useState(collection)
   const [hidden, setHidden] = useState(true)
-  const tagContainerId = makeid(8)
-  // console.log(Liste)
 
 
   !Array.isArray(options) && getOptions(collection, setOptions)
 
-
-  const handleClick=(id)=> {
-    let aa = Liste
-    if (!aa.includes(id)) {
-      aa.push(id)
-      setListe([...aa])
-    }
-    else {
-      setListe([...aa.filter(x => x != id)])
-    }
-  }   
+  const handleClick=(id)=> { setListe([...actions[getActions(Liste,id)](Liste,id)]) }   
 
 
   return (
@@ -36,11 +26,11 @@ const TagSelect =({collection, placeholder, Liste, setListe, titre})=> {
         className='mb-2' 
         variant='dark' 
         key={makeid()}
-        onClick={()=>pikaboo(/* tagContainerId */ hidden, setHidden)}
+        onClick={()=>setHidden(!hidden)}
       >{placeholder || "Selectionnez un ou plusieurs tag"}</Button>
       <div  key={makeid()}>
         <section key={makeid()}>
-          <div key={makeid()} id={tagContainerId} hidden={hidden}>
+          <div key={makeid()} hidden={hidden}>
           {
             Array.isArray(options) && options.map( x => {
               // console.log(Liste, x._id, Liste.includes(x._id))
