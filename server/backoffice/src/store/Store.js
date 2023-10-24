@@ -97,14 +97,22 @@ Store.GetProduits =()=> {
 }
 
 Store.SendProduit =(data)=> {
-  return new Promise((resolve, reject) => {
-    Api.post('produits/', data)
-      .then(e => {
-        console.log(e)
-        if (e.target.status == 404) resolve('fail')
-        else resolve("success")
-      })
-  })
+  return fetch("http://localhost:3000/api/v1/produits/", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    },
+    body: data
+  }).then((response) => response.json())
+
+  // return new Promise((resolve, reject) => {
+  //   Api.post('produits/', data)
+  //     .then(e => {
+  //       console.log(e)
+  //       if (e.target.status == 404) resolve('fail')
+  //       else resolve("success")
+  //     })
+  // })
 }
 
 Store.UpdateProduit =(id, data)=> {
